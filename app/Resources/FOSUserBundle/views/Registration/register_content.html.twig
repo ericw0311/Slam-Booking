@@ -1,0 +1,20 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{{ form_start(form, {'action': path('fos_user_registration_register'), 'method': 'POST', 'class': 'form-horizontal'}) }}
+<div class="panel panel-default">
+
+  <div class="panel-body">
+    {{ form_row(form.lastName) }}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.plainPassword) }}
+    {{ form_rest(form) }}
+  </div>
+
+  <div class="panel-footer">
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'registration.submit'|trans({}, 'FOSUserBundle') }}</button>
+  </div>
+
+</div>
+{{ form_end(form) }}

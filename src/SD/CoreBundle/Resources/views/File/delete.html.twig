@@ -1,0 +1,27 @@
+{# src/SD/CoreBundle/Resources/views/File/delete.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+
+{{ form_start(form) }}
+
+<div class="panel panel-default">
+
+<div class="panel-body">
+<p>{{ 'file.ask.delete'|trans({'%name%': file.name}) }}</p>
+</div>
+
+<div class="panel-footer">
+
+<div class="btn-group">
+    <a href="{{ path('sd_core_file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+    <button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+</div>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}

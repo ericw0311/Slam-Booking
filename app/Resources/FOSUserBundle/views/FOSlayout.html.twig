@@ -1,0 +1,15 @@
+{% extends '::layout.html.twig' %}
+
+{% block title %}{{ parent() }} FOSUser{% endblock %}
+
+{% block navbar %}
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+{{ include("::vendor-connected-navbar.html.twig") }}
+{% else %}
+{{ include("::unconnected-navbar.html.twig") }}
+{% endif %}
+    {% endblock %}
+
+{% block body %}
+    {% block fos_user_content %}{% endblock %}
+{% endblock %}

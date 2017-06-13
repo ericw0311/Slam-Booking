@@ -1,0 +1,25 @@
+{# src/SD/CoreBundle/Resources/views/UserFile/index.html.twig #}
+
+{% extends "SDCoreBundle::list-layout.html.twig" %}
+
+{% block title %}{{ parent() }} userFile{% endblock %}
+
+{% block listRow %}
+<div class="row">
+
+{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
+    <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
+{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
+
+    {% if listUserFiles[i*listContext.numberLinesDisplayed+j].SDadministrator %} {% set image = 'administrator-16.png' %} {% else %} {% set image = 'user-16.png' %} {% endif %}
+    {% if listUserFiles[i*listContext.numberLinesDisplayed+j].userCreated %}
+    <a href="{{ path('sd_core_userFile_edit', { 'userFileID': listUserFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ listUserFiles[i*listContext.numberLinesDisplayed+j].getFirstAndLastName() }}&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-envelope"></span>&nbsp;{{ listUserFiles[i*listContext.numberLinesDisplayed+j].email }}&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span>&nbsp;{{ listUserFiles[i*listContext.numberLinesDisplayed+j].username }}</a>
+    {% else %}
+    <a href="{{ path('sd_core_userFile_edit', { 'userFileID': listUserFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ listUserFiles[i*listContext.numberLinesDisplayed+j].getFirstAndLastName() }}&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-envelope"></span>&nbsp;{{ listUserFiles[i*listContext.numberLinesDisplayed+j].email }}</a>
+    {% endif %}
+{% endfor %}
+    </div>
+{% endfor %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+sd_core_homepage:
+    path:     /
+    defaults: { _controller: SDCoreBundle:Default:index }
+
+sd_core_administration:
+    path:     /administration
+    defaults: { _controller: SDCoreBundle:Default:administration }
+
+sd_core_file_list:
+    path:     /file/list/{pageNumber}
+    defaults: { _controller: SDCoreBundle:File:index }
+
+sd_core_file_add:
+    path:     /file/add
+    defaults: { _controller: SDCoreBundle:File:add }
+
+sd_core_file_edit:
+    path:     /file/edit/{fileID}
+    defaults: { _controller: SDCoreBundle:File:edit }
+    requirements:
+        fileID: \d+
+
+sd_core_file_modify:
+    path:     /file/modify/{fileID}
+    defaults: { _controller: SDCoreBundle:File:modify }
+    requirements:
+        fileID: \d+
+
+sd_core_file_delete:
+    path:     /file/delete/{fileID}
+    defaults: { _controller: SDCoreBundle:File:delete }
+    requirements:
+        fileID: \d+
+
+sd_core_file_set_current:
+    path:     /file/setcurrent/{fileID}
+    defaults: { _controller: SDCoreBundle:File:setCurrent }
+    requirements:
+        fileID: \d+
+
+sd_core_userFile_list:
+    path:     /userfile/list/{pageNumber}
+    defaults: { _controller: SDCoreBundle:UserFile:index }
+
+sd_core_userFile_email:
+    path:     /userfile/email
+    defaults: { _controller: SDCoreBundle:UserFile:email }
+
+sd_core_userFile_add:
+    path:     /userfile/add/{email}
+    defaults: { _controller: SDCoreBundle:UserFile:add }
+
+sd_core_userFile_edit:
+    path:     /userfile/edit/{userFileID}
+    defaults: { _controller: SDCoreBundle:UserFile:edit }
+    requirements:
+        userFileID: \d+
+
+sd_core_userFile_modify:
+    path:     /userfile/modify/{userFileID}
+    defaults: { _controller: SDCoreBundle:UserFile:modify }
+    requirements:
+        userFileID: \d+
+
+sd_core_userFile_delete:
+    path:     /userfile/delete/{userFileID}
+    defaults: { _controller: SDCoreBundle:UserFile:delete }
+    requirements:
+        userFileID: \d+
+
+sd_core_parameter_numberLinesColumns:
+    path:     /setNumberLinesColumns/{bundleCode}/{entityCode}
+    defaults: { _controller: SDCoreBundle:Parameter:numberLinesColumns }

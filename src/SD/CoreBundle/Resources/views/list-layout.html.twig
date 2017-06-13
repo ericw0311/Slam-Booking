@@ -1,0 +1,56 @@
+{# src/SD/CoreBundle/Resources/views/list-layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}{{ parent() }} List{% endblock %}
+
+{% block navbar %}
+{{ include("::connected-navbar.html.twig") }}
+{% endblock %}
+
+{% block body %}
+
+<div class="panel panel-default">
+
+  <div class="panel-heading">
+<div class="btn-group">
+<a href="{{ path(listContext.getCreateLink) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> {{ (listContext.getEntityCode ~ '.create')|trans }}</a>
+<a href="{{ path('sd_core_parameter_numberLinesColumns', { 'bundleCode': listContext.getBundleCode, 'entityCode': listContext.getEntityCode }) }}" class="btn btn-default"><i class="glyphicon glyphicon-wrench"></i> {{ 'parameters'|trans }}</a>
+</div>
+  </div>
+
+  <div class="panel-body">
+
+{% if (listContext.numberPages > 1) %}
+  
+<ul class="pagination">
+{% if listContext.pageNumber > 2 %}
+	<li><a href="{{ path(listContext.getDisplayLink, { 'pageNumber': 1 }) }}">1</a></li>
+{% endif %}
+{% if listContext.pageNumber > 1 %}
+	<li><a href="{{ path(listContext.getDisplayLink, { 'pageNumber': (listContext.pageNumber-1) }) }}">{{ (listContext.pageNumber-1) }}</a></li>
+{% endif %}
+	<li class="active"><a href="{{ path(listContext.getDisplayLink, { 'pageNumber': listContext.pageNumber }) }}">{{ listContext.pageNumber }}</a></li>
+{% if listContext.pageNumber < listContext.numberPages %}
+	<li><a href="{{ path(listContext.getDisplayLink, { 'pageNumber': (listContext.pageNumber+1) }) }}">{{ (listContext.pageNumber+1) }}</a></li>
+{% endif %}
+{% if listContext.pageNumber < (listContext.numberPages-1) %}
+	<li><a href="{{ path(listContext.getDisplayLink, { 'pageNumber': listContext.numberPages }) }}">{{ listContext.numberPages }}</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+{% block listRow %}
+{% endblock %}
+
+</div>
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}

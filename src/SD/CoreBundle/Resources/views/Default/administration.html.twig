@@ -1,0 +1,17 @@
+{# src/SD/CoreBundle/Resources/views/Default/administration.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block title %}{{ parent() }} Administration{% endblock %}
+
+{% block body %}
+    
+<div class="list-group">
+{% if userContext.getCurrentUserFileAdministrator() %}
+  <a href="{{ path('sd_core_userFile_list', { 'pageNumber': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('bundles/sdcore/images/user-32.png') }}"> {{ 'user.plural'|trans }} <span class="badge">{{ fileContext.userFileCount }}</span></a>
+{% else %}
+  <li class="list-group-item list-group-item-success"><img src="{{ asset('bundles/sdcore/images/user-32.png') }}"> {{ 'user.plural'|trans }} <span class="badge">{{ fileContext.userFileCount }}</span></li>
+{% endif %}
+</div>
+
+{% endblock %}

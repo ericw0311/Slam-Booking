@@ -1,0 +1,28 @@
+{# src/SD/CoreBundle/Resources/views/UserFile/add.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+<div class="panel panel-default">
+
+<div class="panel-body">
+    {{ form_row(form.email) }}
+    {{ form_row(form.lastName) }}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.SDadministrator) }}
+    {{ form_rest(form) }}
+</div>
+
+<div class="panel-footer">
+<div class="btn-group">
+<a href="{{ path('sd_core_userFile_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</div>
+
+{{ form_end(form) }}
+{% endblock %}

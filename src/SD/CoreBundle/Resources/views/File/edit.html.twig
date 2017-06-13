@@ -1,0 +1,79 @@
+{# src/SD/CoreBundle/Resources/views/File/edit.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+
+<div class="panel panel-default">
+
+  <div class="panel-body">
+<h1><img src="{{ asset('bundles/sdcore/images/file-32.png') }}">&nbsp;{{ file.name }}</h1>
+<p><img src="{{ asset('bundles/sdcore/images/administrator-32.png') }}">&nbsp;{{ 'file.created.by'|trans }}&nbsp;<strong>{{ file.user.username }}</strong></p>
+  </div>
+
+  <div class="panel-footer">
+
+  <div class="btn-group">
+<a href="{{ path('sd_core_file_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back.to.list'|trans }}</a>
+{% if file.user.id != userContext.user.id %}
+    <button type="button" class="btn btn-info btn-primary" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
+    <button type="button" class="btn btn-info btn-danger" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+{% else %}
+    <a href="{{ path('sd_core_file_modify', { 'fileID': file.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+    <a href="{{ path('sd_core_file_delete', { 'fileID': file.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+{% endif %}
+{% if file.ID != userContext.currentFileID %}
+<a href="{{ path('sd_core_file_set_current', { 'fileID': file.ID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-paperclip"></i> {{ 'file.set.as.current'|trans }}</a>
+{% endif %}
+</div>
+
+  </div>
+</div>
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}
+
+<!-- Modal -->
+<div id="updateModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{ 'file.update.not.allowed'|trans }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="deleteModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{ 'file.delete.not.allowed'|trans }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

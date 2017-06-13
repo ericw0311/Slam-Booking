@@ -1,0 +1,63 @@
+# src/SD/CoreBundle/Resources/translations/messages.en.yml
+
+activity.ask.delete: Do you really want to delete activity %name% ?
+activity.back.to.list: Back to activities list
+activity.create: Create an activity
+activity.created.ok: The activity has been created
+activity.deleted.ok: The activity has been deleted
+activity.name: Activity name
+activity.plural: Activities
+activity.singular: Activity
+activity.updated.ok: The activity has been updated
+
+file.ask.delete: Do you really want to delete file %name% ?
+file.back.to.list: Back to file list
+file.create: Create a file
+file.created.by: File created by
+file.created.ok: The file has been created
+file.current: Current file
+file.current.updated.ok: Current file has been updated
+file.delete.not.allowed: Only the creator of the file ia allowed to delete it
+file.deleted.ok: The file has been deleted
+file.name: File name
+file.plural: Files
+file.set.as.current: Set as current file
+file.singular: File
+file.update.not.allowed: Only the creator of the file ia allowed to update it
+file.updated.ok: The file has been updated
+
+timetable.ask.delete: Do you really want to delete timetable %name% ?
+timetable.back.to.list: Back to timetables list
+timetable.create: Create a timetable
+timetable.created.ok: The timetable has been created
+timetable.deleted.ok: The timetable has been deleted
+timetable.name: Timetable name
+timetable.plural: Timetables
+timetable.singular: Timetable
+timetable.updated.ok: The timetable has been updated
+
+timetableLine.create: Add a timetable slot
+timetableLine.created.ok: The timetable slot has been created
+timetableLine.deleted.ok: The timetable slot has been deleted
+timetableLine.updated.ok: The timetable slot has been updated
+
+user.account.type: Account type
+user.account.type.INDIVIDUAL: Individual
+user.account.type.ORGANISATION: Organisation
+user.firstName: First name
+user.lastName: Last name
+user.organisation.name: Organisation name
+user.plural: Users
+user.singular: User
+
+userFile.administrator.rights: The user has administrator rights on file
+userFile.ask.delete: Do you really want to remove user %name% from file ?
+userFile.back.to.list: Back to users list
+userFile.create: Add a user to file
+userFile.created.ok: The user has been added to file
+userFile.delete.not.allowed: The file creator cannot be removed from file
+userFile.deleted.ok: The user has been removed from file
+userFile.update.not.allowed.1: The file creator cannot be modified
+userFile.update.not.allowed.2: Only the file creator can modify a registered user
+userFile.update.not.allowed.3: Informations related to user can be modified from his profile only
+userFile.updated.ok: The user has been updated

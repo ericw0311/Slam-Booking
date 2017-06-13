@@ -1,0 +1,48 @@
+{# src/SD/CoreBundle/Resources/views/Parameter/numberLinesColumns.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+<div class="panel panel-default">
+
+  <div class="panel-body">
+
+    {{ form_errors(form) }}
+
+    <div class="form-group">
+    {{ form_label(form.numberLines, 'number.lines'|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+    {{ form_errors(form.numberLines) }}
+
+      <div class="col-sm-10">
+      {{ form_widget(form.numberLines, {'attr': {'class': 'form-control'}}) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+    {{ form_label(form.numberColumns, 'number.columns'|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+    {{ form_errors(form.numberColumns) }}
+
+      <div class="col-sm-10">
+      {{ form_widget(form.numberColumns, {'attr': {'class': 'form-control'}}) }}
+      </div>
+    </div>
+
+    {{ form_rest(form) }}
+  </div>
+
+
+  <div class="panel-footer">
+    <div class="btn-group">
+<a href="{{ path('sd_' ~ bundleCode ~ '_' ~ entityCode ~ '_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ (entityCode ~ '.back.to.list')|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+    </div>
+  </div>
+
+</div>
+
+{{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,14 @@
+{# src/SD/CoreBundle/Resources/views/unconnected-navbar.html.twig #}
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{{ path('sd_core_homepage') }}"><span class="label label-primary">Slam Booking</span></a>
+    </div>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{{ path('fos_user_registration_register') }}"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a></li>
+      <li><a href="{{ path('fos_user_security_login') }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
+    </ul>
+  </div>
+</nav>

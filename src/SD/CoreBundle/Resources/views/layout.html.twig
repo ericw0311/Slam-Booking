@@ -1,0 +1,16 @@
+{# src/SD/CoreBundle/Resources/views/layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}{{ parent() }} Core{% endblock %}
+
+{% block navbar %}
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+{{ include("::connected-navbar.html.twig") }}
+{% else %}
+{{ include("::unconnected-navbar.html.twig") }}
+{% endif %}
+{% endblock %}
+
+{% block body %}
+{% endblock %}

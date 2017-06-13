@@ -1,0 +1,20 @@
+# app/Resources/translations/messages.en.yml
+
+administration: Administration
+back: Retour
+beginning.time: Beginning time
+cancel: Cancel
+close: Close
+delete: Delete
+delete.not.allowed: Delete not allowed
+end.time: End time
+from: From
+modify: Modify
+number.columns: Number of columns
+number.lines: Number of lines
+number.lines.columns.updated.ok: Number of lines and columns displayed have been updated
+parameters: Parameters
+to: To
+update.not.allowed: Update not allowed
+user.account: User account
+validate: Validate

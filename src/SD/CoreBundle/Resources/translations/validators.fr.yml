@@ -1,0 +1,12 @@
+# src/SD/CoreBundle/Resources/translations/validators.fr.yml
+
+activity.already.exists: Cette activité existe déjà
+
+file.already.exists: Ce dossier existe déjà
+
+timetable.already.exists: Cette grille horaire existe déjà
+
+timetableLine.order.control: L'heure de début de ce créneau horaire doit être supérieure à l'heure de début du créneau précédent %beginningTime%
+
+user.already.assigned.to.file: Cet utilisateur est déjà affecté au dossier
+user.organisation.name.null: Vous devez saisir un nom d'organisation

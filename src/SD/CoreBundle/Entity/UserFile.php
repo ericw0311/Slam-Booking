@@ -63,9 +63,9 @@ class UserFile
     /**
      * @var bool
      *
-     * @ORM\Column(name="sd_administrator", type="boolean")
+     * @ORM\Column(name="administrator", type="boolean")
      */
-    private $SDadministrator = false;
+    private $administrator;
 
     /**
      * @var bool
@@ -240,15 +240,15 @@ class UserFile
     }
 
     /**
-     * Set SDadministrator
+     * Set administrator
      *
-     * @param boolean $SDadministrator
+     * @param boolean $administrator
      *
      * @return UserFile
      */
-    public function setSDadministrator($SDadministrator)
+    public function setAdministrator($administrator)
     {
-        $this->SDadministrator = $SDadministrator;
+        $this->administrator = $administrator;
         return $this;
     }
 
@@ -257,9 +257,9 @@ class UserFile
      *
      * @return bool
      */
-    public function getSDadministrator()
+    public function getAdministrator()
     {
-        return $this->SDadministrator;
+        return $this->administrator;
     }
 
     /**
@@ -345,12 +345,15 @@ class UserFile
         return $this;
     }
 
-    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file)
+    /**
+     * Get file
+     *
+     * @return \SD\CoreBundle\Entity\File
+     */
+    public function getFile()
     {
-    $this->setUser($user);
-    $this->setFile($file);
+        return $this->file;
     }
-
 
     /**
      * Set account
@@ -376,6 +379,12 @@ class UserFile
         return $this->account;
     }
 
+
+    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file)
+    {
+    $this->setUser($user);
+    $this->setFile($file);
+    }
 
     /**
     * @ORM\PrePersist

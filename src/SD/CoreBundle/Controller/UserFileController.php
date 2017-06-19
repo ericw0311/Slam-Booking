@@ -60,7 +60,7 @@ class UserFileController extends Controller
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $userFile = new UserFile($connectedUser, $userContext->getCurrentFile()); // Initialisation du userFile. Les zones lastName, firstName et email sont gerees par le formulaire UserFileEmailType
-    $userFile->setSDadministrator(false);
+    $userFile->setAdministrator(false);
     $userFile->setUserCreated(false);
 
     $form = $this->createForm(UserFileEmailType::class, $userFile);
@@ -106,7 +106,7 @@ class UserFileController extends Controller
 
     $userFile = new UserFile($connectedUser, $userContext->getCurrentFile());
     $userFile->setEmail($email);
-    $userFile->setSDadministrator	(false);
+    $userFile->setAdministrator	(false);
     $userFile->setUserCreated(false);
 
     $form = $this->createForm(UserFileAddType::class, $userFile);

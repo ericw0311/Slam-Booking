@@ -10,6 +10,16 @@ activity.plural: Activities
 activity.singular: Activity
 activity.updated.ok: The activity has been updated
 
+dashboard.ask.delete: Do you really want to delete dashboard %name% ?
+dashboard.back.to.list: Back to dashboards list
+dashboard.create: Create a dashboard
+dashboard.created.ok: The dashboard has been created
+dashboard.deleted.ok: The dashboard has been deleted
+dashboard.name: Dashboard name
+dashboard.plural: Dashboards
+dashboard.singular: Dashboard
+dashboard.updated.ok: The dashboard has been updated
+
 file.ask.delete: Do you really want to delete file %name% ?
 file.back.to.list: Back to file list
 file.create: Create a file

@@ -40,7 +40,7 @@ class UserContext
     public function getCurrentUserFileAdministrator()
     {
     if ($this->currentUserFile != null) {
-        return $this->currentUserFile->getSDadministrator();
+        return $this->currentUserFile->getAdministrator();
     } else {
         return false;
     }

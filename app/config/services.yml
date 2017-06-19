@@ -17,3 +17,9 @@ services:
         arguments: ["security.token_storage", "@doctrine", "@logger"]
         tags:
             - { name: kernel.event_subscriber }
+
+    sd_core.validator.timetableLineOrder:
+        class: SD\CoreBundle\Validator\TimetableLineOrderValidator
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: validator.constraint_validator, alias: sd_core_timetableLineOrder }

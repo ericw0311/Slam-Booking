@@ -68,6 +68,104 @@ sd_core_userFile_delete:
     requirements:
         userFileID: \d+
 
+sd_core_activity_list:
+    path:     /activity/list/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Activity:index }
+
+sd_core_activity_add:
+    path:     /activity/add
+    defaults: { _controller: SDCoreBundle:Activity:add }
+
+sd_core_activity_edit:
+    path:     /activity/edit/{activityID}
+    defaults: { _controller: SDCoreBundle:Activity:edit }
+    requirements:
+        activityID: \d+
+
+sd_core_activity_modify:
+    path:     /activity/modify/{activityID}
+    defaults: { _controller: SDCoreBundle:Activity:modify }
+    requirements:
+        activityID: \d+
+
+sd_core_activity_delete:
+    path:     /activity/delete/{activityID}
+    defaults: { _controller: SDCoreBundle:Activity:delete }
+    requirements:
+        activityID: \d+
+
+sd_core_timetable_list:
+    path:     /timetable/list/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Timetable:index }
+
+sd_core_timetable_add:
+    path:     /timetable/add
+    defaults: { _controller: SDCoreBundle:Timetable:add }
+
+sd_core_timetable_edit:
+    path:     /timetable/edit/{timetableHeaderID}
+    defaults: { _controller: SDCoreBundle:Timetable:edit }
+    requirements:
+        timetableHeaderID: \d+
+
+sd_core_timetable_modify:
+    path:     /timetable/modify/{timetableHeaderID}
+    defaults: { _controller: SDCoreBundle:Timetable:modify }
+    requirements:
+        timetableHeaderID: \d+
+
+sd_core_timetable_delete:
+    path:     /timetable/delete/{timetableHeaderID}
+    defaults: { _controller: SDCoreBundle:Timetable:delete }
+    requirements:
+        timetableHeaderID: \d+
+
+sd_core_timetable_addline:
+    path:     /timetable/addline/{timetableHeaderID}
+    defaults: { _controller: SDCoreBundle:Timetable:addline }
+    requirements:
+        timetableHeaderID: \d+
+
+sd_core_timetable_modifyline:
+    path:     /timetable/modifyline/{timetableHeaderID}/{timetableLineID}
+    defaults: { _controller: SDCoreBundle:Timetable:modifyline }
+    requirements:
+        timetableHeaderID: \d+
+        timetableLineID: \d+
+
+sd_core_timetable_deleteline:
+    path:     /timetable/deleteline/{timetableHeaderID}/{timetableLineID}
+    defaults: { _controller: SDCoreBundle:Timetable:deleteline }
+    requirements:
+        timetableHeaderID: \d+
+        timetableLineID: \d+
+
+sd_core_queryBooking_list:
+    path:     /queryBooking/list/{pageNumber}
+    defaults: { _controller: SDCoreBundle:QueryBooking:index }
+
+sd_core_queryBooking_add:
+    path:     /queryBooking/add
+    defaults: { _controller: SDCoreBundle:QueryBooking:add }
+
+sd_core_queryBooking_edit:
+    path:     /queryBooking/edit/{queryBookingID}
+    defaults: { _controller: SDCoreBundle:QueryBooking:edit }
+    requirements:
+        queryBookingID: \d+
+
+sd_core_queryBooking_modify:
+    path:     /queryBooking/modify/{queryBookingID}
+    defaults: { _controller: SDCoreBundle:QueryBooking:modify }
+    requirements:
+        queryBookingID: \d+
+
+sd_core_queryBooking_delete:
+    path:     /queryBooking/delete/{queryBookingID}
+    defaults: { _controller: SDCoreBundle:QueryBooking:delete }
+    requirements:
+        queryBookingID: \d+
+
 sd_core_parameter_numberLinesColumns:
     path:     /setNumberLinesColumns/{bundleCode}/{entityCode}
     defaults: { _controller: SDCoreBundle:Parameter:numberLinesColumns }

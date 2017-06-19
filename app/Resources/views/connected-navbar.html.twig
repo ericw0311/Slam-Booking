@@ -11,11 +11,19 @@
     </div>
     <ul class="nav navbar-nav">
       <li><a href="{{ path('sd_core_file_list', { 'pageNumber': 1 }) }}"><img src="{{ asset('bundles/sdcore/images/file-16.png') }}"> {{ 'file.plural'|trans }}</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('bundles/sdcore/images/booking-16.png') }}"> Slam Booking<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+  <li><a href="{{ path('sd_core_queryBooking_list', { 'pageNumber': 1 }) }}"><img src="{{ asset('bundles/sdcore/images/dashboard-16.png') }}"> {{ 'dashboard.plural'|trans }}</a></li>
+          </ul>
+      </li>
 {% if userContext.getCurrentUserFileAdministrator() %}
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('bundles/sdcore/images/administration-16.png') }}"> {{ 'administration'|trans }}<span class="caret"></span></a>
           <ul class="dropdown-menu">
   <li><a href="{{ path('sd_core_userFile_list', { 'pageNumber': 1 }) }}"><img src="{{ asset('bundles/sdcore/images/user-16.png') }}"> {{ 'user.plural'|trans }}</a></li>
+  <li><a href="{{ path('sd_core_timetable_list', { 'pageNumber': 1 }) }}"><img src="{{ asset('bundles/sdcore/images/time-16.png') }}"> {{ 'timetable.plural'|trans }}</a></li>
+  <li><a href="{{ path('sd_core_activity_list', { 'pageNumber': 1 }) }}"><img src="{{ asset('bundles/sdcore/images/activity-16.png') }}"> {{ 'activity.plural'|trans }}</a></li>
           </ul>
       </li>
 {% endif %}

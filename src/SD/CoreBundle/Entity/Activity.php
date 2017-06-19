@@ -3,18 +3,17 @@
 namespace SD\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * File
+ * Activity
  *
- * @ORM\Table(name="file", uniqueConstraints={@ORM\UniqueConstraint(name="uk_file",columns={"user_id", "name"})})
- * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\FileRepository")
+ * @ORM\Table(name="activity", uniqueConstraints={@ORM\UniqueConstraint(name="uk_activity",columns={"file_id", "name"})})
+ * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\ActivityRepository")
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity(fields={"user", "name"}, errorPath="name", message="file.already.exists")
+ * @UniqueEntity(fields={"file", "name"}, errorPath="name", message="activity.already.exists")
  */
-class File
+class Activity
 {
     /**
      * @var int
@@ -26,17 +25,23 @@ class File
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+ 
+    /**
+    * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\File")
+    * @ORM\JoinColumn(nullable=false)
+    */
+    private $file;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
 
     /**
     * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -47,13 +52,6 @@ class File
     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
     */
     private $updatedAt;
-
-    /**
-     * One File has Many UserFile.
-     * @ORM\OneToMany(targetEntity="UserFile", mappedBy="file", cascade={"persist", "remove"})
-     */
-    private $userFiles;
-
 
     /**
      * Get id
@@ -70,11 +68,12 @@ class File
      *
      * @param string $name
      *
-     * @return File
+     * @return Activity
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -93,7 +92,7 @@ class File
      *
      * @param \SD\UserBundle\Entity\User $user
      *
-     * @return File
+     * @return Activity
      */
     public function setUser(\SD\UserBundle\Entity\User $user)
     {
@@ -111,10 +110,10 @@ class File
         return $this->user;
     }
 
-    public function __construct(\SD\UserBundle\Entity\User $user)
+    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file)
     {
     $this->setUser($user);
-	$this->userFiles = new ArrayCollection();
+    $this->setFile($file);
     }
 
     /**
@@ -134,37 +133,25 @@ class File
     }
 
     /**
-     * Add userFile
+     * Set file
      *
-     * @param \SD\CoreBundle\Entity\UserFile $userFile
+     * @param \SD\CoreBundle\Entity\File $file
      *
-     * @return File
+     * @return Activity
      */
-    public function addUserFile(\SD\CoreBundle\Entity\UserFile $userFile)
+    public function setFile(\SD\CoreBundle\Entity\File $file)
     {
-        $this->userFiles[] = $userFile;
-        $userFile->setFile($this);
+        $this->file = $file;
         return $this;
     }
 
     /**
-     * Remove userFile
+     * Get file
      *
-     * @param \SD\CoreBundle\Entity\UserFile $userFile
+     * @return \SD\CoreBundle\Entity\File
      */
-    public function removeUserFile(\SD\CoreBundle\Entity\UserFile $userFile)
+    public function getFile()
     {
-        $this->userFiles->removeElement($userFile);
-    }
-
-    /**
-     * Get userFiles
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserFiles()
-    {
-        return $this->userFiles;
+        return $this->file;
     }
 }
-

@@ -3,23 +3,18 @@
 namespace SD\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserFileAddType extends AbstractType
+class TimetableHeaderType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-    $builder->add('email', HiddenType::class)
-        ->add('lastName', TextType::class, array('label' => 'user.lastName', 'translation_domain' => 'messages'))
-        ->add('firstName', TextType::class, array('label' => 'user.firstName', 'translation_domain' => 'messages'))
-        ->add('administrator', HiddenType::class, array('data' => 0));
+        $builder->add('name', TextType::class, array('label' => 'timetable.name', 'translation_domain' => 'messages'));
     }
     
     /**
@@ -28,7 +23,7 @@ class UserFileAddType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SD\CoreBundle\Entity\UserFile'
+            'data_class' => 'SD\CoreBundle\Entity\TimetableHeader'
         ));
     }
 
@@ -37,8 +32,7 @@ class UserFileAddType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'sd_corebundle_userfile';
+        return 'sd_corebundle_timetableHeader';
     }
-
 
 }

@@ -3,6 +3,7 @@
 {% extends "::layout.html.twig" %}
 
 {% block title %}{{ parent() }} List{% endblock %}
+{% block stylesheets %}{{ parent() }}{% endblock %}
 
 {% block navbar %}
 {{ include("::connected-navbar.html.twig") }}

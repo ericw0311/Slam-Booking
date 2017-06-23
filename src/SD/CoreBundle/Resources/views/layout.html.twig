@@ -3,6 +3,7 @@
 {% extends "::layout.html.twig" %}
 
 {% block title %}{{ parent() }} Core{% endblock %}
+{% block stylesheets %}{{ parent() }}{% endblock %}
 
 {% block navbar %}
 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}

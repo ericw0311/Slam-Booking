@@ -36,7 +36,7 @@ class QueryBooking
      *
      * @ORM\Column(name="period_type", type="string", length=255)
      */
-    private $periodType;
+    private $periodType = "NO";
 
     /**
      * @var \DateTime
@@ -57,14 +57,14 @@ class QueryBooking
      *
      * @ORM\Column(name="user_type", type="string", length=255)
      */
-    private $userType;
+    private $userType = "ALL";
 
     /**
      * @var string
      *
      * @ORM\Column(name="resource_type", type="string", length=255)
      */
-    private $resourceType;
+    private $resourceType = "ALL";
 
 
     /**

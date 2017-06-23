@@ -28,7 +28,7 @@ class TimetableLineOrderValidator extends ConstraintValidator
     $timetableHeaderRepository = $entityManager->getRepository('SDCoreBundle:TimetableHeader');
     $timetableHeader = $timetableHeaderRepository->find($timetableLine->getTimetableHeader()->getID());
 
-    if (true) {
+    if (false) {
         // C'est cette ligne qui déclenche l'erreur pour le formulaire, avec en argument le message de la contrainte
         $this->context->buildViolation($constraint->message)
 //            ->setParameter('%beginningTime%', date_format($timetableLine->getBeginningTime(), 'H:i'))

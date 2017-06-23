@@ -34,7 +34,7 @@ class ActivityController extends Controller
 
     $numberRecords = $activityRepository->getActivitiesCount($userContext->getCurrentFile());
 
-    $listContext = new ListContext($em, $connectedUser, 'core', 'activity', $pageNumber, $numberRecords, 'sd_core_activity_display', 'sd_core_activity_add');
+    $listContext = new ListContext($em, $connectedUser, 'core', 'activity', $pageNumber, $numberRecords, 'sd_core_activity_list', 'sd_core_activity_add');
 
     $listActivities = $activityRepository->getDisplayedActivities($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 

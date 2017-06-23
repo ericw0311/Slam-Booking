@@ -44,6 +44,10 @@ class TimetableHeader
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity="TimetableLine", mappedBy="timetableHeader", cascade={"persist", "remove"})
+     */
+    private $timetableLines;
 
     /**
      * Get id

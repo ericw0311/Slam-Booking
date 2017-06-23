@@ -10,15 +10,18 @@ activity.plural: Activities
 activity.singular: Activity
 activity.updated.ok: The activity has been updated
 
-dashboard.ask.delete: Do you really want to delete dashboard %name% ?
-dashboard.back.to.list: Back to dashboards list
-dashboard.create: Create a dashboard
-dashboard.created.ok: The dashboard has been created
-dashboard.deleted.ok: The dashboard has been deleted
-dashboard.name: Dashboard name
 dashboard.plural: Dashboards
 dashboard.singular: Dashboard
-dashboard.updated.ok: The dashboard has been updated
+
+queryBooking.ask.delete: Do you really want to delete query %name% ?
+queryBooking.back.to.list: Back to queries list
+queryBooking.create: Create a query
+queryBooking.created.ok: The query has been created
+queryBooking.deleted.ok: The query has been deleted
+queryBooking.name: Query name
+queryBooking.plural: Queries
+queryBooking.singular: Query
+queryBooking.updated.ok: The query has been updated
 
 file.ask.delete: Do you really want to delete file %name% ?
 file.back.to.list: Back to file list
@@ -35,6 +38,15 @@ file.set.as.current: Set as current file
 file.singular: File
 file.update.not.allowed: Only the creator of the file ia allowed to update it
 file.updated.ok: The file has been updated
+
+period.type: Period
+period.type.AFTER: After a day
+period.type.AFTER.SYSDATE: After current day
+period.type.BEFORE: Before a day
+period.type.BEFORE.SYSDATE: Before current day
+period.type.BETWEEN: Between two days
+period.type.NO: No period
+period.type.SYSDATE: Current date
 
 timetable.ask.delete: Do you really want to delete timetable %name% ?
 timetable.back.to.list: Back to timetables list

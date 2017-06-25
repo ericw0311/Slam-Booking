@@ -25,4 +25,21 @@
 
 {{ form_end(form) }}
 
+<script>
+	var periodType = document.getElementById('sd_corebundle_queryBooking_periodType');
+	var beginningDate = document.getElementById('sd_corebundle_queryBooking_beginningDate');
+	var endDate = document.getElementById('sd_corebundle_queryBooking_endDate');
+	var periodTypeValue = periodType.options[periodType.selectedIndex].value;
+
+	if (periodTypeValue != "BETWEEN" && periodTypeValue != "AFTER") {
+		beginningDate.disabled = true;
+	}
+
+	if (periodTypeValue != "BETWEEN" && periodTypeValue != "BEFORE") {
+		endDate.disabled = true;
+	}
+</script>
+
+<script src="{{ asset('bundles/sdcore/js/queryBooking.js') }}"></script>
+
 {% endblock %}

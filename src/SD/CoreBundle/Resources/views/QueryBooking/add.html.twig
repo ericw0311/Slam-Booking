@@ -10,6 +10,9 @@
 <div class="panel-body">
     {{ form_errors(form) }}
     {{ form_row(form.name) }}
+    {{ form_row(form.periodType) }}
+    {{ form_row(form.beginningDate) }}
+    {{ form_row(form.endDate) }}
     {{ form_rest(form) }}
 </div>
 
@@ -23,5 +26,14 @@
 </div>
 
 {{ form_end(form) }}
+
+<script>
+	var beginningDate = document.getElementById('sd_corebundle_queryBooking_beginningDate');
+	beginningDate.disabled = true;
+	var endDate = document.getElementById('sd_corebundle_queryBooking_endDate');
+	endDate.disabled = true;
+</script>
+
+<script src="{{ asset('bundles/sdcore/js/queryBooking.js') }}"></script>
 
 {% endblock %}

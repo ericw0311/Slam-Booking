@@ -10,7 +10,6 @@
 <div class="panel-body">
 <p><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;<strong>{{ timetableHeader.name }}</strong></p>
 
-{% if listLastTimetableLines|length > 0 %}
 <table class="table table-striped">
 <thead>
     <tr>
@@ -19,20 +18,26 @@
     </tr>
 </thead>
 <tbody>
+
+{% if listLastTimetableLines|length > 0 %}
 {% for timetableLine in listLastTimetableLines|reverse %}
 <tr>
     <td>{{ timetableLine.beginningTime|date("H:i") }}</td>
     <td>{{ timetableLine.endTime|date("H:i") }}</td>
 </tr>
 {% endfor %}
-</tbody>
-</table>
 {% endif %}
 
-    {{ form_errors(form) }}
-    {{ form_row(form.beginningTime) }}
-    {{ form_row(form.endTime) }}
-    {{ form_rest(form) }}
+<tr>
+	<td>{{ form_widget(form.beginningTime) }}</td>
+	<td>{{ form_widget(form.endTime) }}</td>
+</tr>
+
+</tbody>
+</table>
+
+{{ form_errors(form) }}
+
 </div>
 
 <div class="panel-footer">
@@ -45,4 +50,9 @@
 </div>
 
 {{ form_end(form) }}
+
+<script>
+	document.getElementById("sd_corebundle_timetableLine_beginningTime").focus();
+</script>
+
 {% endblock %}

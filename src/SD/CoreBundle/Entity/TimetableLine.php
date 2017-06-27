@@ -183,4 +183,11 @@ class TimetableLine
     {
         $this->updatedAt = new \DateTime();
     }
+
+    public function myToString()
+    {
+        return '*1*'.date_format($this->beginningTime, "H:i").'*2*'.$this->getId().'*3*'.number_format($this->id).'*4*'.$this->id.'*5*';
+    }
+
+
 }

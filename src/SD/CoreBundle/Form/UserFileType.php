@@ -28,7 +28,7 @@ class UserFileType extends AbstractType
         ->add('lastName', TextType::class, array('label' => 'user.lastName', 'translation_domain' => 'messages'))
         ->add('firstName', TextType::class, array('label' => 'user.firstName', 'translation_domain' => 'messages'))
         ->add('uniqueName', TextType::class, array('label' => 'user.organisation.name', 'translation_domain' => 'messages', 'required' => false))
-        ->add('administrator', HiddenType::class);
+        ->add('administrator', HiddenType::class, array('data' => 0));
     }
     
     /**

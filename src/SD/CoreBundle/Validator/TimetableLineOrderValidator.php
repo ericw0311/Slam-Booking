@@ -28,13 +28,20 @@ class TimetableLineOrderValidator extends ConstraintValidator
     $timetableHeaderRepository = $entityManager->getRepository('SDCoreBundle:TimetableHeader');
     $timetableHeader = $timetableHeaderRepository->find($timetableLine->getTimetableHeader()->getID());
 
-    if (false) {
-        // C'est cette ligne qui déclenche l'erreur pour le formulaire, avec en argument le message de la contrainte
-        $this->context->buildViolation($constraint->message)
-//            ->setParameter('%beginningTime%', date_format($timetableLine->getBeginningTime(), 'H:i'))
-            ->setParameter('%beginningTime%', $timetableHeader->getName())
-            ->addViolation();
+	$timetableLineRepository = $entityManager->getRepository('SDCoreBundle:TimetableLine');
+	$previousTimetableLine = null;
+	if ($timetableLine->getId() > 0) {
+		$previousTimetableLine = $timetableLineRepository->getPreviousTimetableLine($timetableHeader, $timetableLine->getId());
+	}
 
+	$interval = date_diff($previousTimetableLine->getBeginningTime(), $timetableLine->getBeginningTime());
+
+	if ($previousTimetableLine != null) { // Le créneau précédent est trouvé 
+		// C'est cette ligne qui déclenche l'erreur pour le formulaire, avec en argument le message de la contrainte
+		$this->context->buildViolation($constraint->message)
+//			->setParameter('%beginningTime%', date_format($previousTimetableLine->getBeginningTime(), "H:i"))
+			->setParameter('%beginningTime%', $interval->format('%R%h%i minuts'))
+            ->addViolation();
     }
     }
 }

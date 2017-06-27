@@ -39,6 +39,4 @@ class UserFileAddType extends AbstractType
     {
         return 'sd_corebundle_userfile';
     }
-
-
 }

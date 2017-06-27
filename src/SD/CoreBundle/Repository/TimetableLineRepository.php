@@ -56,4 +56,18 @@ class TimetableLineRepository extends \Doctrine\ORM\EntityRepository
     $results = $query->getResult();
     return $results;
     }
+
+	// Retourne le creneau horaire precedent
+	public function getPreviousTimetableLine($timetableHeader, $timetableLineID)
+    {
+	$queryBuilder = $this->createQueryBuilder('tl');
+	$queryBuilder->where('tl.timetableHeader = :timetableHeader')->setParameter('timetableHeader', $timetableHeader);
+	$queryBuilder->andWhere('tl.id < :timetableLineID')->setParameter('timetableLineID', $timetableLineID);
+	$queryBuilder->orderBy('tl.id', 'DESC');
+	$queryBuilder->setMaxResults(1);
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
 }

@@ -6,7 +6,8 @@ file.already.exists: This file already exists
 
 timetable.already.exists: This timetable already exists
 
-timetableLine.order.control: L'heure de début de ce créneau horaire doit être supérieure à l'heure de début du créneau précédent
+timetableLine.endTime.control: End time must be greather than beginning time
+timetableLine.order.control: Beginning time must be equal or greather than the previous slot end time %endTime%
 
 user.already.assigned.to.file: This user is already assigned to file
 user.organisation.name.null: You must enter an organisation name

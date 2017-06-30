@@ -148,6 +148,10 @@ public function addlineAction(TimetableHeader $timetableHeader, Request $request
 
     $timetableLine = new TimetableLine($connectedUser, $timetableHeader);
 
+    if (count($listLastTimetableLines) > 0) { // On initialise la date de début avec la date de fin du dernier créneau
+		$timetableLine->setBeginningTime(current($listLastTimetableLines)->getEndTime());
+	}
+
     $form = $this->createForm(TimetableLineType::class, $timetableLine);
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {

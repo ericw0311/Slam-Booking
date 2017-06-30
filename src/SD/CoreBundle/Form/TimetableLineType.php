@@ -14,9 +14,9 @@ class TimetableLineType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('beginningTime', TimeType::class, array('label' => 'beginning.time', 'translation_domain' => 'messages',
+        $builder->add('beginningTime', TimeType::class, array('label' => false,
 			'widget' => 'single_text', 'html5' => false, 'attr' => ['class' => 'timepicker']))
-            ->add('endTime', TimeType::class, array('label' => 'end.time', 'translation_domain' => 'messages',
+            ->add('endTime', TimeType::class, array('label' => false,
 			'widget' => 'single_text', 'html5' => false, 'attr' => ['class' => 'timepicker']));
     }
     

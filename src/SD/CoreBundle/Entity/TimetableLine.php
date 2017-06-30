@@ -4,6 +4,7 @@ namespace SD\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use SD\CoreBundle\Validator\TimetableLineOrder;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * TimetableLine
@@ -189,5 +190,12 @@ class TimetableLine
         return '*1*'.date_format($this->beginningTime, "H:i").'*2*'.$this->getId().'*3*'.number_format($this->id).'*4*'.$this->id.'*5*';
     }
 
-
+    /**
+    * @Assert\IsTrue(message="timetableLine.endTime.control")
+    */
+    public function isEndTime()
+    {
+	$interval = date_diff($this->getEndTime(), $this->getBeginningTime());
+	return ($interval->format("%R") == "-");
+    }
 }

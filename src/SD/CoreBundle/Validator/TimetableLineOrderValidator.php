@@ -30,18 +30,22 @@ class TimetableLineOrderValidator extends ConstraintValidator
 
 	$timetableLineRepository = $entityManager->getRepository('SDCoreBundle:TimetableLine');
 	$previousTimetableLine = null;
-	if ($timetableLine->getId() > 0) {
+	$nextTimetableLine = null;
+
+	if ($timetableLine->getId() > 0) { // On est en mise a jour de créneau horaire
 		$previousTimetableLine = $timetableLineRepository->getPreviousTimetableLine($timetableHeader, $timetableLine->getId());
+	} else { // On est en création de créneau horaire
+		$previousTimetableLine = $timetableLineRepository->getLastTimetableLine($timetableHeader);
 	}
 
-	$interval = date_diff($previousTimetableLine->getBeginningTime(), $timetableLine->getBeginningTime());
+	if ($previousTimetableLine != null) { // Il existe un créneau précédent
+		$interval = date_diff($previousTimetableLine->getEndTime(), $timetableLine->getBeginningTime());
 
-	if ($previousTimetableLine != null) { // Le créneau précédent est trouvé 
-		// C'est cette ligne qui déclenche l'erreur pour le formulaire, avec en argument le message de la contrainte
-		$this->context->buildViolation($constraint->message)
-//			->setParameter('%beginningTime%', date_format($previousTimetableLine->getBeginningTime(), "H:i"))
-			->setParameter('%beginningTime%', $interval->format('%R%h%i minuts'))
-            ->addViolation();
-    }
+		if ($interval->format("%R") == "-") { // L'heure de début est inférieure à l'heure de fin du créneau précédent
+			$this->context->buildViolation($constraint->message)
+				->setParameter('%endTime%', date_format($previousTimetableLine->getEndTime(), "H:i"))
+				->addViolation();
+		}
+	}
     }
 }

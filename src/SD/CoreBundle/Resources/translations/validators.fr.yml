@@ -6,7 +6,8 @@ file.already.exists: Ce dossier existe déjà
 
 timetable.already.exists: Cette grille horaire existe déjà
 
-timetableLine.order.control: L'heure de début de ce créneau horaire doit être supérieure à l'heure de début du créneau précédent %beginningTime%
+timetableLine.endTime.control: L'heure de fin doit être supérieure à l'heure de début
+timetableLine.order.control: L'heure de début doit être égale ou supérieure à l'heure de fin du créneau précédent %endTime%
 
 user.already.assigned.to.file: Cet utilisateur est déjà affecté au dossier
 user.organisation.name.null: Vous devez saisir un nom d'organisation

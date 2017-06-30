@@ -70,4 +70,31 @@ class TimetableLineRepository extends \Doctrine\ORM\EntityRepository
 	$results = $query->getOneOrNullResult();
 	return $results;
 	}
+
+	// Retourne le creneau horaire suivant
+	public function getNextTimetableLine($timetableHeader, $timetableLineID)
+    {
+	$queryBuilder = $this->createQueryBuilder('tl');
+	$queryBuilder->where('tl.timetableHeader = :timetableHeader')->setParameter('timetableHeader', $timetableHeader);
+	$queryBuilder->andWhere('tl.id > :timetableLineID')->setParameter('timetableLineID', $timetableLineID);
+	$queryBuilder->orderBy('tl.id', 'ASC');
+	$queryBuilder->setMaxResults(1);
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
+
+	// Retourne le dernier creneau horaire
+	public function getLastTimetableLine($timetableHeader)
+	{
+	$queryBuilder = $this->createQueryBuilder('tl');
+	$queryBuilder->where('tl.timetableHeader = :timetableHeader')->setParameter('timetableHeader', $timetableHeader);
+	$queryBuilder->orderBy('tl.id', 'DESC');
+	$queryBuilder->setMaxResults(1);
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
 }

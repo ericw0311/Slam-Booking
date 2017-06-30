@@ -410,7 +410,5 @@ class UserFile
     {
         return ($this->getAccountType() != 'ORGANISATION' or $this->getUniqueName() !== null);
     }
-
-
 }
 

@@ -1,0 +1,38 @@
+{# src/SD/CoreBundle/Resources/views/Planning/index.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block title %}{{ parent() }} Planning{% endblock %}
+
+{% block body %}
+
+Le planning Slam-Booking
+
+<table>
+<tr>
+<td>ici</td>
+</tr>
+<tr>
+<td>ici</td>
+<td><a href="" id="view">View</a></td>
+</tr>
+<tr>
+<td>et la</td>
+</tr>
+</table>
+
+<span id="clickme">Cliquez-moi !</span>
+
+<script>
+
+url1 = Routing.generate('my_route_to_expose', { id: 21 });
+$('#view').attr('href', url1);
+
+	var element = document.getElementById('clickme');
+	element.onclick = function() {
+		url = Routing.generate('my_route_to_expose', { id: 22 });
+		alert(url);
+	};
+</script>
+
+{% endblock %}

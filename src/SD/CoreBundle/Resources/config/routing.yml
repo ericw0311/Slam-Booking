@@ -166,6 +166,22 @@ sd_core_queryBooking_delete:
     requirements:
         queryBookingID: \d+
 
+sd_core_planning_display:
+    path:     /planning/display
+    defaults: { _controller: SDCoreBundle:Planning:index }
+
+my_route_to_expose:
+    path: /planning/foo/{id}/bar
+    defaults: { _controller: SDCoreBundle:Planning:foo }
+    options:
+        expose: true
+
+my_route_to_expose_with_defaults:
+    path: /planning/blog/{page}
+    defaults: { _controller: SDCoreBundle:Planning:blog, page: 1 }
+    options:
+        expose: true
+
 sd_core_parameter_numberLinesColumns:
     path:     /setNumberLinesColumns/{bundleCode}/{entityCode}
     defaults: { _controller: SDCoreBundle:Parameter:numberLinesColumns }

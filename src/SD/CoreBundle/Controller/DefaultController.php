@@ -25,6 +25,7 @@ class DefaultController extends Controller
         return $this->render('SDCoreBundle:Default:administration.html.twig', array('userContext' => $userContext, 'fileContext' => $fileContext));
     }
     }
+    
     public function administrationAction()
     {
     $connectedUser = $this->getUser();

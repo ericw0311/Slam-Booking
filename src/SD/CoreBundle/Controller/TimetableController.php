@@ -158,9 +158,13 @@ public function addlineAction(TimetableHeader $timetableHeader, Request $request
         $em->persist($timetableLine);
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'timetableLine.created.ok');
-
-        return $this->redirectToRoute('sd_core_timetable_edit', array('timetableHeaderID' => $timetableHeader->getID()));
-    }
+		
+		if ($form->get('validateAndCreate')->isClicked()) {
+			return $this->redirectToRoute('sd_core_timetable_addline', array('timetableHeaderID' => $timetableHeader->getID()));
+		} else {
+			return $this->redirectToRoute('sd_core_timetable_edit', array('timetableHeaderID' => $timetableHeader->getID()));
+		}
+	}
 
     return $this->render('SDCoreBundle:Timetable:addline.html.twig',
         array('userContext' => $userContext, 'timetableHeader' => $timetableHeader, 'listLastTimetableLines' => $listLastTimetableLines, 'form' => $form->createView()));

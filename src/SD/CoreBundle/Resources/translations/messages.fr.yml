@@ -64,6 +64,7 @@ timetableLine.create: Ajouter un créneau horaire
 timetableLine.created.ok: Le créneau horaire a bien été créé
 timetableLine.deleted.ok: Le créneau horaire a bien été supprimé
 timetableLine.updated.ok: Le créneau horaire a bien été modifié
+timetableLine.validate.and.create: Valider et ajouter un créneau horaire
 
 user.account.type: Type de compte
 user.account.type.INDIVIDUAL: Individuel

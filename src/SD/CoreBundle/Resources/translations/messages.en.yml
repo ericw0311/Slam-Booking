@@ -64,6 +64,7 @@ timetableLine.create: Add a timetable slot
 timetableLine.created.ok: The timetable slot has been created
 timetableLine.deleted.ok: The timetable slot has been deleted
 timetableLine.updated.ok: The timetable slot has been updated
+timetableLine.validate.and.create: Validate and add a timetable slot
 
 user.account.type: Account type
 user.account.type.INDIVIDUAL: Individual

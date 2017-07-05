@@ -43,7 +43,10 @@
 <div class="panel-footer">
 <div class="btn-group">
 <a href="{{ path('sd_core_timetable_edit', { 'timetableHeaderID': timetableHeader.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<button type="submit" name = "validate" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<button type="submit" name = "validateAndCreate" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> {{ 'timetableLine.validate.and.create'|trans }}</button>
+{{ form_row(form.validateAndCreate) }}
+
 </div>
 </div>
 

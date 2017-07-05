@@ -18,6 +18,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    sd_core.calendar_listener:
+        class: SD\CoreBundle\Event\CalendarEventListener
+        arguments: ["@doctrine", "@logger"]
+        tags:
+            - { name: kernel.event_listener, event: calendar.load_events, method: loadEvents }
+
     sd_core.validator.timetableLineOrder:
         class: SD\CoreBundle\Validator\TimetableLineOrderValidator
         arguments: ["@doctrine.orm.entity_manager"]

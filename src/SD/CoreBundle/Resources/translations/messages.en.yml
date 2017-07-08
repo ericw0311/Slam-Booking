@@ -50,6 +50,16 @@ queryBooking.plural: Queries
 queryBooking.singular: Query
 queryBooking.updated.ok: The query has been updated
 
+resourceClassification.ask.delete: Do you really want to delete resource classification %name% ?
+resourceClassification.back.to.list: Back to resource classifications
+resourceClassification.create: Create a resource classification
+resourceClassification.created.ok: The resource classification has been created
+resourceClassification.deleted.ok: The resource classification has been deleted
+resourceClassification.name: Resource classification name
+resourceClassification.plural: Resource classifications
+resourceClassification.singular: Resource classification
+resourceClassification.updated.ok: The resource classification has been updated
+
 timetable.ask.delete: Do you really want to delete timetable %name% ?
 timetable.back.to.list: Back to timetables list
 timetable.create: Create a timetable

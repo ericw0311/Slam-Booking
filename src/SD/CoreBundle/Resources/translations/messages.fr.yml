@@ -50,6 +50,16 @@ queryBooking.plural: Requêtes
 queryBooking.singular: Requête
 queryBooking.updated.ok: La requête a bien été modifiée
 
+resourceClassification.ask.delete: Voulez-vous vraiment supprimer la classification de ressources %name% ?
+resourceClassification.back.to.list: Retour aux classifications de ressources
+resourceClassification.create: Créer une classification de ressources
+resourceClassification.created.ok: La classification de ressources a bien été créée
+resourceClassification.deleted.ok: La classification de ressources a bien été supprimée
+resourceClassification.name: Nom de la classification de ressources
+resourceClassification.plural: Classifications de ressources
+resourceClassification.singular: Classification de ressources
+resourceClassification.updated.ok: La classification de ressources a bien été modifiée
+
 timetable.ask.delete: Voulez-vous vraiment supprimer la grille horaire %name% ?
 timetable.back.to.list: Retour à la liste des grilles horaires
 timetable.create: Créer une grille horaire

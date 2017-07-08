@@ -20,7 +20,7 @@ services:
 
     sd_core.calendar_listener:
         class: SD\CoreBundle\Event\CalendarEventListener
-        arguments: ["@doctrine", "@logger"]
+        arguments: ["@router", "@security.token_storage", "@doctrine", "@logger"]
         tags:
             - { name: kernel.event_listener, event: calendar.load_events, method: loadEvents }
 

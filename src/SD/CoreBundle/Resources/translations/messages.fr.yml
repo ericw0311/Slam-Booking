@@ -60,6 +60,68 @@ resourceClassification.plural: Classifications de ressources
 resourceClassification.singular: Classification de ressources
 resourceClassification.updated.ok: La classification de ressources a bien été modifiée
 
+resourceClassification.plural.BIKE: Vélos
+resourceClassification.plural.BOAT: Bateaux
+resourceClassification.plural.CAMERA: Appareils photo
+resourceClassification.plural.CAR: Voitures
+resourceClassification.plural.COMPUTER: Ordinateurs
+resourceClassification.plural.CONTRACTOR: Prestataires
+resourceClassification.plural.COURT: Courts
+resourceClassification.plural.DENTIST: Dentistes
+resourceClassification.plural.DOCTOR: Médecins
+resourceClassification.plural.FLAT: Appartements
+resourceClassification.plural.GLIDER: Planeurs
+resourceClassification.plural.GYMNASIUM: Gymnases
+resourceClassification.plural.HORSE: Chevaux
+resourceClassification.plural.HOUSE: Maisons
+resourceClassification.plural.MOBILE-HOME: Mobile homes
+resourceClassification.plural.MOTORBIKE: Motos
+resourceClassification.plural.PITCH: Terrains
+resourceClassification.plural.PLANE: Avions
+resourceClassification.plural.PROJECTOR: Rétro projecteurs
+resourceClassification.plural.ROOM: Salles
+resourceClassification.plural.TEACHER: Formateurs
+resourceClassification.plural.TENT: Tentes
+resourceClassification.plural.TRACTOR: Tracteurs
+resourceClassification.plural.TRUCK: Camions
+
+resourceClassification.singular.BIKE: Vélo
+resourceClassification.singular.BOAT: Bateau
+resourceClassification.singular.CAMERA: Appareil photo
+resourceClassification.singular.CAR: Voiture
+resourceClassification.singular.COMPUTER: Ordinateur
+resourceClassification.singular.CONTRACTOR: Prestataire
+resourceClassification.singular.COURT: Court
+resourceClassification.singular.DENTIST: Dentiste
+resourceClassification.singular.DOCTOR: Médecin
+resourceClassification.singular.FLAT: Appartement
+resourceClassification.singular.GLIDER: Planeur
+resourceClassification.singular.GYMNASIUM: Gymnase
+resourceClassification.singular.HORSE: Cheval
+resourceClassification.singular.HOUSE: Maison
+resourceClassification.singular.MOBILE-HOME: Mobile home
+resourceClassification.singular.MOTORBIKE: Moto
+resourceClassification.singular.PITCH: Terrain
+resourceClassification.singular.PLANE: Avion
+resourceClassification.singular.PROJECTOR: Rétro projecteur
+resourceClassification.singular.ROOM: Salle
+resourceClassification.singular.TEACHER: Formateur
+resourceClassification.singular.TENT: Tente
+resourceClassification.singular.TRACTOR: Tracteur
+resourceClassification.singular.TRUCK: Camion
+
+resourceType.plural.PLACE: Lieux
+resourceType.plural.SPORT: Equipements sportifs
+resourceType.plural.TOOL: Outils
+resourceType.plural.USER: Utilisateurs
+resourceType.plural.VEHICLE: Véhicules
+
+resourceType.singular.PLACE: Lieu
+resourceType.singular.SPORT: Equipement sportif
+resourceType.singular.TOOL: Outil
+resourceType.singular.USER: Utilisateur
+resourceType.singular.VEHICLE: Véhicule
+
 timetable.ask.delete: Voulez-vous vraiment supprimer la grille horaire %name% ?
 timetable.back.to.list: Retour à la liste des grilles horaires
 timetable.create: Créer une grille horaire

@@ -60,6 +60,68 @@ resourceClassification.plural: Resource classifications
 resourceClassification.singular: Resource classification
 resourceClassification.updated.ok: The resource classification has been updated
 
+resourceClassification.plural.BIKE: Bicycles
+resourceClassification.plural.BOAT: Boats
+resourceClassification.plural.CAMERA: Cameras
+resourceClassification.plural.CAR: Cars
+resourceClassification.plural.COMPUTER: Computers
+resourceClassification.plural.CONTRACTOR: Contractors
+resourceClassification.plural.COURT: Courts
+resourceClassification.plural.DENTIST: Dentists
+resourceClassification.plural.DOCTOR: Doctors
+resourceClassification.plural.FLAT: Flat
+resourceClassification.plural.GLIDER: Gliders
+resourceClassification.plural.GYMNASIUM: Gymnasium
+resourceClassification.plural.HORSE: Horses
+resourceClassification.plural.HOUSE: Houses
+resourceClassification.plural.MOBILE-HOME: Mobile homes
+resourceClassification.plural.MOTORBIKE: Motorbikes
+resourceClassification.plural.PITCH: Pitches
+resourceClassification.plural.PLANE: Planes
+resourceClassification.plural.PROJECTOR: Projectors
+resourceClassification.plural.ROOM: Rooms
+resourceClassification.plural.TEACHER: Teachers
+resourceClassification.plural.TENT: Tents
+resourceClassification.plural.TRACTOR: Tractors
+resourceClassification.plural.TRUCK: Trucks
+
+resourceClassification.singular.BIKE: Bicycle
+resourceClassification.singular.BOAT: Boat
+resourceClassification.singular.CAMERA: Camera
+resourceClassification.singular.CAR: Car
+resourceClassification.singular.COMPUTER: Computer
+resourceClassification.singular.CONTRACTOR: Contractor
+resourceClassification.singular.COURT: Court
+resourceClassification.singular.DENTIST: Dentist
+resourceClassification.singular.DOCTOR: Doctor
+resourceClassification.singular.FLAT: Flat
+resourceClassification.singular.GLIDER: Glider
+resourceClassification.singular.GYMNASIUM: Gymnasium
+resourceClassification.singular.HORSE: Horse
+resourceClassification.singular.HOUSE: House
+resourceClassification.singular.MOBILE-HOME: Mobile home
+resourceClassification.singular.MOTORBIKE: Motorbike
+resourceClassification.singular.PITCH: Pitch
+resourceClassification.singular.PLANE: Plane
+resourceClassification.singular.PROJECTOR: Projector
+resourceClassification.singular.ROOM: Room
+resourceClassification.singular.TEACHER: Teacher
+resourceClassification.singular.TENT: Tent
+resourceClassification.singular.TRACTOR: Tractor
+resourceClassification.singular.TRUCK: Truck
+
+resourceType.plural.PLACE: Places
+resourceType.plural.SPORT: Sport equipments
+resourceType.plural.TOOL: Tools
+resourceType.plural.USER: Users
+resourceType.plural.VEHICLE: Vehicles
+
+resourceType.singular.PLACE: Place
+resourceType.singular.SPORT: Sport equipment
+resourceType.singular.TOOL: Tool
+resourceType.singular.USER: User
+resourceType.singular.VEHICLE: Vehicle
+
 timetable.ask.delete: Do you really want to delete timetable %name% ?
 timetable.back.to.list: Back to timetables list
 timetable.create: Create a timetable

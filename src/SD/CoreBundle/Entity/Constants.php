@@ -17,4 +17,48 @@ class Constants
 
 	const NUMBER_LINES_BEFORE_AFTER_UPDATE = 3; // Nombre de lignes a afficher avant et apres la ligne mise a jour (cas de multilignes type creneaux horaires)
 	const NUMBER_LINES_MINI_DUAL_BUTTON_LIST = 8; // Nombre de lignes minimum a partir duquel on affiche la serie de bouttons actions avant et après la liste en question
+
+	const RESOURCE_TYPE = array('PLACE', 'VEHICLE', 'TOOL', 'SPORT');
+	
+	const RESOURCE_TYPE_ICON = array(
+			'PLACE' => 'place',
+			'VEHICLE' => 'vehicle',
+			'TOOL' => 'tool',
+			'SPORT' => 'sport',
+			'USER' => 'user'
+		);
+
+	const RESOURCE_CLASSIFICATION = array(
+			'PLACE' => array('ROOM', 'FLAT', 'HOUSE', 'MOBILE-HOME', 'TENT'),
+			'VEHICLE' => array('CAR', 'TRUCK', 'TRACTOR', 'BIKE', 'MOTORBIKE', 'BOAT', 'PLANE', 'GLIDER'),
+			'TOOL' => array('COMPUTER', 'CAMERA', 'PROJECTOR'),
+			'SPORT' => array('COURT', 'PITCH', 'GYMNASIUM', 'HORSE'),
+			'USER' => array('TEACHER', 'CONTRACTOR', 'DOCTOR', 'DENTIST')
+		);
+
+	const RESOURCE_CLASSIFICATION_ICON = array(
+			'BIKE' => 'bike',
+			'BOAT' => 'boat',
+			'CAMERA' => 'camera',
+			'CAR' => 'car',
+			'COMPUTER' => 'computer',
+			'CONTRACTOR' => 'contractor',
+			'COURT' => 'court',
+			'DENTIST' => 'dentist',
+			'DOCTOR' => 'doctor',
+			'FLAT' => 'flat',
+			'GLIDER' => 'glider',
+			'GYMNASIUM' => 'gymnasium',
+			'HORSE' => 'horse',
+			'HOUSE' => 'house',
+			'MOBILE-HOME' => 'mobile-home',
+			'MOTORBIKE' => 'motorbike',
+			'PITCH' => 'pitch',
+			'PLANE' => 'plane',
+			'PROJECTOR' => 'projector',
+			'ROOM' => 'room',
+			'TENT' => 'tent',
+			'TRACTOR' => 'tractor',
+			'TRUCK' => 'truck'
+		);
 }

@@ -1,5 +1,6 @@
 # app/Resources/translations/messages.fr.yml
 
+activate: Activer
 administration: Administration
 back: Retour
 beginning.time: Heure de début
@@ -15,6 +16,7 @@ number.lines: Nombre de lignes
 number.lines.columns.updated.ok: Les nombres de lignes et de colonnes affichées ont été mis à jour
 parameters: Paramètres
 to: A
+unactivate: Désactiver
 update.not.allowed: Modification interdite
 user.account: Compte utilisateur
 validate: Valider

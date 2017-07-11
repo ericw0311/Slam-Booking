@@ -141,7 +141,7 @@ sd_core_timetable_deleteline:
         timetableLineID: \d+
 
 sd_core_resourceclassification_display:
-    path:     /resourceclassification/display
+    path:     /resourceclassification/display/{resourceType}
     defaults: { _controller: SDCoreBundle:ResourceClassification:index }
 
 sd_core_queryBooking_list:

@@ -7,10 +7,10 @@ use SD\CoreBundle\Entity\UserParameter;
 use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\ListContext;
 use SD\CoreBundle\Entity\Trace;
-use SD\CoreBundle\Entity\Constants;
 
 use SD\CoreBundle\Entity\TimetableHeader;
 use SD\CoreBundle\Entity\TimetableLine;
+use SD\CoreBundle\Entity\Constants;
 
 use SD\CoreBundle\Form\TimetableHeaderType;
 use SD\CoreBundle\Form\TimetableLineType;

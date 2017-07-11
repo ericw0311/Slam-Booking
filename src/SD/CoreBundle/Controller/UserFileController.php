@@ -21,7 +21,6 @@ use SD\UserBundle\Entity\User;
 use SD\CoreBundle\Entity\UserParameter;
 use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\ListContext;
-use SD\CoreBundle\Entity\Constants;
 
 use SD\CoreBundle\Api\AdministrationApi;
 

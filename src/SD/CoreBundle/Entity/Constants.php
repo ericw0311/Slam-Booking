@@ -18,7 +18,7 @@ class Constants
 	const NUMBER_LINES_BEFORE_AFTER_UPDATE = 3; // Nombre de lignes a afficher avant et apres la ligne mise a jour (cas de multilignes type creneaux horaires)
 	const NUMBER_LINES_MINI_DUAL_BUTTON_LIST = 8; // Nombre de lignes minimum a partir duquel on affiche la serie de bouttons actions avant et après la liste en question
 
-	const RESOURCE_TYPE = array('PLACE', 'VEHICLE', 'TOOL', 'SPORT');
+	const RESOURCE_TYPE = array('PLACE', 'VEHICLE', 'TOOL', 'SPORT', 'USER');
 	
 	const RESOURCE_TYPE_ICON = array(
 			'PLACE' => 'place',
@@ -35,6 +35,8 @@ class Constants
 			'SPORT' => array('COURT', 'PITCH', 'GYMNASIUM', 'HORSE'),
 			'USER' => array('TEACHER', 'CONTRACTOR', 'DOCTOR', 'DENTIST')
 		);
+
+	const RESOURCE_CLASSIFICATION_ACTIVE = array('CAR', 'COMPUTER', 'COURT', 'GYMNASIUM', 'HOUSE', 'ROOM', 'TEACHER');
 
 	const RESOURCE_CLASSIFICATION_ICON = array(
 			'BIKE' => 'bike',
@@ -57,6 +59,7 @@ class Constants
 			'PLANE' => 'plane',
 			'PROJECTOR' => 'projector',
 			'ROOM' => 'room',
+			'TEACHER' => 'teacher',
 			'TENT' => 'tent',
 			'TRACTOR' => 'tractor',
 			'TRUCK' => 'truck'

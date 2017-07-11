@@ -20,12 +20,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class ResourceClassificationController extends Controller
 {
 	// Affichage des classifications du dossier en cours
-	public function indexAction()
+	public function indexAction($resourceType, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    return $this->render('SDCoreBundle:ResourceClassification:index.html.twig', array('userContext' => $userContext));
+    $activeResourceClassifications = Constants::RESOURCE_CLASSIFICATION_ACTIVE;
+
+    return $this->render('SDCoreBundle:ResourceClassification:index.html.twig',
+		array('userContext' => $userContext,
+			'resourceType' => $resourceType,
+			'activeResourceClassifications' => $activeResourceClassifications));
     }
 }

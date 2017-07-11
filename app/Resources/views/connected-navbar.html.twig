@@ -24,7 +24,7 @@
           <ul class="dropdown-menu">
   <li><a href="{{ path('sd_core_userFile_list', { 'pageNumber': 1 }) }}"><img src="{{ asset('bundles/sdcore/images/user-16.png') }}"> {{ 'user.plural'|trans }}</a></li>
   <li><a href="{{ path('sd_core_timetable_list', { 'pageNumber': 1 }) }}"><img src="{{ asset('bundles/sdcore/images/time-16.png') }}"> {{ 'timetable.plural'|trans }}</a></li>
-  <li><a href="{{ path('sd_core_resourceclassification_display') }}"><img src="{{ asset('bundles/sdcore/images/box-16.png') }}"> {{ 'resourceClassification.plural'|trans }}</a></li>
+  <li><a href="{{ path('sd_core_resourceclassification_display', { 'resourceType': 'PLACE' }) }}"><img src="{{ asset('bundles/sdcore/images/box-16.png') }}"> {{ 'resourceClassification.plural'|trans }}</a></li>
   <li><a href="{{ path('sd_core_activity_list', { 'pageNumber': 1 }) }}"><img src="{{ asset('bundles/sdcore/images/activity-16.png') }}"> {{ 'activity.plural'|trans }}</a></li>
           </ul>
       </li>

@@ -144,6 +144,14 @@ sd_core_resourceclassification_display:
     path:     /resourceclassification/display/{resourceType}
     defaults: { _controller: SDCoreBundle:ResourceClassification:index }
 
+sd_core_resourceclassification_activateinternal:
+    path:     /resourceclassification/activateinternal/{resourceType}/{classificationCode}
+    defaults: { _controller: SDCoreBundle:ResourceClassification:activateinternal }
+
+sd_core_resourceclassification_unactivateinternal:
+    path:     /resourceclassification/unactivateinternal/{resourceType}/{classificationCode}
+    defaults: { _controller: SDCoreBundle:ResourceClassification:unactivateinternal }
+
 sd_core_queryBooking_list:
     path:     /queryBooking/list/{pageNumber}
     defaults: { _controller: SDCoreBundle:QueryBooking:index }

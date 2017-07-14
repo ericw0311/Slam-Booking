@@ -36,7 +36,13 @@ class Constants
 			'USER' => array('TEACHER', 'CONTRACTOR', 'DOCTOR', 'DENTIST')
 		);
 
-	const RESOURCE_CLASSIFICATION_ACTIVE = array('CAR', 'COMPUTER', 'COURT', 'GYMNASIUM', 'HOUSE', 'ROOM', 'TEACHER');
+	const RESOURCE_CLASSIFICATION_ACTIVE = array(
+			'PLACE' => array('ROOM', 'HOUSE'),
+			'VEHICLE' => array('CAR'),
+			'TOOL' => array('COMPUTER'),
+			'SPORT' => array('COURT', 'GYMNASIUM'),
+			'USER' => array('TEACHER')
+		);
 
 	const RESOURCE_CLASSIFICATION_ICON = array(
 			'BIKE' => 'bike',

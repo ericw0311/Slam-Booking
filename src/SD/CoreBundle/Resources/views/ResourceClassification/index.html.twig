@@ -31,20 +31,27 @@
 
 <table class="table table-striped">
 	<tbody>
-{% for resourceClassification in resourceClassifications[resourceType] %}
+{% for classificationCode in resourceClassifications[resourceType] %}
 	<tr>
-	<td><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[resourceClassification] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.plural.' ~ resourceClassification)|trans }}</td>
-{% if resourceClassification in activeResourceClassifications %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[classificationCode] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.plural.' ~ classificationCode)|trans }}</td>
+{% if classificationCode in activeResourceClassifications %}
 	<td><img src="{{ asset('bundles/sdcore/images/green-check-32.png') }}"></td>
-	<td><a href="{{ path('sd_core_resourceclassification_display', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i> {{ 'unactivate'|trans }}</a></td>
+	<td><a href="{{ path('sd_core_resourceclassification_unactivateinternal', { 'resourceType': resourceType, 'classificationCode': classificationCode }) }}" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i> {{ 'unactivate'|trans }}</a></td>
 {% else %}
 	<td><img src="{{ asset('bundles/sdcore/images/red-cross-32.png') }}"></td>
-	<td><a href="{{ path('sd_core_resourceclassification_display', { 'resourceType': resourceType }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> {{ 'activate'|trans }}</a></td>
+	<td><a href="{{ path('sd_core_resourceclassification_activateinternal', { 'resourceType': resourceType, 'classificationCode': classificationCode }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> {{ 'activate'|trans }}</a></td>
 {% endif %}
 	</tr>
 {% endfor %}
 	</tbody>
 </table>
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}
 
 </div>
 

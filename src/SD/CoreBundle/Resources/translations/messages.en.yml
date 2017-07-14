@@ -50,15 +50,17 @@ queryBooking.plural: Queries
 queryBooking.singular: Query
 queryBooking.updated.ok: The query has been updated
 
-resourceClassification.ask.delete: Do you really want to delete resource classification %name% ?
-resourceClassification.back.to.list: Back to resource classifications
+resourceClassification.activated.ok: The classification has been activated
+resourceClassification.ask.delete: Do you really want to delete classification %name% ?
+resourceClassification.back.to.list: Back to classifications
 resourceClassification.create: Create a resource classification
-resourceClassification.created.ok: The resource classification has been created
-resourceClassification.deleted.ok: The resource classification has been deleted
+resourceClassification.created.ok: The classification has been created
+resourceClassification.deleted.ok: The classification has been deleted
 resourceClassification.name: Resource classification name
 resourceClassification.plural: Resource classifications
 resourceClassification.singular: Resource classification
-resourceClassification.updated.ok: The resource classification has been updated
+resourceClassification.unactivated.ok: The classification has been unactivated
+resourceClassification.updated.ok: The classification has been updated
 
 resourceClassification.plural.BIKE: Bicycles
 resourceClassification.plural.BOAT: Boats

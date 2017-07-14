@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ResourceClassification
  *
- * @ORM\Table(name="resource_classification", uniqueConstraints={@ORM\UniqueConstraint(name="uk_resource_classification",columns={"file_id", "internal", "code"})})
+ * @ORM\Table(name="resource_classification", uniqueConstraints={@ORM\UniqueConstraint(name="uk_resource_classification",columns={"file_id", "internal", "type", "code"})})
  * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\ResourceClassificationRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -28,6 +28,13 @@ class ResourceClassification
      * @ORM\Column(name="internal", type="boolean")
      */
     private $internal;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255)
+     */
+    private $type;
 
     /**
      * @var string
@@ -104,6 +111,30 @@ class ResourceClassification
     public function getInternal()
     {
         return $this->internal;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return ResourceClassification
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**

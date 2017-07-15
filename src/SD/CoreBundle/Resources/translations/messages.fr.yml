@@ -54,7 +54,9 @@ resourceClassification.activated.ok: La classification a bien été activée
 resourceClassification.ask.delete: Voulez-vous vraiment supprimer la classification %name% ?
 resourceClassification.back.to.list: Retour aux classifications de ressources
 resourceClassification.create: Créer une classification de ressources
+resourceClassification.create.warning: Attention, vous créez une nouvelle classification de ressource. Ceci n'est à faire que si les classifications proposées par défaut ne suffisent pas
 resourceClassification.created.ok: La classification a bien été créée
+
 resourceClassification.deleted.ok: La classification a bien été supprimée
 resourceClassification.name: Nom de la classification de ressources
 resourceClassification.plural: Classifications de ressources
@@ -111,6 +113,12 @@ resourceClassification.singular.TEACHER: Formateur
 resourceClassification.singular.TENT: Tente
 resourceClassification.singular.TRACTOR: Tracteur
 resourceClassification.singular.TRUCK: Camion
+
+resourceType.create.classification.PLACE: Créer une classification de lieux
+resourceType.create.classification.SPORT: Créer une classification d'équipements sportifs
+resourceType.create.classification.TOOL: Créer une classification d'outils
+resourceType.create.classification.USER: Créer une classification d'utilisateurs
+resourceType.create.classification.VEHICLE: Créer une classification de véhicules
 
 resourceType.plural.PLACE: Lieux
 resourceType.plural.SPORT: Equipements sportifs

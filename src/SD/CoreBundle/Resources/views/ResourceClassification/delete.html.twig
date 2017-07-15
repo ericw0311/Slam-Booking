@@ -1,0 +1,27 @@
+{# src/SD/CoreBundle/Resources/views/ResourceClassification/delete.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+
+{{ form_start(form) }}
+
+<div class="panel panel-default">
+
+<div class="panel-body">
+<p>{{ 'resourceClassification.ask.delete'|trans({'%name%': resourceClassification.name}) }}</p>
+</div>
+
+<div class="panel-footer">
+
+<div class="btn-group">
+	<a href="{{ path('sd_core_resourceclassification_display', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+    <button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+</div>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}

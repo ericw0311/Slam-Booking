@@ -4,6 +4,8 @@ activity.already.exists: This activity already exists
 
 file.already.exists: This file already exists
 
+resourceClassification.already.exists: This classification already exists
+
 timetable.already.exists: This timetable already exists
 
 timetableLine.endTime.control: End time must be greather than beginning time

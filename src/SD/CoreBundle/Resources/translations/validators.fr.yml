@@ -4,6 +4,8 @@ activity.already.exists: Cette activité existe déjà
 
 file.already.exists: Ce dossier existe déjà
 
+resourceClassification.already.exists: Cette classification existe déjà
+
 timetable.already.exists: Cette grille horaire existe déjà
 
 timetableLine.endTime.control: L'heure de fin doit être supérieure à l'heure de début

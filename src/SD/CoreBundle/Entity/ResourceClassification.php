@@ -3,6 +3,7 @@
 namespace SD\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * ResourceClassification
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="resource_classification", uniqueConstraints={@ORM\UniqueConstraint(name="uk_resource_classification",columns={"file_id", "internal", "type", "code"})})
  * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\ResourceClassificationRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields={"file", "internal", "type", "name"}, errorPath="name", message="resourceClassification.already.exists")
  */
 class ResourceClassification
 {

@@ -1,0 +1,38 @@
+{# src/SD/CoreBundle/Resources/views/ResourceClassification/add.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+<div class="panel panel-default">
+
+<div class="panel-body">
+    {{ form_errors(form) }}
+    {{ form_row(form.name) }}
+    {{ form_rest(form) }}
+</div>
+
+<div class="panel-footer">
+<div class="btn-group">
+<a href="{{ path('sd_core_resourceclassification_display', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</div>
+
+{{ form_end(form) }}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-warning">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}
+
+<script>
+	document.getElementById("sd_corebundle_resourceclassification_name").focus();
+</script>
+
+{% endblock %}

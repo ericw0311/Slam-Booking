@@ -140,6 +140,7 @@ sd_core_timetable_deleteline:
         timetableHeaderID: \d+
         timetableLineID: \d+
 
+
 sd_core_resourceclassification_display:
     path:     /resourceclassification/display/{resourceType}
     defaults: { _controller: SDCoreBundle:ResourceClassification:index }
@@ -151,6 +152,31 @@ sd_core_resourceclassification_activateinternal:
 sd_core_resourceclassification_unactivateinternal:
     path:     /resourceclassification/unactivateinternal/{resourceType}/{classificationCode}
     defaults: { _controller: SDCoreBundle:ResourceClassification:unactivateinternal }
+
+sd_core_resourceclassification_activateexternal:
+    path:     /resourceclassification/activateexternal/{resourceType}/{resourceClassificationID}
+    defaults: { _controller: SDCoreBundle:ResourceClassification:activateexternal }
+
+sd_core_resourceclassification_unactivateexternal:
+    path:     /resourceclassification/unactivateexternal/{resourceType}/{resourceClassificationID}
+    defaults: { _controller: SDCoreBundle:ResourceClassification:unactivateexternal }
+
+sd_core_resourceclassification_add:
+    path:     /resourceclassification/add/{resourceType}
+    defaults: { _controller: SDCoreBundle:ResourceClassification:add }
+
+sd_core_resourceclassification_modify:
+    path:     /resourceclassification/modify/{resourceType}/{resourceClassificationID}
+    defaults: { _controller: SDCoreBundle:ResourceClassification:modify }
+    requirements:
+        resourceClassificationID: \d+
+
+sd_core_resourceclassification_delete:
+    path:     /resourceclassification/delete/{resourceType}/{resourceClassificationID}
+    defaults: { _controller: SDCoreBundle:ResourceClassification:delete }
+    requirements:
+        resourceClassificationID: \d+
+
 
 sd_core_queryBooking_list:
     path:     /queryBooking/list/{pageNumber}

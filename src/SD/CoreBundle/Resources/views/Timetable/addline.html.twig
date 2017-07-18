@@ -14,6 +14,7 @@
 <thead>
     <tr>
     <th>{{ 'from'|trans }}</th>
+	<th>&nbsp;</th>
     <th>{{ 'to'|trans }}</th>
     </tr>
 </thead>
@@ -23,6 +24,7 @@
 {% for timetableLine in listLastTimetableLines|reverse %}
 <tr>
     <td>{{ timetableLine.beginningTime|date("H:i") }}</td>
+	<td>&nbsp;</td>
     <td>{{ timetableLine.endTime|date("H:i") }}</td>
 </tr>
 {% endfor %}
@@ -30,6 +32,7 @@
 
 <tr>
 	<td>{{ form_row(form.beginningTime) }}</td>
+	<td>&nbsp;</td>
 	<td>{{ form_row(form.endTime) }}</td>
 </tr>
 
@@ -43,9 +46,8 @@
 <div class="panel-footer">
 <div class="btn-group">
 <a href="{{ path('sd_core_timetable_edit', { 'timetableHeaderID': timetableHeader.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" name = "validate" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
-<button type="submit" name = "validateAndCreate" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> {{ 'timetableLine.validate.and.create'|trans }}</button>
-{{ form_row(form.validateAndCreate) }}
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+{{ form_widget(form.validateAndCreate, { 'attr': {'class': 'btn btn-success'} }) }}
 
 </div>
 </div>
@@ -53,5 +55,12 @@
 </div>
 
 {{ form_end(form) }}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}
 
 {% endblock %}

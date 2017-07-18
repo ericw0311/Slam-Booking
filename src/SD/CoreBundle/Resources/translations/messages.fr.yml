@@ -50,6 +50,16 @@ queryBooking.plural: Requêtes
 queryBooking.singular: Requête
 queryBooking.updated.ok: La requête a bien été modifiée
 
+resource.ask.delete: Voulez-vous vraiment supprimer la ressource %name% ?
+resource.back.to.list: Retour à la liste des ressources
+resource.create: Créer une ressource
+resource.created.ok: La ressource a bien été créée
+resource.deleted.ok: La ressource a bien été supprimée
+resource.name: Nom de la ressource
+resource.plural: Ressources
+resource.singular: Ressource
+resource.updated.ok: La ressource a bien été modifiée
+
 resourceClassification.activated.ok: La classification a bien été activée
 resourceClassification.ask.delete: Voulez-vous vraiment supprimer la classification %name% ?
 resourceClassification.back.to.list: Retour aux classifications de ressources

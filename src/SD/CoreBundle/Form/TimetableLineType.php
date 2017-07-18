@@ -18,9 +18,7 @@ class TimetableLineType extends AbstractType
         $builder->add('beginningTime', TimeType::class, array('label' => false,
 			'widget' => 'single_text', 'html5' => false, 'attr' => ['class' => 'timepicker']))
             ->add('endTime', TimeType::class, array('label' => false,
-			'widget' => 'single_text', 'html5' => false, 'attr' => ['class' => 'timepicker']))
-			->add('validate', SubmitType::class, array('label' => 'Create Task'))
-			->add('validateAndCreate', SubmitType::class, array('label' => 'Save and Add'));
+			'widget' => 'single_text', 'html5' => false, 'attr' => ['class' => 'timepicker']));
     }
     
     /**

@@ -14,6 +14,7 @@ use SD\CoreBundle\Entity\Constants;
 
 use SD\CoreBundle\Form\TimetableHeaderType;
 use SD\CoreBundle\Form\TimetableLineType;
+use SD\CoreBundle\Form\TimetableLineAddType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,13 +60,15 @@ class TimetableController extends Controller
 	$form = $this->createForm(TimetableHeaderType::class, $timetableHeader);
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-	$em->persist($timetableHeader);
-	$em->flush();
-	$request->getSession()->getFlashBag()->add('notice', 'timetable.created.ok');
+		$em->persist($timetableHeader);
+		$em->flush();
+		$request->getSession()->getFlashBag()->add('notice', 'timetable.created.ok');
 
-	return $this->redirectToRoute('sd_core_timetable_list', array('pageNumber' => 1));
+		return $this->redirectToRoute('sd_core_timetable_addline', array('timetableHeaderID' => $timetableHeader->getID()));
+		// return $this->redirectToRoute('sd_core_timetable_list', array('pageNumber' => 1));
     }
-    return $this->render('SDCoreBundle:Timetable:add.html.twig', array('userContext' => $userContext, 'form' => $form->createView()));
+    
+	return $this->render('SDCoreBundle:Timetable:add.html.twig', array('userContext' => $userContext, 'form' => $form->createView()));
     }
 	
     // Edition du detail d'une grille horaire
@@ -152,12 +155,12 @@ public function addlineAction(TimetableHeader $timetableHeader, Request $request
 		$timetableLine->setBeginningTime(current($listLastTimetableLines)->getEndTime());
 	}
 
-    $form = $this->createForm(TimetableLineType::class, $timetableLine);
+    $form = $this->createForm(TimetableLineAddType::class, $timetableLine);
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
         $em->persist($timetableLine);
         $em->flush();
-        $request->getSession()->getFlashBag()->add('notice', 'timetableLine.created.ok');
+        $request->getSession()->getFlashBag()->add('08notice', 'timetableLine.created.ok');
 		
 		if ($form->get('validateAndCreate')->isClicked()) {
 			return $this->redirectToRoute('sd_core_timetable_addline', array('timetableHeaderID' => $timetableHeader->getID()));

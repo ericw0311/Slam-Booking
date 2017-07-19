@@ -164,8 +164,6 @@ class ResourceClassificationController extends Controller
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
-		$resourceClassification->setCode($resourceClassification->getName());
-		
 		$em->persist($resourceClassification);
 		$em->flush();
 		$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.created.ok');

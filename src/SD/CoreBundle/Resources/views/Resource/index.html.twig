@@ -7,7 +7,13 @@
 {% block listRow %}
 <div class="row">
 
-La liste des ressources
+{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
+    <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
+	{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
+	<a href="{{ path('sd_core_resource_edit', { 'resourceID': listResources[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/resource-16.png') }}">&nbsp;{{ listResources[i*listContext.numberLinesDisplayed+j].name }}</a>
+        {% endfor %}
+    </div>
+{% endfor %}
 
 </div>
 {% endblock %}

@@ -10,4 +10,27 @@ namespace SD\CoreBundle\Repository;
  */
 class ResourceRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getResourcesCount($file)
+    {
+    $queryBuilder = $this->createQueryBuilder('r');
+    $queryBuilder->select($queryBuilder->expr()->count('r'));
+    $queryBuilder->where('r.file = :file')->setParameter('file', $file);
+
+    $query = $queryBuilder->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+	
+	public function getDisplayedResources($file, $firstRecordIndex, $maxRecord)
+    {
+    $queryBuilder = $this->createQueryBuilder('r');
+    $queryBuilder->where('r.file = :file')->setParameter('file', $file);
+    $queryBuilder->orderBy('r.name', 'ASC');
+    $queryBuilder->setFirstResult($firstRecordIndex);
+    $queryBuilder->setMaxResults($maxRecord);
+   
+    $query = $queryBuilder->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
 }

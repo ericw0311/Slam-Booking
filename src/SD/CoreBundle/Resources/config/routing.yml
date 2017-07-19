@@ -177,6 +177,31 @@ sd_core_resourceclassification_delete:
     requirements:
         resourceClassificationID: \d+
 
+sd_core_resource_list:
+    path:     /resource/list/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Resource:index }
+
+sd_core_resource_add:
+    path:     /resource/add
+    defaults: { _controller: SDCoreBundle:Resource:add }
+
+sd_core_resource_edit:
+    path:     /resource/edit/{resourceID}
+    defaults: { _controller: SDCoreBundle:Resource:edit }
+    requirements:
+        resourceID: \d+
+
+sd_core_resource_modify:
+    path:     /resource/modify/{resourceID}
+    defaults: { _controller: SDCoreBundle:Resource:modify }
+    requirements:
+        resourceID: \d+
+
+sd_core_resource_delete:
+    path:     /resource/delete/{resourceID}
+    defaults: { _controller: SDCoreBundle:Resource:delete }
+    requirements:
+        resourceID: \d+
 
 sd_core_queryBooking_list:
     path:     /queryBooking/list/{pageNumber}

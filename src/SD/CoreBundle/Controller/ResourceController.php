@@ -17,12 +17,14 @@ use SD\CoreBundle\Entity\UserParameter;
 use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\ListContext;
 use SD\CoreBundle\Entity\Trace;
+use SD\CoreBundle\Entity\Constants;
+use SD\CoreBundle\Entity\ResourceClassificationNDB;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class ResourceController extends Controller
 {
-	// Affichage des activites du dossier en cours
+	// Affichage des ressources du dossier en cours
 	public function indexAction($pageNumber)
     {
 	$connectedUser = $this->getUser();
@@ -33,7 +35,7 @@ class ResourceController extends Controller
 
     $numberRecords = $resourceRepository->getResourcesCount($userContext->getCurrentFile());
 
-    $listContext = new ListContext($em, $connectedUser, 'core', 'resource', $pageNumber, $numberRecords, 'sd_core_resource_list', 'sd_core_resource_add');
+    $listContext = new ListContext($em, $connectedUser, 'core', 'resource', $pageNumber, $numberRecords, 'sd_core_resource_list', 'sd_core_resource_classification');
 
     $listResources = $resourceRepository->getDisplayedResources($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
@@ -43,7 +45,43 @@ class ResourceController extends Controller
 		'listResources' => $listResources));
     }
 
-	// Ajout d'une activite
+	// Ajout d'une ressource: selection de la classification
+    public function classificationAction(Request $request)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
+	$activeRC = array();
+
+    foreach (Constants::RESOURCE_TYPE as $resourceType) {
+
+		$defaultActiveRC = Constants::RESOURCE_CLASSIFICATION_ACTIVE[$resourceType]; // Classifications actives par défaut
+
+		$activeInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($userContext->getCurrentFile(), $resourceType, 1); // Classifications internes actives (lues en BD)
+		$unactiveInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($userContext->getCurrentFile(), $resourceType, 0); // Classifications internes inactives (lues en BD)
+
+		$activeRC = array();
+		foreach (Constants::RESOURCE_CLASSIFICATION[$resourceType] as $resourceClassificationCode) {
+			if ((in_array($resourceClassificationCode, $defaultActiveRC) || in_array($resourceClassificationCode, $activeInternalRC_DB))
+				&& !in_array($resourceClassificationCode, $unactiveInternalRC_DB))
+			{
+			$resourceClassification = new ResourceClassificationNDB();
+			$resourceClassification->setInternal(1);
+			$resourceClassification->setType($resourceType);
+			$resourceClassification->setCode($resourceClassificationCode);
+			array_push($activeRC, $resourceClassification);
+			}
+		}
+	}
+
+    return $this->render('SDCoreBundle:Resource:classification.html.twig',
+		array('userContext' => $userContext, 'activeRC' => $activeRC));
+    }
+
+
+	// Ajout d'une ressource
     public function addAction(Request $request)
     {
 	$connectedUser = $this->getUser();
@@ -65,7 +103,7 @@ class ResourceController extends Controller
     }
 
 	
-    // Edition du detail d'une activite
+    // Edition du detail d'une ressource
     /**
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
     */
@@ -79,7 +117,7 @@ class ResourceController extends Controller
     }
 
 	
-    // Modification d'une activite
+    // Modification d'une ressource
     /**
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
     */
@@ -92,7 +130,7 @@ class ResourceController extends Controller
     $form = $this->createForm(ResourceType::class, $resource);
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-        // Inutile de persister ici, Doctrine connait déjà l'activite
+        // Inutile de persister ici, Doctrine connait déjà la ressource
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'resource.updated.ok');
 
@@ -102,7 +140,7 @@ class ResourceController extends Controller
     }
 
 
-    // Suppression d'une activite
+    // Suppression d'une ressource
     /**
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
     */
@@ -115,7 +153,7 @@ class ResourceController extends Controller
     $form = $this->get('form.factory')->create();
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-        // Inutile de persister ici, Doctrine connait déjà l'activite
+        // Inutile de persister ici, Doctrine connait déjà la ressource
         $em->remove($resource);
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'resource.deleted.ok');

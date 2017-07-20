@@ -1,0 +1,17 @@
+{# src/SD/CoreBundle/Resources/views/Resource/classification.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+{% block title %}{{ parent() }} resource{% endblock %}
+
+{% block listRow %}
+<div class="row">
+
+{% for resourceClassification in activeRC %}
+	<a href="{{ path('sd_core_resource_add') }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/resource-16.png') }}">&nbsp;{{ resourceClassification.code }}</a>
+{% endfor %}
+
+</div>
+{% endblock %}
+{% endblock %}

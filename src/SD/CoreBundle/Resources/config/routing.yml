@@ -181,6 +181,10 @@ sd_core_resource_list:
     path:     /resource/list/{pageNumber}
     defaults: { _controller: SDCoreBundle:Resource:index }
 
+sd_core_resource_classification:
+    path:     /resource/classification
+    defaults: { _controller: SDCoreBundle:Resource:classification }
+
 sd_core_resource_add:
     path:     /resource/add
     defaults: { _controller: SDCoreBundle:Resource:add }

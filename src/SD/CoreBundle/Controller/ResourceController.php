@@ -62,17 +62,26 @@ class ResourceController extends Controller
 		$activeInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($userContext->getCurrentFile(), $resourceType, 1); // Classifications internes actives (lues en BD)
 		$unactiveInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($userContext->getCurrentFile(), $resourceType, 0); // Classifications internes inactives (lues en BD)
 
-		$activeRC = array();
 		foreach (Constants::RESOURCE_CLASSIFICATION[$resourceType] as $resourceClassificationCode) {
 			if ((in_array($resourceClassificationCode, $defaultActiveRC) || in_array($resourceClassificationCode, $activeInternalRC_DB))
 				&& !in_array($resourceClassificationCode, $unactiveInternalRC_DB))
 			{
-			$resourceClassification = new ResourceClassificationNDB();
-			$resourceClassification->setInternal(1);
-			$resourceClassification->setType($resourceType);
-			$resourceClassification->setCode($resourceClassificationCode);
-			array_push($activeRC, $resourceClassification);
+			$resourceClassificationNDB = new ResourceClassificationNDB();
+			$resourceClassificationNDB->setInternal(1);
+			$resourceClassificationNDB->setType($resourceType);
+			$resourceClassificationNDB->setCode($resourceClassificationCode);
+			array_push($activeRC, $resourceClassificationNDB);
 			}
+		}
+
+		$activeExternalRC = $RCRepository->getActiveExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
+		foreach ($activeExternalRC as $resourceClassification) {
+			$resourceClassificationNDB = new ResourceClassificationNDB();
+			$resourceClassificationNDB->setInternal(0);
+			$resourceClassificationNDB->setType($resourceType);
+			$resourceClassificationNDB->setId($resourceClassification->getId());
+			$resourceClassificationNDB->setName($resourceClassification->getName());
+			array_push($activeRC, $resourceClassificationNDB);
 		}
 	}
 

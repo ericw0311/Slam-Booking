@@ -189,6 +189,10 @@ sd_core_resource_add:
     path:     /resource/add
     defaults: { _controller: SDCoreBundle:Resource:add }
 
+sd_core_resource_addinternal:
+    path:     /resource/addinternal/{type}/{code}
+    defaults: { _controller: SDCoreBundle:Resource:addinternal }
+
 sd_core_resource_edit:
     path:     /resource/edit/{resourceID}
     defaults: { _controller: SDCoreBundle:Resource:edit }

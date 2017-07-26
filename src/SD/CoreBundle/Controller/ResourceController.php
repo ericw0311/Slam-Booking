@@ -111,6 +111,30 @@ class ResourceController extends Controller
     return $this->render('SDCoreBundle:Resource:add.html.twig', array('userContext' => $userContext, 'form' => $form->createView()));
     }
 
+	// Ajout d'une ressource de classification interne
+    public function addinternalAction($type, $code, Request $request)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$resource = new Resource($connectedUser, $userContext->getCurrentFile());
+	$resource->setInternal(true);
+	$resource->setType($type);
+	$resource->setCode($code);
+
+	$form = $this->createForm(ResourceType::class, $resource);
+
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+		$em->persist($resource);
+		$em->flush();
+		$request->getSession()->getFlashBag()->add('notice', 'resource.created.ok');
+
+		return $this->redirectToRoute('sd_core_resource_list', array('pageNumber' => 1));
+	}
+    return $this->render('SDCoreBundle:Resource:add.html.twig', array('userContext' => $userContext, 'form' => $form->createView()));
+    }
+
 	
     // Edition du detail d'une ressource
     /**

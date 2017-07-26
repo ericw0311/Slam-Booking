@@ -70,6 +70,7 @@ resourceClassification.deleted.ok: The classification has been deleted
 resourceClassification.name: Resource classification name
 resourceClassification.plural: Resource classifications
 resourceClassification.singular: Resource classification
+resourceClassification.select: Select a resource classification
 resourceClassification.unactivated.ok: The classification has been unactivated
 resourceClassification.updated.ok: The classification has been updated
 

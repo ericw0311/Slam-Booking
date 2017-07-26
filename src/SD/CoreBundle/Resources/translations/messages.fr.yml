@@ -70,6 +70,7 @@ resourceClassification.created.ok: La classification a bien été créée
 resourceClassification.deleted.ok: La classification a bien été supprimée
 resourceClassification.name: Nom de la classification de ressources
 resourceClassification.plural: Classifications de ressources
+resourceClassification.select: Sélectionnez une classification de ressources
 resourceClassification.singular: Classification de ressources
 resourceClassification.unactivated.ok: La classification a bien été désactivée
 resourceClassification.updated.ok: La classification a bien été modifiée

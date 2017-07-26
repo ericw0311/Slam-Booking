@@ -5,20 +5,20 @@
 {% set rtIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-{% block title %}{{ parent() }} resource{% endblock %}
-
 {% block body %}
-{% block listRow %}
-<div class="row">
+
+<div class="alert alert-info">
+<span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'resourceClassification.select'|trans }}
+</div>
 
 {% for rc in activeRC %}
 {% if rc.internal %}
-	<a href="{{ path('sd_core_resource_add') }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[rc.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ rc.code)|trans }}</a>
+	<a href="{{ path('sd_core_resource_addinternal', { 'type': rc.type, 'code': rc.code }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[rc.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ rc.code)|trans }}</a>
 {% else %}
 	<a href="{{ path('sd_core_resource_add') }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[rc.type] ~ '-32.png') }}">&nbsp;{{ rc.name }}</a>
 {% endif %}
 {% endfor %}
 
-</div>
-{% endblock %}
+<a href="{{ path('sd_core_resource_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+
 {% endblock %}

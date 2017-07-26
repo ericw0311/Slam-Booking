@@ -4,6 +4,7 @@
 namespace SD\CoreBundle\Controller;
 
 use SD\CoreBundle\Entity\Resource;
+use SD\CoreBundle\Entity\ResourceClassification;
 use SD\CoreBundle\Form\ResourceType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -132,7 +133,35 @@ class ResourceController extends Controller
 
 		return $this->redirectToRoute('sd_core_resource_list', array('pageNumber' => 1));
 	}
-    return $this->render('SDCoreBundle:Resource:add.html.twig', array('userContext' => $userContext, 'form' => $form->createView()));
+    return $this->render('SDCoreBundle:Resource:add.html.twig', array('userContext' => $userContext, 'resourceClassification' => null, 'resource' => $resource, 'form' => $form->createView()));
+    }
+
+
+    // Ajout d'une ressource de classification externe
+    /**
+    * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
+    */
+    public function addexternalAction($type, ResourceClassification $resourceClassification, Request $request)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$resource = new Resource($connectedUser, $userContext->getCurrentFile());
+	$resource->setInternal(false);
+	$resource->setType($type);
+	$resource->setClassification($resourceClassification);
+
+	$form = $this->createForm(ResourceType::class, $resource);
+
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+		$em->persist($resource);
+		$em->flush();
+		$request->getSession()->getFlashBag()->add('notice', 'resource.created.ok');
+
+		return $this->redirectToRoute('sd_core_resource_list', array('pageNumber' => 1));
+	}
+    return $this->render('SDCoreBundle:Resource:add.html.twig', array('userContext' => $userContext, 'resourceClassification' => $resourceClassification, 'resource' => $resource, 'form' => $form->createView()));
     }
 
 	

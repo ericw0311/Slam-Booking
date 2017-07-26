@@ -15,7 +15,7 @@
 {% if rc.internal %}
 	<a href="{{ path('sd_core_resource_addinternal', { 'type': rc.type, 'code': rc.code }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[rc.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ rc.code)|trans }}</a>
 {% else %}
-	<a href="{{ path('sd_core_resource_add') }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[rc.type] ~ '-32.png') }}">&nbsp;{{ rc.name }}</a>
+	<a href="{{ path('sd_core_resource_addexternal', { 'type': rc.type, 'resourceClassificationID': rc.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[rc.type] ~ '-32.png') }}">&nbsp;{{ rc.name }}</a>
 {% endif %}
 {% endfor %}
 

@@ -56,6 +56,8 @@ resource.create: Créer une ressource
 resource.created.ok: La ressource a bien été créée
 resource.deleted.ok: La ressource a bien été supprimée
 resource.name: Nom de la ressource
+resource.planning.background.color: Couleur de fond sur le planning
+resource.planning.foreground.color: Couleur du texte sur le planning
 resource.plural: Ressources
 resource.singular: Ressource
 resource.updated.ok: La ressource a bien été modifiée

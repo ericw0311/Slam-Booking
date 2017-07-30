@@ -305,15 +305,4 @@ class QueryBooking
     {
         $this->updatedAt = new \DateTime();
     }
-
-
-    public function get_tprr_createdAt()
-    {
-        return $this->createdAt;
-    }
-
-    public function get_tprr_updatedAt()
-    {
-        return $this->updatedAt;
-    }
 }

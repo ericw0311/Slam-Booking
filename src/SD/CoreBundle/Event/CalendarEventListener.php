@@ -68,9 +68,9 @@ class CalendarEventListener
 	// load events using your custom logic here,
 	// for instance, retrieving events from a repository
 
-	$SBEvents = $entityManager->getRepository('SDCoreBundle:QueryBooking')
-		->createQueryBuilder('qb')
-		->where('qb.file = :file')->setParameter('file', $userContext->getCurrentFile())
+	$SBEvents = $entityManager->getRepository('SDCoreBundle:Resource')
+		->createQueryBuilder('r')
+		->where('r.file = :file')->setParameter('file', $userContext->getCurrentFile())
 		->getQuery()->getResult();
 
 	foreach($SBEvents as $SBEvent) {
@@ -80,10 +80,9 @@ class CalendarEventListener
 
 		//optional calendar event settings
 		$eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
-		$eventEntity->setBgColor('#FF0000'); //set the background color of the event's label
-		$eventEntity->setFgColor('#FFFFFF'); //set the foreground color of the event's label
-		// $eventEntity->setUrl('../queryBooking/edit/12');
-		$eventEntity->setUrl($this->getRouter()->generate('sd_core_queryBooking_edit', array('queryBookingID' => $SBEvent->getID()))); // url to send user to when event label is clicked
+		$eventEntity->setBgColor($SBEvent->getBackgroundColor()); //set the background color of the event's label
+		$eventEntity->setFgColor($SBEvent->getForegroundColor()); //set the foreground color of the event's label
+		$eventEntity->setUrl($this->getRouter()->generate('sd_core_resource_edit', array('resourceID' => $SBEvent->getID()))); // url to send user to when event label is clicked
 		// $eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
 
 		//finally, add the event to the CalendarEvent for displaying on the calendar

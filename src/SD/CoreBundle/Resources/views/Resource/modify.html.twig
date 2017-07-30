@@ -19,6 +19,8 @@
 <p><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;<strong>{{ resource.classification.name }}</strong></p>
 {% endif %}
     {{ form_row(form.name) }}
+    {{ form_row(form.backgroundColor) }}
+    {{ form_row(form.foregroundColor) }}
     {{ form_rest(form) }}
 </div>
 
@@ -36,5 +38,7 @@
 <script>
 	document.getElementById("sd_corebundle_resource_name").focus();
 </script>
+
+<script src="{{ asset('bundles/sdcore/js/resource.js') }}"></script>
 
 {% endblock %}

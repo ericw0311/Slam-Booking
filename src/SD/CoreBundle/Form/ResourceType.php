@@ -14,9 +14,13 @@ class ResourceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', TextType::class, array('label' => 'resource.name', 'translation_domain' => 'messages'));
+        $builder->add('name', TextType::class, array('label' => 'resource.name', 'translation_domain' => 'messages'))
+			->add('backgroundColor', TextType::class, array('label' => 'resource.planning.background.color', 'translation_domain' => 'messages',
+			'attr' => ['class' => 'simple_color_custom_slam_booking']))
+			->add('foregroundColor', TextType::class, array('label' => 'resource.planning.foreground.color', 'translation_domain' => 'messages',
+			'attr' => ['class' => 'simple_color_custom_slam_booking']));
     }
-    
+
     /**
      * {@inheritdoc}
      */

@@ -60,6 +60,20 @@ class Resource
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="background_color", type="string", length=255)
+     */
+    private $backgroundColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="foreground_color", type="string", length=255)
+     */
+    private $foregroundColor;
+
+    /**
      * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -207,6 +221,52 @@ class Resource
     }
 
     /**
+     * Set backgroundColor
+     *
+     * @param string $backgroundColor
+     *
+     * @return Resource
+     */
+    public function setBackgroundColor($backgroundColor)
+    {
+        $this->backgroundColor = $backgroundColor;
+        return $this;
+    }
+
+    /**
+     * Get backgroundColor
+     *
+     * @return string
+     */
+    public function getBackgroundColor()
+    {
+        return $this->backgroundColor;
+    }
+
+    /**
+     * Set foregroundColor
+     *
+     * @param string $foregroundColor
+     *
+     * @return Resource
+     */
+    public function setForegroundColor($foregroundColor)
+    {
+        $this->foregroundColor = $foregroundColor;
+        return $this;
+    }
+
+    /**
+     * Get foregroundColor
+     *
+     * @return string
+     */
+    public function getForegroundColor()
+    {
+        return $this->foregroundColor;
+    }
+
+    /**
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
@@ -273,5 +333,14 @@ class Resource
     {
         $this->updatedAt = new \DateTime();
     }
-}
 
+    public function get_tprr_createdAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function get_tprr_updatedAt()
+    {
+        return $this->updatedAt;
+    }
+}

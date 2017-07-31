@@ -4,6 +4,8 @@ activity.already.exists: This activity already exists
 
 file.already.exists: This file already exists
 
+planification.already.exists: This planification already exists
+
 resource.already.exists: This resource already exists
 
 resourceClassification.already.exists: This classification already exists

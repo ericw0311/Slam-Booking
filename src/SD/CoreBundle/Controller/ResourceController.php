@@ -6,6 +6,7 @@ namespace SD\CoreBundle\Controller;
 use SD\CoreBundle\Entity\Resource;
 use SD\CoreBundle\Entity\ResourceClassification;
 use SD\CoreBundle\Form\ResourceType;
+use SD\CoreBundle\Form\ResourceAddType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -105,14 +106,20 @@ class ResourceController extends Controller
 	$resource->setBackgroundColor("#0000ff");
 	$resource->setForegroundColor("#ffffff");
 
-	$form = $this->createForm(ResourceType::class, $resource);
+	$form = $this->createForm(ResourceAddType::class, $resource);
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 		$em->persist($resource);
 		$em->flush();
 		$request->getSession()->getFlashBag()->add('notice', 'resource.created.ok');
 
-		return $this->redirectToRoute('sd_core_resource_list', array('pageNumber' => 1));
+
+		if ($form->get('validateAndCreate')->isClicked()) {
+			return $this->redirectToRoute('sd_core_resource_addinternal', array('type' => $type, 'code' => $code));
+		} else {
+			return $this->redirectToRoute('sd_core_resource_list', array('pageNumber' => 1));
+		}
+
 	}
     return $this->render('SDCoreBundle:Resource:add.html.twig', array('userContext' => $userContext, 'resourceClassification' => null, 'resource' => $resource, 'form' => $form->createView()));
     }
@@ -135,14 +142,18 @@ class ResourceController extends Controller
 	$resource->setBackgroundColor("#0000ff");
 	$resource->setForegroundColor("#ffffff");
 
-	$form = $this->createForm(ResourceType::class, $resource);
+	$form = $this->createForm(ResourceAddType::class, $resource);
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 		$em->persist($resource);
 		$em->flush();
 		$request->getSession()->getFlashBag()->add('notice', 'resource.created.ok');
 
-		return $this->redirectToRoute('sd_core_resource_list', array('pageNumber' => 1));
+		if ($form->get('validateAndCreate')->isClicked()) {
+			return $this->redirectToRoute('sd_core_resource_addexternal', array('type' => $type, 'resourceClassificationID' => $resourceClassification->getId()));
+		} else {
+			return $this->redirectToRoute('sd_core_resource_list', array('pageNumber' => 1));
+		}
 	}
     return $this->render('SDCoreBundle:Resource:add.html.twig', array('userContext' => $userContext, 'resourceClassification' => $resourceClassification, 'resource' => $resource, 'form' => $form->createView()));
     }

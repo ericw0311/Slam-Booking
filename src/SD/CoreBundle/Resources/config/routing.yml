@@ -177,6 +177,7 @@ sd_core_resourceclassification_delete:
     requirements:
         resourceClassificationID: \d+
 
+
 sd_core_resource_list:
     path:     /resource/list/{pageNumber}
     defaults: { _controller: SDCoreBundle:Resource:index }
@@ -214,6 +215,32 @@ sd_core_resource_delete:
     defaults: { _controller: SDCoreBundle:Resource:delete }
     requirements:
         resourceID: \d+
+
+sd_core_planification_list:
+    path:     /planification/list/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Planification:index }
+
+sd_core_planification_add:
+    path:     /planification/add
+    defaults: { _controller: SDCoreBundle:Planification:add }
+
+sd_core_planification_edit:
+    path:     /planification/edit/{planificationHeaderID}
+    defaults: { _controller: SDCoreBundle:Planification:edit }
+    requirements:
+        planificationHeaderID: \d+
+
+sd_core_planification_modify:
+    path:     /planification/modify/{planificationHeaderID}
+    defaults: { _controller: SDCoreBundle:Planification:modify }
+    requirements:
+        planificationHeaderID: \d+
+
+sd_core_planification_delete:
+    path:     /planification/delete/{planificationHeaderID}
+    defaults: { _controller: SDCoreBundle:Planification:delete }
+    requirements:
+        planificationHeaderID: \d+
 
 sd_core_queryBooking_list:
     path:     /queryBooking/list/{pageNumber}

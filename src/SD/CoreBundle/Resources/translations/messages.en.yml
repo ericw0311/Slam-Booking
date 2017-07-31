@@ -38,6 +38,16 @@ period.type.BETWEEN: Between two days
 period.type.NO: No period
 period.type.SYSDATE: Current date
 
+planification.ask.delete: Do you really want to delete planification %name% ?
+planification.back.to.list: Back to planifications list
+planification.create: Create a planification
+planification.created.ok: The planification has been created
+planification.deleted.ok: The planification has been deleted
+planification.name: Planification name
+planification.plural: Planifications
+planification.singular: Planification
+planification.updated.ok: The planification has been updated
+
 planning: Planning
 
 queryBooking.ask.delete: Do you really want to delete query %name% ?
@@ -58,10 +68,10 @@ resource.deleted.ok: The resource has been deleted
 resource.name: Resource name
 resource.planning.background.color: Background color on planning
 resource.planning.foreground.color: Foreground color on planning
-
 resource.plural: Resources
 resource.singular: Resource
 resource.updated.ok: The resource has been updated
+resource.validate.and.create: Validate and add a resource
 
 resourceClassification.activated.ok: The classification has been activated
 resourceClassification.ask.delete: Do you really want to delete classification %name% ?

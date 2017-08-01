@@ -216,13 +216,18 @@ sd_core_resource_delete:
     requirements:
         resourceID: \d+
 
+
 sd_core_planification_list:
     path:     /planification/list/{pageNumber}
     defaults: { _controller: SDCoreBundle:Planification:index }
 
+sd_core_planification_type:
+    path:     /planification/type
+    defaults: { _controller: SDCoreBundle:Planification:type }
+
 sd_core_planification_add:
-    path:     /planification/add
-    defaults: { _controller: SDCoreBundle:Planification:add }
+    path:     /planification/add/{type}/{resourceIDList}
+    defaults: { _controller: SDCoreBundle:Planification:add, resourceIDList: null }
 
 sd_core_planification_edit:
     path:     /planification/edit/{planificationHeaderID}

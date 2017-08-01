@@ -45,6 +45,7 @@ planification.created.ok: The planification has been created
 planification.deleted.ok: The planification has been deleted
 planification.name: Planification name
 planification.plural: Planifications
+planification.select.type: Select type of resources to planify
 planification.singular: Planification
 planification.updated.ok: The planification has been updated
 

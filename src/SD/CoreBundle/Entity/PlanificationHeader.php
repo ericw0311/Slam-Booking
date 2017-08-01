@@ -8,10 +8,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * PlanificationHeader
  *
- * @ORM\Table(name="planification_header", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification_header",columns={"file_id", "name"})})
+ * @ORM\Table(name="planification_header", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification_header",columns={"file_id", "type", "name"})})
  * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\PlanificationHeaderRepository")
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity(fields={"file", "name"}, errorPath="name", message="planification.already.exists")
+ * @UniqueEntity(fields={"file", "type", "name"}, errorPath="name", message="planification.already.exists")
  */
 class PlanificationHeader
 {
@@ -23,6 +23,13 @@ class PlanificationHeader
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255)
+     */
+    private $type;
 
     /**
      * @var string
@@ -83,6 +90,29 @@ class PlanificationHeader
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Resource
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**

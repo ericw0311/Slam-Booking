@@ -2,30 +2,49 @@
 
 {% extends "SDCoreBundle::layout.html.twig" %}
 
+{% block title %}{{ parent() }} planification{% endblock %}
+
 {% block body %}
-{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 
-<div class="panel panel-default">
+{% set rtIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-<div class="panel-body">
-    {{ form_errors(form) }}
-    {{ form_row(form.name) }}
-    {{ form_rest(form) }}
+<div class="col-sm-6">
+
+<table class="table table-striped">
+	<tbody>
+{% for resource in selectedResources %}
+	<tr>
+{% if resource.internal %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
+{% else %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
+{% endif %}
+	<td><a href="{{ path('sd_core_planification_add', { 'type': type, 'resourceIDList': resource.resourceIDList	 }) }}"><i class="glyphicon glyphicon-arrow-right"></i></a></td>
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
+
 </div>
 
-<div class="panel-footer">
-<div class="btn-group">
-<a href="{{ path('sd_core_planification_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
-</div>
-</div>
+<div class="col-sm-6">
+
+<table class="table table-striped">
+	<tbody>
+{% for resource in resourcesToPlanify %}
+	<tr>
+	<td><a href="{{ path('sd_core_planification_add', { 'type': type, 'resourceIDList': resource.resourceIDList	 }) }}"><i class="glyphicon glyphicon-arrow-left"></i></a></td>
+{% if resource.internal %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
+{% else %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
+{% endif %}
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
 
 </div>
-
-{{ form_end(form) }}
-
-<script>
-	document.getElementById("sd_corebundle_planificationHeader_name").focus();
-</script>
 
 {% endblock %}

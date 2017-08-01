@@ -33,4 +33,16 @@ class ResourceRepository extends \Doctrine\ORM\EntityRepository
     $results = $query->getResult();
     return $results;
     }
+
+	public function getResourcesToPlanify($file, $type)
+    {
+    $queryBuilder = $this->createQueryBuilder('r');
+    $queryBuilder->where('r.file = :file')->setParameter('file', $file);
+    $queryBuilder->andWhere('r.type = :type')->setParameter('type', $type);
+    $queryBuilder->orderBy('r.name', 'ASC');
+
+    $query = $queryBuilder->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
 }

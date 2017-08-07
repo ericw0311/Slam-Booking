@@ -11,8 +11,7 @@ use Doctrine\Common\EventManager;
 use SD\CoreBundle\Entity\UserParameter;
 use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\ListContext;
-use SD\CoreBundle\Entity\ResourceNDBPlanificationSelected;
-use SD\CoreBundle\Entity\ResourceNDBPlanificationAdd;
+use SD\CoreBundle\Entity\ResourceNDBPlanification;
 use SD\CoreBundle\Entity\Trace;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -57,15 +56,22 @@ class PlanificationController extends Controller
     $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
 
 	$selectedResources = array();
+	$i = 0;
+
     foreach ($resourceIDArray as $resourceID) {
 		$resourceDB = $resourceRepository->find($resourceID);
 		if ($resourceDB !== null) {
-			$resource = new ResourceNDBPlanificationSelected();
+			$resource = new ResourceNDBPlanification();
 			$resource->setId($resourceDB->getId());
 			$resource->setName($resourceDB->getName());
 			$resource->setInternal($resourceDB->getInternal());
 			$resource->setType($resourceDB->getType());
 			$resource->setCode($resourceDB->getCode());
+
+			$resourceIDArray_tprr = $resourceIDArray;
+			unset($resourceIDArray_tprr[$i++]);
+			$resource->setResourceIDList(implode('-', $resourceIDArray_tprr));
+
 			array_push($selectedResources, $resource);
 		}
 	}
@@ -74,14 +80,16 @@ class PlanificationController extends Controller
                 
 	$resourcesToPlanify = array();
     foreach ($resourcesToPlanifyDB as $resourceDB) {
-		$resource = new ResourceNDBPlanificationAdd();
-		$resource->setId($resourceDB->getId());
-		$resource->setName($resourceDB->getName());
-		$resource->setInternal($resourceDB->getInternal());
-		$resource->setType($resourceDB->getType());
-		$resource->setCode($resourceDB->getCode());
-		$resource->setResourceIDList(($resourceIDList == '') ? $resourceDB->getId() : ($resourceIDList.'-'.$resourceDB->getId()));
-		array_push($resourcesToPlanify, $resource);
+		if (array_search($resourceDB->getId(), $resourceIDArray) === false) {
+			$resource = new ResourceNDBPlanification();
+			$resource->setId($resourceDB->getId());
+			$resource->setName($resourceDB->getName());
+			$resource->setInternal($resourceDB->getInternal());
+			$resource->setType($resourceDB->getType());
+			$resource->setCode($resourceDB->getCode());
+			$resource->setResourceIDList(($resourceIDList == '') ? $resourceDB->getId() : ($resourceIDList.'-'.$resourceDB->getId()));
+			array_push($resourcesToPlanify, $resource);
+		}
 	}
 
     return $this->render('SDCoreBundle:Planification:add.html.twig', array('userContext' => $userContext, 'type' => $type, 'selectedResources' => $selectedResources, 'resourcesToPlanify' => $resourcesToPlanify));

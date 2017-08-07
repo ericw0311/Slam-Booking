@@ -3,7 +3,7 @@
 namespace SD\CoreBundle\Entity;
 
 // NDB = not database
-class ResourceNDBPlanificationAdd
+class ResourceNDBPlanification
 {
     private $id = 0;
     private $name;

@@ -15,6 +15,8 @@ number.columns: Nombre de colonnes
 number.lines: Nombre de lignes
 number.lines.columns.updated.ok: Les nombres de lignes et de colonnes affichées ont été mis à jour
 parameters: Paramètres
+sort.after: Trier après
+sort.before: Trier avant
 to: A
 unactivate: Désactiver
 update.not.allowed: Modification interdite

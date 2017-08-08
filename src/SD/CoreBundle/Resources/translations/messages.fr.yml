@@ -46,6 +46,8 @@ planification.deleted.ok: La planification a bien été supprimée
 planification.name: Nom de la planification
 planification.plural: Planifications
 planification.resource.select: Sélectionner la ressource
+planification.resource.selected: Ressources sélectionnées
+planification.resource.to.planify: Ressources à planifier
 planification.resource.unselect: Désélectionner la ressource
 planification.singular: Planification
 planification.type.select: Sélectionnez le type des ressources à planifier

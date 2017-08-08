@@ -12,6 +12,15 @@
 <div class="col-sm-6">
 
 <table class="table table-striped">
+
+	<thead><tr>
+{% if selectedResources|length > 1 %}
+	<th colspan=4>
+{% else %}
+	<th colspan=2>
+{% endif %}
+	{{ 'planification.resource.selected'|trans }}</th></tr></thead>
+
 	<tbody>
 {% for resource in selectedResources %}
 	<tr>
@@ -43,6 +52,7 @@
 <div class="col-sm-6">
 
 <table class="table table-striped">
+	<thead><tr><th colspan=2>{{ 'planification.resource.to.planify'|trans }}</th></tr></thead>
 	<tbody>
 {% for resource in resourcesToPlanify %}
 	<tr>
@@ -57,6 +67,35 @@
 	</tbody>
 </table>
 
+</div>
+
+<div class="col-sm-12 well well-sm btn-group">
+	<a href="{{ path('sd_core_planification_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
+{% if selectedResources|length < 1 %}
+	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#validateModal"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'validate'|trans }}</del></button>
+{% else %}
+	<a href="{{ path('sd_core_planification_list', { 'pageNumber': 1 }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
+{% endif %}
+</div>
+
+<!-- Modal -->
+<div id="validateModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{ 'userFile.update.not.allowed.1'|trans }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 {% endblock %}

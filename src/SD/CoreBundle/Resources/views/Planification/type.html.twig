@@ -15,6 +15,8 @@
 	<a href="{{ path('sd_core_planification_add', { 'type': rt }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[rt] ~ '-32.png') }}">&nbsp;{{ ('resourceType.plural.' ~ rt)|trans }}</a>
 {% endfor %}
 
-<a href="{{ path('sd_core_planification_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<div class="well well-sm">
+	<a href="{{ path('sd_core_planification_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+</div>
 
 {% endblock %}

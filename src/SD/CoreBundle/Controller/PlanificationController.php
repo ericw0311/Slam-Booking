@@ -45,8 +45,8 @@ class PlanificationController extends Controller
     return $this->render('SDCoreBundle:Planification:type.html.twig', array('userContext' => $userContext));
     }
 	
-	// Ajout d'une planification: sélection des ressources à planifier
-    public function addAction($type, $resourceIDList, Request $request)
+	// Sélection des ressources à planifier
+    public function selectresourceAction($type, $resourceIDList, Request $request)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -109,26 +109,41 @@ class PlanificationController extends Controller
 		}
 	}
 
-    return $this->render('SDCoreBundle:Planification:add.html.twig', array('userContext' => $userContext, 'type' => $type, 'selectedResources' => $selectedResources, 'resourcesToPlanify' => $resourcesToPlanify));
+    return $this->render('SDCoreBundle:Planification:resource.html.twig', array('userContext' => $userContext, 'type' => $type, 'selectedResources' => $selectedResources, 'selectedResourcesIDList' => $resourceIDList, 'resourcesToPlanify' => $resourcesToPlanify));
     }
-	
-	// Ajout d'une planification
-    public function addAction_sav(Request $request)
+
+
+	// Validation des ressources à planifier
+    public function validateresourceAction($type, $resourceIDList, Request $request)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-	$planificationHeader = new PlanificationHeader($connectedUser, $userContext->getCurrentFile());
-	$form = $this->createForm(PlanificationHeaderType::class, $planificationHeader);
-    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-		$em->persist($planificationHeader);
-		$em->flush();
-		$request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
-		return $this->redirectToRoute('sd_core_planification_list', array('pageNumber' => 1));
-	}
-    return $this->render('SDCoreBundle:Planification:add.html.twig', array('userContext' => $userContext, 'form' => $form->createView()));
-    }
+
+	$resourceIDArray = explode('-', $resourceIDList);
 	
+    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+
+	$i = 0;
+
+	$planificationHeader = new PlanificationHeader($connectedUser, $userContext->getCurrentFile());
+	$planificationHeader->setType($type);
+
+    foreach ($resourceIDArray as $resourceID) {
+		$resourceDB = $resourceRepository->find($resourceID);
+		if ($i++ == 0) {
+			$planificationHeader->setName($resourceDB->getName());
+
+			$em->persist($planificationHeader);
+			$em->flush();
+			$request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
+		}
+	}
+
+	return $this->redirectToRoute('sd_core_planification_list', array('pageNumber' => 1));
+    }
+
+
     // Edition du detail d'une planification
     /**
     * @ParamConverter("planificationHeader", options={"mapping": {"planificationHeaderID": "id"}})

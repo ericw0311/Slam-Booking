@@ -12,7 +12,7 @@
 </div>
 
 {% for rt in resourceTypes %}
-	<a href="{{ path('sd_core_planification_add', { 'type': rt }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[rt] ~ '-32.png') }}">&nbsp;{{ ('resourceType.plural.' ~ rt)|trans }}</a>
+	<a href="{{ path('sd_core_planification_select_resource', { 'type': rt }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[rt] ~ '-32.png') }}">&nbsp;{{ ('resourceType.plural.' ~ rt)|trans }}</a>
 {% endfor %}
 
 <div class="well well-sm">

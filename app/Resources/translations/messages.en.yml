@@ -22,3 +22,4 @@ unactivate: Unactivate
 update.not.allowed: Update not allowed
 user.account: User account
 validate: Validate
+validate.not.allowed: Validate not allowed

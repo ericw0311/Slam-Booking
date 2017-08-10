@@ -52,6 +52,7 @@ planification.resource.unselect: Unselect resource
 planification.singular: Planification
 planification.type.select: Select type of resources to planify
 planification.updated.ok: The planification has been updated
+planification.validate.not.allowed: You must select at least one resource
 
 planning: Planning
 

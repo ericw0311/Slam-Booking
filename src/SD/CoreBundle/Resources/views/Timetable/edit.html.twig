@@ -7,7 +7,7 @@
 <div class="panel panel-default">
 
   <div class="panel-body">
-<p><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;<strong>{{ timetableHeader.name }}</strong></p>
+<p><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;<strong>{{ timetable.name }}</strong></p>
 
 {% if listTimetableLines|length > 0 %}
 <table class="table table-striped">
@@ -24,8 +24,8 @@
 <tr>
     <td>{{ timetableLine.beginningTime|date("H:i") }}</td>
     <td>{{ timetableLine.endTime|date("H:i") }}</td>
-    <td><a href="{{ path('sd_core_timetable_modifyline', { 'timetableHeaderID': timetableHeader.ID, 'timetableLineID': timetableLine.ID }) }}"><i class="glyphicon glyphicon-pencil"></i></a></td>
-    <td><a href="{{ path('sd_core_timetable_deleteline', { 'timetableHeaderID': timetableHeader.ID, 'timetableLineID': timetableLine.ID }) }}"><i class="glyphicon glyphicon-trash"></i></a></td>
+    <td><a href="{{ path('sd_core_timetable_modifyline', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}"><i class="glyphicon glyphicon-pencil"></i></a></td>
+    <td><a href="{{ path('sd_core_timetable_deleteline', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}"><i class="glyphicon glyphicon-trash"></i></a></td>
 </tr>
 {% endfor %}
     </tbody>
@@ -37,9 +37,9 @@
 
  <div class="btn-group">
 <a href="{{ path('sd_core_timetable_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'timetable.back.to.list'|trans }}</a>
-<a href="{{ path('sd_core_timetable_modify', { 'timetableHeaderID': timetableHeader.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
-<a href="{{ path('sd_core_timetable_delete', { 'timetableHeaderID': timetableHeader.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
-<a href="{{ path('sd_core_timetable_addline', { 'timetableHeaderID': timetableHeader.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> {{ ('timetableLine.create')|trans }}</a>
+<a href="{{ path('sd_core_timetable_modify', { 'timetableID': timetable.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+<a href="{{ path('sd_core_timetable_delete', { 'timetableID': timetable.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+<a href="{{ path('sd_core_timetable_addline', { 'timetableID': timetable.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> {{ ('timetableLine.create')|trans }}</a>
 </div>
 
   </div>

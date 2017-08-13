@@ -8,7 +8,7 @@
 <div class="panel panel-default">
 
 <div class="panel-body">
-<p><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;<strong>{{ timetableHeader.name }}</strong></p>
+<p><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;<strong>{{ timetable.name }}</strong></p>
 
 <table class="table table-striped">
 <thead>
@@ -45,7 +45,7 @@
 
 <div class="panel-footer">
 <div class="btn-group">
-<a href="{{ path('sd_core_timetable_edit', { 'timetableHeaderID': timetableHeader.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<a href="{{ path('sd_core_timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
 <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
 {{ form_widget(form.validateAndCreate, { 'attr': {'class': 'btn btn-success'} }) }}
 </div>

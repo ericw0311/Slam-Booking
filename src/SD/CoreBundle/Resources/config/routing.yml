@@ -103,41 +103,41 @@ sd_core_timetable_add:
     defaults: { _controller: SDCoreBundle:Timetable:add }
 
 sd_core_timetable_edit:
-    path:     /timetable/edit/{timetableHeaderID}
+    path:     /timetable/edit/{timetableID}
     defaults: { _controller: SDCoreBundle:Timetable:edit }
     requirements:
-        timetableHeaderID: \d+
+        timetableID: \d+
 
 sd_core_timetable_modify:
-    path:     /timetable/modify/{timetableHeaderID}
+    path:     /timetable/modify/{timetableID}
     defaults: { _controller: SDCoreBundle:Timetable:modify }
     requirements:
-        timetableHeaderID: \d+
+        timetableID: \d+
 
 sd_core_timetable_delete:
-    path:     /timetable/delete/{timetableHeaderID}
+    path:     /timetable/delete/{timetableID}
     defaults: { _controller: SDCoreBundle:Timetable:delete }
     requirements:
-        timetableHeaderID: \d+
+        timetableID: \d+
 
 sd_core_timetable_addline:
-    path:     /timetable/addline/{timetableHeaderID}
+    path:     /timetable/addline/{timetableID}
     defaults: { _controller: SDCoreBundle:Timetable:addline }
     requirements:
-        timetableHeaderID: \d+
+        timetableID: \d+
 
 sd_core_timetable_modifyline:
-    path:     /timetable/modifyline/{timetableHeaderID}/{timetableLineID}
+    path:     /timetable/modifyline/{timetableID}/{timetableLineID}
     defaults: { _controller: SDCoreBundle:Timetable:modifyline }
     requirements:
-        timetableHeaderID: \d+
+        timetableID: \d+
         timetableLineID: \d+
 
 sd_core_timetable_deleteline:
-    path:     /timetable/deleteline/{timetableHeaderID}/{timetableLineID}
+    path:     /timetable/deleteline/{timetableID}/{timetableLineID}
     defaults: { _controller: SDCoreBundle:Timetable:deleteline }
     requirements:
-        timetableHeaderID: \d+
+        timetableID: \d+
         timetableLineID: \d+
 
 
@@ -238,22 +238,22 @@ sd_core_planification_add:
     defaults: { _controller: SDCoreBundle:Planification:add, resourceIDList: null }
 
 sd_core_planification_edit:
-    path:     /planification/edit/{planificationHeaderID}
+    path:     /planification/edit/{planificationID}
     defaults: { _controller: SDCoreBundle:Planification:edit }
     requirements:
-        planificationHeaderID: \d+
+        planificationID: \d+
 
 sd_core_planification_modify:
-    path:     /planification/modify/{planificationHeaderID}
+    path:     /planification/modify/{planificationID}
     defaults: { _controller: SDCoreBundle:Planification:modify }
     requirements:
-        planificationHeaderID: \d+
+        planificationID: \d+
 
 sd_core_planification_delete:
-    path:     /planification/delete/{planificationHeaderID}
+    path:     /planification/delete/{planificationID}
     defaults: { _controller: SDCoreBundle:Planification:delete }
     requirements:
-        planificationHeaderID: \d+
+        planificationID: \d+
 
 sd_core_queryBooking_list:
     path:     /queryBooking/list/{pageNumber}

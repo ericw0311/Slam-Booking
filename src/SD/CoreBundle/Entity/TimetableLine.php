@@ -32,10 +32,10 @@ class TimetableLine
     private $user;
  
     /**
-     * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\TimetableHeader")
+     * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\Timetable")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $timetableHeader;
+    private $timetable;
 
     /**
      * @var \DateTime
@@ -141,32 +141,32 @@ class TimetableLine
     }
 
     /**
-     * Set timetableHeader
+     * Set timetable
      *
-     * @param \SD\CoreBundle\Entity\TimetableHeader $timetableHeader
+     * @param \SD\CoreBundle\Entity\Timetable $timetable
      *
      * @return TimetableLine
      */
-    public function setTimetableHeader(\SD\CoreBundle\Entity\TimetableHeader $timetableHeader)
+    public function setTimetable(\SD\CoreBundle\Entity\Timetable $timetable)
     {
-        $this->timetableHeader = $timetableHeader;
+        $this->timetable = $timetable;
         return $this;
     }
 
     /**
-     * Get timetableHeader
+     * Get timetable
      *
-     * @return \SD\UserBundle\Entity\TimetableHeader
+     * @return \SD\UserBundle\Entity\Timetable
      */
-    public function getTimetableHeader()
+    public function getTimetable()
     {
-        return $this->timetableHeader;
+        return $this->timetable;
     }
 
-    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\TimetableHeader $timetableHeader)
+    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\Timetable $timetable)
     {
     $this->setUser($user);
-    $this->setTimetableHeader($timetableHeader);
+    $this->setTimetable($timetable);
     }
 
     /**

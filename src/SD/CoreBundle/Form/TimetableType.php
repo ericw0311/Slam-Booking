@@ -7,14 +7,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PlanificationHeaderType extends AbstractType
+class TimetableType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', TextType::class, array('label' => 'planification.name', 'translation_domain' => 'messages'));
+        $builder->add('name', TextType::class, array('label' => 'timetable.name', 'translation_domain' => 'messages'));
     }
     
     /**
@@ -23,7 +23,7 @@ class PlanificationHeaderType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SD\CoreBundle\Entity\PlanificationHeader'
+            'data_class' => 'SD\CoreBundle\Entity\Timetable'
         ));
     }
 
@@ -32,7 +32,7 @@ class PlanificationHeaderType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'sd_corebundle_planificationHeader';
+        return 'sd_corebundle_timetable';
     }
 
 }

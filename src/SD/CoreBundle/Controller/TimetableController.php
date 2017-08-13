@@ -8,11 +8,11 @@ use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\ListContext;
 use SD\CoreBundle\Entity\Trace;
 
-use SD\CoreBundle\Entity\TimetableHeader;
+use SD\CoreBundle\Entity\Timetable;
 use SD\CoreBundle\Entity\TimetableLine;
 use SD\CoreBundle\Entity\Constants;
 
-use SD\CoreBundle\Form\TimetableHeaderType;
+use SD\CoreBundle\Form\TimetableType;
 use SD\CoreBundle\Form\TimetableLineType;
 use SD\CoreBundle\Form\TimetableLineAddType;
 
@@ -34,13 +34,13 @@ class TimetableController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $timetableHeaderRepository = $em->getRepository('SDCoreBundle:TimetableHeader');
+    $timetableRepository = $em->getRepository('SDCoreBundle:Timetable');
 
-    $numberRecords = $timetableHeaderRepository->getTimetablesCount($userContext->getCurrentFile());
+    $numberRecords = $timetableRepository->getTimetablesCount($userContext->getCurrentFile());
 
     $listContext = new ListContext($em, $connectedUser, 'core', 'timetable', $pageNumber, $numberRecords, 'sd_core_timetable_display', 'sd_core_timetable_add');
 
-    $listTimetables = $timetableHeaderRepository->getDisplayedTimetables($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+    $listTimetables = $timetableRepository->getDisplayedTimetables($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
     return $this->render('SDCoreBundle:Timetable:index.html.twig', array(
                 'userContext' => $userContext,
@@ -55,16 +55,16 @@ class TimetableController extends Controller
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$timetableHeader = new TimetableHeader($connectedUser, $userContext->getCurrentFile());
+	$timetable = new Timetable($connectedUser, $userContext->getCurrentFile());
 
-	$form = $this->createForm(TimetableHeaderType::class, $timetableHeader);
+	$form = $this->createForm(TimetableType::class, $timetable);
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-		$em->persist($timetableHeader);
+		$em->persist($timetable);
 		$em->flush();
 		$request->getSession()->getFlashBag()->add('notice', 'timetable.created.ok');
 
-		return $this->redirectToRoute('sd_core_timetable_addline', array('timetableHeaderID' => $timetableHeader->getID()));
+		return $this->redirectToRoute('sd_core_timetable_addline', array('timetableID' => $timetable->getID()));
 		// return $this->redirectToRoute('sd_core_timetable_list', array('pageNumber' => 1));
     }
     
@@ -73,50 +73,50 @@ class TimetableController extends Controller
 	
     // Edition du detail d'une grille horaire
     /**
-    * @ParamConverter("timetableHeader", options={"mapping": {"timetableHeaderID": "id"}})
+    * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
     */
-    public function editAction(TimetableHeader $timetableHeader)
+    public function editAction(Timetable $timetable)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
-    $listTimetableLines = $timetableLineRepository->getTimetableLines($timetableHeader);
+    $listTimetableLines = $timetableLineRepository->getTimetableLines($timetable);
 
     return $this->render('SDCoreBundle:Timetable:edit.html.twig', 
-        array('userContext' => $userContext, 'timetableHeader' => $timetableHeader, 'listTimetableLines' => $listTimetableLines));
+        array('userContext' => $userContext, 'timetable' => $timetable, 'listTimetableLines' => $listTimetableLines));
     }
 
 	
 // Modification d'une grille horaire
 /**
-* @ParamConverter("timetableHeader", options={"mapping": {"timetableHeaderID": "id"}})
+* @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
 */
-public function modifyAction(TimetableHeader $timetableHeader, Request $request)
+public function modifyAction(Timetable $timetable, Request $request)
 {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $form = $this->createForm(TimetableHeaderType::class, $timetableHeader);
+    $form = $this->createForm(TimetableType::class, $timetable);
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
         // Inutile de persister ici, Doctrine connait déjà la grille horaire
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'timetable.updated.ok');
 
-        return $this->redirectToRoute('sd_core_timetable_edit', array('timetableHeaderID' => $timetableHeader->getId()));
+        return $this->redirectToRoute('sd_core_timetable_edit', array('timetableID' => $timetable->getId()));
     }
-    return $this->render('SDCoreBundle:Timetable:modify.html.twig', array('userContext' => $userContext, 'timetableHeader' => $timetableHeader, 'form' => $form->createView()));
+    return $this->render('SDCoreBundle:Timetable:modify.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'form' => $form->createView()));
 }
 
 
     // Suppression d'une grille horaire
     /**
-    * @ParamConverter("timetableHeader", options={"mapping": {"timetableHeaderID": "id"}})
+    * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
     */
-    public function deleteAction(TimetableHeader $timetableHeader, Request $request)
+    public function deleteAction(Timetable $timetable, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -126,30 +126,30 @@ public function modifyAction(TimetableHeader $timetableHeader, Request $request)
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
         // Inutile de persister ici, Doctrine connait déjà la grille horaire
-        $em->remove($timetableHeader);
+        $em->remove($timetable);
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'timetable.deleted.ok');
 
         return $this->redirectToRoute('sd_core_timetable_list', array('pageNumber' => 1));
     }
-    return $this->render('SDCoreBundle:Timetable:delete.html.twig', array('userContext' => $userContext, 'timetableHeader' => $timetableHeader, 'form' => $form->createView()));
+    return $this->render('SDCoreBundle:Timetable:delete.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'form' => $form->createView()));
     }
     
     
 // Ajout d'un creneau horaire
 /**
-* @ParamConverter("timetableHeader", options={"mapping": {"timetableHeaderID": "id"}})
+* @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
 */
-public function addlineAction(TimetableHeader $timetableHeader, Request $request)
+public function addlineAction(Timetable $timetable, Request $request)
 {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
-    $listLastTimetableLines = $timetableLineRepository->getLastTimetableLines($timetableHeader, Constants::NUMBER_LINES_BEFORE_AFTER_UPDATE);
+    $listLastTimetableLines = $timetableLineRepository->getLastTimetableLines($timetable, Constants::NUMBER_LINES_BEFORE_AFTER_UPDATE);
 
-    $timetableLine = new TimetableLine($connectedUser, $timetableHeader);
+    $timetableLine = new TimetableLine($connectedUser, $timetable);
 
     if (count($listLastTimetableLines) > 0) { // On initialise la date de début avec la date de fin du dernier créneau
 		$timetableLine->setBeginningTime(current($listLastTimetableLines)->getEndTime());
@@ -163,31 +163,31 @@ public function addlineAction(TimetableHeader $timetableHeader, Request $request
         $request->getSession()->getFlashBag()->add('08notice', 'timetableLine.created.ok');
 		
 		if ($form->get('validateAndCreate')->isClicked()) {
-			return $this->redirectToRoute('sd_core_timetable_addline', array('timetableHeaderID' => $timetableHeader->getID()));
+			return $this->redirectToRoute('sd_core_timetable_addline', array('timetableID' => $timetable->getID()));
 		} else {
-			return $this->redirectToRoute('sd_core_timetable_edit', array('timetableHeaderID' => $timetableHeader->getID()));
+			return $this->redirectToRoute('sd_core_timetable_edit', array('timetableID' => $timetable->getID()));
 		}
 	}
 
     return $this->render('SDCoreBundle:Timetable:addline.html.twig',
-        array('userContext' => $userContext, 'timetableHeader' => $timetableHeader, 'listLastTimetableLines' => $listLastTimetableLines, 'form' => $form->createView()));
+        array('userContext' => $userContext, 'timetable' => $timetable, 'listLastTimetableLines' => $listLastTimetableLines, 'form' => $form->createView()));
 }
 
 
     // Modification d'un creneau horaire
     /**
-    * @ParamConverter("timetableHeader", options={"mapping": {"timetableHeaderID": "id"}})
+    * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
     * @ParamConverter("timetableLine", options={"mapping": {"timetableLineID": "id"}})
     */
-    public function modifylineAction(TimetableHeader $timetableHeader, TimetableLine $timetableLine, Request $request)
+    public function modifylineAction(Timetable $timetable, TimetableLine $timetableLine, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
-    $listPreviousTimetableLines = $timetableLineRepository->getSomeTimetableLines($timetableHeader, $timetableLine->getId(), Constants::NUMBER_LINES_BEFORE_AFTER_UPDATE, true);
-    $listNextTimetableLines = $timetableLineRepository->getSomeTimetableLines($timetableHeader, $timetableLine->getId(), Constants::NUMBER_LINES_BEFORE_AFTER_UPDATE, false);
+    $listPreviousTimetableLines = $timetableLineRepository->getSomeTimetableLines($timetable, $timetableLine->getId(), Constants::NUMBER_LINES_BEFORE_AFTER_UPDATE, true);
+    $listNextTimetableLines = $timetableLineRepository->getSomeTimetableLines($timetable, $timetableLine->getId(), Constants::NUMBER_LINES_BEFORE_AFTER_UPDATE, false);
     
     $form = $this->createForm(TimetableLineType::class, $timetableLine);
 
@@ -196,11 +196,11 @@ public function addlineAction(TimetableHeader $timetableHeader, Request $request
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'timetableLine.updated.ok');
 
-        return $this->redirectToRoute('sd_core_timetable_edit', array('timetableHeaderID' => $timetableHeader->getId()));
+        return $this->redirectToRoute('sd_core_timetable_edit', array('timetableID' => $timetable->getId()));
     }
 
     return $this->render('SDCoreBundle:Timetable:modifyline.html.twig',
-        array('userContext' => $userContext, 'timetableHeader' => $timetableHeader,
+        array('userContext' => $userContext, 'timetable' => $timetable,
             'timetableLine' => $timetableLine,
             'listPreviousTimetableLines' => $listPreviousTimetableLines,
             'listNextTimetableLines' => $listNextTimetableLines,
@@ -212,7 +212,7 @@ public function addlineAction(TimetableHeader $timetableHeader, Request $request
     /**
     * @ParamConverter("timetableLine", options={"mapping": {"timetableLineID": "id"}})
     */
-    public function deletelineAction($timetableHeaderID, TimetableLine $timetableLine, Request $request)
+    public function deletelineAction($timetableID, TimetableLine $timetableLine, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -223,6 +223,6 @@ public function addlineAction(TimetableHeader $timetableHeader, Request $request
     $em->flush();
     $request->getSession()->getFlashBag()->add('notice', 'timetableLine.deleted.ok');
 
-    return $this->redirectToRoute('sd_core_timetable_edit', array('timetableHeaderID' => $timetableHeaderID));
+    return $this->redirectToRoute('sd_core_timetable_edit', array('timetableID' => $timetableID));
     }
 }

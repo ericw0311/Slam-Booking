@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PlanificationResource
  *
- * @ORM\Table(name="planification_resource", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification_resource",columns={"planification_line_id", "resource_id"})})
+ * @ORM\Table(name="planification_resource", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification_resource",columns={"planification_period_id", "resource_id"})})
  * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\PlanificationResourceRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -23,10 +23,10 @@ class PlanificationResource
     private $id;
 
      /**
-     * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\PlanificationLine")
+     * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\PlanificationPeriod")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $planificationLine;
+    private $planificationPeriod;
 
      /**
      * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\Resource")
@@ -61,26 +61,26 @@ class PlanificationResource
     }
 
     /**
-     * Set planificationLine
+     * Set planificationPeriod
      *
-     * @param \SD\CoreBundle\Entity\PlanificationLine $planificationLine
+     * @param \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod
      *
      * @return PlanificationResource
      */
-    public function setPlanificationLine(\SD\CoreBundle\Entity\PlanificationLine $planificationLine)
+    public function setPlanificationPeriod(\SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)
     {
-        $this->planificationLine = $planificationLine;
+        $this->planificationPeriod = $planificationPeriod;
         return $this;
     }
 
     /**
-     * Get planificationLine
+     * Get planificationPeriod
      *
-     * @return \SD\UserBundle\Entity\PlanificationLine
+     * @return \SD\UserBundle\Entity\PlanificationPeriod
      */
-    public function getPlanificationLine()
+    public function getPlanificationPeriod()
     {
-        return $this->planificationLine;
+        return $this->planificationPeriod;
     }
 
     /**
@@ -129,10 +129,10 @@ class PlanificationResource
         return $this->user;
     }
 
-    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\PlanificationLine $planificationLine, \SD\CoreBundle\Entity\Resource $resource)
+    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod, \SD\CoreBundle\Entity\Resource $resource)
     {
     $this->setUser($user);
-    $this->setPlanificationLine($planificationLine);
+    $this->setPlanificationPeriod($planificationPeriod);
     $this->setResource($resource);
     }
 

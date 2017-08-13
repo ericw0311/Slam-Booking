@@ -6,14 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * TimetableHeader
+ * Timetable
  *
- * @ORM\Table(name="timetable_header", uniqueConstraints={@ORM\UniqueConstraint(name="uk_timetable_header",columns={"file_id", "name"})})
- * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\TimetableHeaderRepository")
+ * @ORM\Table(name="timetable", uniqueConstraints={@ORM\UniqueConstraint(name="uk_timetable",columns={"file_id", "name"})})
+ * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\TimetableRepository")
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity(fields={"file", "name"}, errorPath="name", message="timetable.already.exists")
  */
-class TimetableHeader
+class Timetable
 {
     /**
      * @var int
@@ -45,7 +45,7 @@ class TimetableHeader
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="TimetableLine", mappedBy="timetableHeader", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="TimetableLine", mappedBy="timetable", cascade={"persist", "remove"})
      */
     private $timetableLines;
 
@@ -64,7 +64,7 @@ class TimetableHeader
      *
      * @param string $name
      *
-     * @return TimetableHeader
+     * @return Timetable
      */
     public function setName($name)
     {
@@ -119,7 +119,7 @@ class TimetableHeader
      *
      * @param \SD\UserBundle\Entity\User $user
      *
-     * @return TimetableHeader
+     * @return Timetable
      */
     public function setUser(\SD\UserBundle\Entity\User $user)
     {
@@ -143,7 +143,7 @@ class TimetableHeader
      *
      * @param \SD\CoreBundle\Entity\File $file
      *
-     * @return TimetableHeader
+     * @return Timetable
      */
     public function setFile(\SD\CoreBundle\Entity\File $file)
     {

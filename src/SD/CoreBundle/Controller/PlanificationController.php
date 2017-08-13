@@ -1,8 +1,10 @@
 <?php
 // src/SD/CoreBundle/Controller/PlanificationController.php
 namespace SD\CoreBundle\Controller;
-use SD\CoreBundle\Entity\PlanificationHeader;
-use SD\CoreBundle\Form\PlanificationHeaderType;
+use SD\CoreBundle\Entity\Planification;
+use SD\CoreBundle\Entity\PlanificationPeriod;
+use SD\CoreBundle\Entity\PlanificationResource;
+use SD\CoreBundle\Form\PlanificationType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,15 +26,15 @@ class PlanificationController extends Controller
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-    $planificationHeaderRepository = $em->getRepository('SDCoreBundle:PlanificationHeader');
-    $numberRecords = $planificationHeaderRepository->getPlanificationHeadersCount($userContext->getCurrentFile());
+    $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
+    $numberRecords = $planificationRepository->getPlanificationsCount($userContext->getCurrentFile());
     $listContext = new ListContext($em, $connectedUser, 'core', 'planification', $pageNumber, $numberRecords, 'sd_core_planification_list', 'sd_core_planification_type');
-    $listPlanificationHeaders = $planificationHeaderRepository->getDisplayedPlanificationHeaders($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+    $listPlanifications = $planificationRepository->getDisplayedPlanifications($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
     return $this->render('SDCoreBundle:Planification:index.html.twig', array(
                 'userContext' => $userContext,
                 'listContext' => $listContext,
-		'listPlanificationHeaders' => $listPlanificationHeaders));
+		'listPlanifications' => $listPlanifications));
     }
 
 	// Ajout d'une planification: Sélection du type de ressources à planifier
@@ -121,64 +123,66 @@ class PlanificationController extends Controller
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
 	$resourceIDArray = explode('-', $resourceIDList);
-	
     $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
-
 	$i = 0;
 
-	$planificationHeader = new PlanificationHeader($connectedUser, $userContext->getCurrentFile());
-	$planificationHeader->setType($type);
+	$planification = new Planification($connectedUser, $userContext->getCurrentFile());
+	$planification->setType($type);
+
+	$planificationPeriod = new PlanificationPeriod($connectedUser, $planification);
 
     foreach ($resourceIDArray as $resourceID) {
 		$resourceDB = $resourceRepository->find($resourceID);
 		if ($i++ == 0) {
-			$planificationHeader->setName($resourceDB->getName());
-
-			$em->persist($planificationHeader);
-			$em->flush();
-			$request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
+			$planification->setName($resourceDB->getName());
+			$em->persist($planification);
+			$em->persist($planificationPeriod);
 		}
+		$planificationResource = new PlanificationResource($connectedUser, $planificationPeriod, $resourceDB);
+		$em->persist($planificationResource);
 	}
 
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
 	return $this->redirectToRoute('sd_core_planification_list', array('pageNumber' => 1));
     }
 
 
     // Edition du detail d'une planification
     /**
-    * @ParamConverter("planificationHeader", options={"mapping": {"planificationHeaderID": "id"}})
+    * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
     */
-    public function editAction(PlanificationHeader $planificationHeader)
+    public function editAction(Planification $planification)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-    return $this->render('SDCoreBundle:Planification:edit.html.twig', array('userContext' => $userContext, 'planificationHeader' => $planificationHeader));
+    return $this->render('SDCoreBundle:Planification:edit.html.twig', array('userContext' => $userContext, 'planification' => $planification));
     }
 	
     // Modification d'une planification
     /**
-    * @ParamConverter("planificationHeader", options={"mapping": {"planificationHeaderID": "id"}})
+    * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
     */
-    public function modifyAction(PlanificationHeader $planificationHeader, Request $request)
+    public function modifyAction(Planification $planification, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-    $form = $this->createForm(PlanificationHeaderType::class, $planificationHeader);
+    $form = $this->createForm(PlanificationType::class, $planification);
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
         // Inutile de persister ici, Doctrine connait déjà l'activite
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'planification.updated.ok');
-        return $this->redirectToRoute('sd_core_planification_edit', array('planificationHeaderID' => $planificationHeader->getId()));
+        return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getId()));
     }
-    return $this->render('SDCoreBundle:Planification:modify.html.twig', array('userContext' => $userContext, 'planificationHeader' => $planificationHeader, 'form' => $form->createView()));
+    return $this->render('SDCoreBundle:Planification:modify.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'form' => $form->createView()));
     }
     // Suppression d'une planification
     /**
-    * @ParamConverter("planificationHeader", options={"mapping": {"planificationHeaderID": "id"}})
+    * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
     */
-    public function deleteAction(PlanificationHeader $planificationHeader, Request $request)
+    public function deleteAction(Planification $planification, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -186,11 +190,11 @@ class PlanificationController extends Controller
     $form = $this->get('form.factory')->create();
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
         // Inutile de persister ici, Doctrine connait déjà l'activite
-        $em->remove($planificationHeader);
+        $em->remove($planification);
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'planification.deleted.ok');
         return $this->redirectToRoute('sd_core_planification_list', array('pageNumber' => 1));
     }
-    return $this->render('SDCoreBundle:Planification:delete.html.twig', array('userContext' => $userContext, 'planificationHeader' => $planificationHeader, 'form' => $form->createView()));
+    return $this->render('SDCoreBundle:Planification:delete.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'form' => $form->createView()));
     }
 }

@@ -9,13 +9,13 @@
 <div class="panel panel-default">
 
 <div class="panel-body">
-<p>{{ 'planification.ask.delete'|trans({'%name%': planificationHeader.name}) }}</p>
+<p>{{ 'planification.ask.delete'|trans({'%name%': planification.name}) }}</p>
 </div>
 
 <div class="panel-footer">
 
 <div class="btn-group">
-    <a href="{{ path('sd_core_planification_edit', { 'planificationHeaderID': planificationHeader.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+    <a href="{{ path('sd_core_planification_edit', { 'planificationID': planification.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
     <button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
 </div>
 

@@ -5,13 +5,13 @@ namespace SD\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PlanificationLine
+ * PlanificationPeriod
  *
- * @ORM\Table(name="planification_line", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification_line",columns={"planification_header_id", "beginning_date"})})
- * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\PlanificationLineRepository")
+ * @ORM\Table(name="planification_period", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification_period",columns={"planification_id", "beginning_date"})})
+ * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\PlanificationPeriodRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class PlanificationLine
+class PlanificationPeriod
 {
     /**
      * @var int
@@ -38,10 +38,10 @@ class PlanificationLine
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\PlanificationHeader")
+     * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\Planification")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $planificationHeader;
+    private $planification;
 
     /**
      * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")
@@ -50,7 +50,7 @@ class PlanificationLine
     private $user;
  
     /**
-     * @ORM\OneToMany(targetEntity="PlanificationResource", mappedBy="planificationLine", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="PlanificationResource", mappedBy="planificationPeriod", cascade={"persist", "remove"})
      */
     private $planificationResources;
 
@@ -79,7 +79,7 @@ class PlanificationLine
      *
      * @param \DateTime $beginningDate
      *
-     * @return PlanificationLine
+     * @return PlanificationPeriod
      */
     public function setBeginningDate($beginningDate)
     {
@@ -102,7 +102,7 @@ class PlanificationLine
      *
      * @param \DateTime $endDate
      *
-     * @return PlanificationLine
+     * @return PlanificationPeriod
      */
     public function setEndDate($endDate)
     {
@@ -117,30 +117,30 @@ class PlanificationLine
      */
     public function getEndDate()
     {
-		return $this->endDPlanificationLineate;
+		return $this->endDPlanificationPeriodate;
     }
 
     /**
-     * Set planificationHeader
+     * Set planification
      *
-     * @param \SD\CoreBundle\Entity\PlanificationHeader $planificationHeader
+     * @param \SD\CoreBundle\Entity\Planification $planification
      *
-     * @return PlanificationLine
+     * @return PlanificationPeriod
      */
-    public function setPlanificationHeader(\SD\CoreBundle\Entity\PlanificationHeader $planificationHeader)
+    public function setPlanification(\SD\CoreBundle\Entity\Planification $planification)
     {
-        $this->planificationHeader = $planificationHeader;
+        $this->planification = $planification;
         return $this;
     }
 
     /**
-     * Get planificationHeader
+     * Get planification
      *
-     * @return \SD\UserBundle\Entity\PlanificationHeader
+     * @return \SD\UserBundle\Entity\Planification
      */
-    public function getPlanificationHeader()
+    public function getPlanification()
     {
-        return $this->planificationHeader;
+        return $this->planification;
     }
     
     /**
@@ -148,7 +148,7 @@ class PlanificationLine
      *
      * @param \SD\UserBundle\Entity\User $user
      *
-     * @return PlanificationLine
+     * @return PlanificationPeriod
      */
     public function setUser(\SD\UserBundle\Entity\User $user)
     {
@@ -166,10 +166,10 @@ class PlanificationLine
         return $this->user;
     }
 
-    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\PlanificationHeader $planificationHeader)
+    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\Planification $planification)
     {
     $this->setUser($user);
-    $this->setPlanificationHeader($planificationHeader);
+    $this->setPlanification($planification);
     }
 
     /**

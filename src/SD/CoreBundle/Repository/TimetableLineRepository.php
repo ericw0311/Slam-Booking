@@ -11,10 +11,10 @@ namespace SD\CoreBundle\Repository;
 class TimetableLineRepository extends \Doctrine\ORM\EntityRepository
 {
     // Recherche les creneaux d'une grille horaire
-    public function getTimetableLines($timetableHeader)
+    public function getTimetableLines($timetable)
     {
     $queryBuilder = $this->createQueryBuilder('tl');
-    $queryBuilder->where('tl.timetableHeader = :timetableHeader')->setParameter('timetableHeader', $timetableHeader);
+    $queryBuilder->where('tl.timetable = :timetable')->setParameter('timetable', $timetable);
     $queryBuilder->orderBy('tl.id', 'ASC');
    
     $query = $queryBuilder->getQuery();
@@ -23,10 +23,10 @@ class TimetableLineRepository extends \Doctrine\ORM\EntityRepository
     }
 
     // Recherche les derniers creneaux horaires d'une grille
-    public function getLastTimetableLines($timetableHeader, $maxRecord)
+    public function getLastTimetableLines($timetable, $maxRecord)
     {
     $queryBuilder = $this->createQueryBuilder('tl');
-    $queryBuilder->where('tl.timetableHeader = :timetableHeader')->setParameter('timetableHeader', $timetableHeader);
+    $queryBuilder->where('tl.timetable = :timetable')->setParameter('timetable', $timetable);
     $queryBuilder->orderBy('tl.id', 'DESC');
     $queryBuilder->setMaxResults($maxRecord);
    
@@ -36,10 +36,10 @@ class TimetableLineRepository extends \Doctrine\ORM\EntityRepository
     }
 
     // Recherche quelques creneaux horaires d'une grille a partir d'une position
-    public function getSomeTimetableLines($timetableHeader, $timetableLineID, $maxRecord, $previous = false)
+    public function getSomeTimetableLines($timetable, $timetableLineID, $maxRecord, $previous = false)
     {
     $queryBuilder = $this->createQueryBuilder('tl');
-    $queryBuilder->where('tl.timetableHeader = :timetableHeader')->setParameter('timetableHeader', $timetableHeader);
+    $queryBuilder->where('tl.timetable = :timetable')->setParameter('timetable', $timetable);
     if ($previous) {
         $queryBuilder->andWhere('tl.id < :timetableLineID')->setParameter('timetableLineID', $timetableLineID);
     } else {
@@ -58,10 +58,10 @@ class TimetableLineRepository extends \Doctrine\ORM\EntityRepository
     }
 
 	// Retourne le creneau horaire precedent
-	public function getPreviousTimetableLine($timetableHeader, $timetableLineID)
+	public function getPreviousTimetableLine($timetable, $timetableLineID)
     {
 	$queryBuilder = $this->createQueryBuilder('tl');
-	$queryBuilder->where('tl.timetableHeader = :timetableHeader')->setParameter('timetableHeader', $timetableHeader);
+	$queryBuilder->where('tl.timetable = :timetable')->setParameter('timetable', $timetable);
 	$queryBuilder->andWhere('tl.id < :timetableLineID')->setParameter('timetableLineID', $timetableLineID);
 	$queryBuilder->orderBy('tl.id', 'DESC');
 	$queryBuilder->setMaxResults(1);
@@ -72,10 +72,10 @@ class TimetableLineRepository extends \Doctrine\ORM\EntityRepository
 	}
 
 	// Retourne le creneau horaire suivant
-	public function getNextTimetableLine($timetableHeader, $timetableLineID)
+	public function getNextTimetableLine($timetable, $timetableLineID)
     {
 	$queryBuilder = $this->createQueryBuilder('tl');
-	$queryBuilder->where('tl.timetableHeader = :timetableHeader')->setParameter('timetableHeader', $timetableHeader);
+	$queryBuilder->where('tl.timetable = :timetable')->setParameter('timetable', $timetable);
 	$queryBuilder->andWhere('tl.id > :timetableLineID')->setParameter('timetableLineID', $timetableLineID);
 	$queryBuilder->orderBy('tl.id', 'ASC');
 	$queryBuilder->setMaxResults(1);
@@ -86,10 +86,10 @@ class TimetableLineRepository extends \Doctrine\ORM\EntityRepository
 	}
 
 	// Retourne le dernier creneau horaire
-	public function getLastTimetableLine($timetableHeader)
+	public function getLastTimetableLine($timetable)
 	{
 	$queryBuilder = $this->createQueryBuilder('tl');
-	$queryBuilder->where('tl.timetableHeader = :timetableHeader')->setParameter('timetableHeader', $timetableHeader);
+	$queryBuilder->where('tl.timetable = :timetable')->setParameter('timetable', $timetable);
 	$queryBuilder->orderBy('tl.id', 'DESC');
 	$queryBuilder->setMaxResults(1);
 

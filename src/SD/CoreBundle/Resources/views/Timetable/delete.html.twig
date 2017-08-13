@@ -9,13 +9,13 @@
 <div class="panel panel-default">
 
 <div class="panel-body">
-<p>{{ 'timetable.ask.delete'|trans({'%name%': timetableHeader.name}) }}</p>
+<p>{{ 'timetable.ask.delete'|trans({'%name%': timetable.name}) }}</p>
 </div>
 
 <div class="panel-footer">
 
 <div class="btn-group">
-    <a href="{{ path('sd_core_timetable_edit', { 'timetableHeaderID': timetableHeader.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+    <a href="{{ path('sd_core_timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
     <button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
 </div>
 

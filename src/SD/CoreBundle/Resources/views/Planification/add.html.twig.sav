@@ -25,7 +25,7 @@
 {{ form_end(form) }}
 
 <script>
-	document.getElementById("sd_corebundle_planificationHeader_name").focus();
+	document.getElementById("sd_corebundle_planification_name").focus();
 </script>
 
 {% endblock %}

@@ -5,19 +5,21 @@
 {% block title %}{{ parent() }} file{% endblock %}
 
 {% block listRow %}
+
 <div class="row">
 
 {% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
     <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
 {% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
     {% if listFiles[i*listContext.numberLinesDisplayed+j].ID == userContext.currentFileID %}
-    <a href="{{ path('sd_core_file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/file-16.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('bundles/sdcore/images/administrator-16.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.username }}<span class="badge">{{ 'file.current'|trans }}</span></a>
+    <a href="{{ path('sd_core_file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/file-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('bundles/sdcore/images/administrator-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.username }}<span class="badge">{{ 'file.current'|trans }}</span></a>
     {% else %}
-    <a href="{{ path('sd_core_file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/file-16.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('bundles/sdcore/images/administrator-16.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.username }}</a>
+    <a href="{{ path('sd_core_file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/file-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('bundles/sdcore/images/administrator-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.username }}</a>
     {% endif %}
 {% endfor %}
     </div>
 {% endfor %}
 
 </div>
+
 {% endblock %}

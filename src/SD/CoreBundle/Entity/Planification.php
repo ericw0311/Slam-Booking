@@ -6,14 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * PlanificationHeader
+ * Planification
  *
- * @ORM\Table(name="planification_header", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification_header",columns={"file_id", "type", "name"})})
- * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\PlanificationHeaderRepository")
+ * @ORM\Table(name="planification", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification",columns={"file_id", "type", "name"})})
+ * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\PlanificationRepository")
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity(fields={"file", "type", "name"}, errorPath="name", message="planification.already.exists")
  */
-class PlanificationHeader
+class Planification
 {
     /**
      * @var int
@@ -52,9 +52,9 @@ class PlanificationHeader
     private $file;
 
     /**
-     * @ORM\OneToMany(targetEntity="PlanificationLine", mappedBy="planificationHeader", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="PlanificationPeriod", mappedBy="planification", cascade={"persist", "remove"})
      */
-    private $planificationLines;
+    private $planificationPeriods;
 
     /**
     * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -120,7 +120,7 @@ class PlanificationHeader
      *
      * @param string $name
      *
-     * @return PlanificationHeader
+     * @return Planification
      */
     public function setName($name)
     {
@@ -150,7 +150,7 @@ class PlanificationHeader
      *
      * @param \SD\UserBundle\Entity\User $user
      *
-     * @return PlanificationHeader
+     * @return Planification
      */
     public function setUser(\SD\UserBundle\Entity\User $user)
     {
@@ -173,7 +173,7 @@ class PlanificationHeader
      *
      * @param \SD\CoreBundle\Entity\File $file
      *
-     * @return PlanificationHeader
+     * @return Planification
      */
     public function setFile(\SD\CoreBundle\Entity\File $file)
     {

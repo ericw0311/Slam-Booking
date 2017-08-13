@@ -25,17 +25,17 @@ class TimetableLineOrderValidator extends ConstraintValidator
     {
     $entityManager = $this->getEntityManager();
 
-    $timetableHeaderRepository = $entityManager->getRepository('SDCoreBundle:TimetableHeader');
-    $timetableHeader = $timetableHeaderRepository->find($timetableLine->getTimetableHeader()->getID());
+    $timetableRepository = $entityManager->getRepository('SDCoreBundle:Timetable');
+    $timetable = $timetableRepository->find($timetableLine->getTimetable()->getID());
 
 	$timetableLineRepository = $entityManager->getRepository('SDCoreBundle:TimetableLine');
 	$previousTimetableLine = null;
 	$nextTimetableLine = null;
 
 	if ($timetableLine->getId() > 0) { // On est en mise a jour de créneau horaire
-		$previousTimetableLine = $timetableLineRepository->getPreviousTimetableLine($timetableHeader, $timetableLine->getId());
+		$previousTimetableLine = $timetableLineRepository->getPreviousTimetableLine($timetable, $timetableLine->getId());
 	} else { // On est en création de créneau horaire
-		$previousTimetableLine = $timetableLineRepository->getLastTimetableLine($timetableHeader);
+		$previousTimetableLine = $timetableLineRepository->getLastTimetableLine($timetable);
 	}
 
 	if ($previousTimetableLine != null) { // Il existe un créneau précédent

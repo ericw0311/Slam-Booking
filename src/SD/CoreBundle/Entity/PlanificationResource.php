@@ -35,6 +35,11 @@ class PlanificationResource
     private $resource;
 
     /**
+    * @ORM\Column(name="oorder", type="smallint", nullable=false)
+    */
+    private $order;
+
+    /**
      * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -104,6 +109,29 @@ class PlanificationResource
     public function getResource()
     {
         return $this->resource;
+    }
+
+    /**
+     * Set order
+     *
+     * @param smallint $order
+     *
+     * @return PlanificationResource
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return smallint
+     */
+    public function getOrder()
+    {
+        return $this->order;
     }
 
     /**

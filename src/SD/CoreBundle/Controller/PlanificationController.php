@@ -139,6 +139,7 @@ class PlanificationController extends Controller
 			$em->persist($planificationPeriod);
 		}
 		$planificationResource = new PlanificationResource($connectedUser, $planificationPeriod, $resourceDB);
+		$planificationResource->setOrder($i);
 		$em->persist($planificationResource);
 	}
 
@@ -157,7 +158,16 @@ class PlanificationController extends Controller
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-    return $this->render('SDCoreBundle:Planification:edit.html.twig', array('userContext' => $userContext, 'planification' => $planification));
+
+
+    $planificationPeriodRepository = $em->getRepository('SDCoreBundle:PlanificationPeriod');
+    $planificationPeriod = $planificationPeriodRepository->findOneBy(array('planification' => $planification), array('id' => 'DESC'));
+
+    $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+    $listPlanificationResources = $planificationResourceRepository->getResources($planificationPeriod);
+
+    return $this->render('SDCoreBundle:Planification:edit.html.twig',
+array('userContext' => $userContext, 'planification' => $planification, 'listPlanificationResources' => $listPlanificationResources));
     }
 	
     // Modification d'une planification

@@ -129,7 +129,7 @@ class PlanificationController extends Controller
 
 	$resourcesToPlanify = PlanificationController::getResourcesToPlanify($em, $userContext->getCurrentFile(), $type, $resourceIDList);
 
-    return $this->render('SDCoreBundle:Planification:resource.html.twig', 
+    return $this->render('SDCoreBundle:Planification:resource.insert.html.twig', 
 		array('userContext' => $userContext, 'type' => $type, 'selectedResources' => $selectedResources, 
 		'selectedResourcesIDList' => $resourceIDList, 'resourcesToPlanify' => $resourcesToPlanify));
     }
@@ -184,7 +184,10 @@ class PlanificationController extends Controller
 
 	$resourcesToPlanify = PlanificationController::getResourcesToPlanify($em, $userContext->getCurrentFile(), $planification->getType(), $resourceIDList);
 
-    return $this->render('SDCoreBundle:Planification:resource.html.twig', array('userContext' => $userContext, 'type' => $planification->getType(), 'selectedResources' => $selectedResources, 'selectedResourcesIDList' => $resourceIDList, 'resourcesToPlanify' => $resourcesToPlanify));
+    return $this->render('SDCoreBundle:Planification:resource.update.html.twig',
+		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
+			'selectedResources' => $selectedResources, 'selectedResourcesIDList' => $resourceIDList,
+			'resourcesToPlanify' => $resourcesToPlanify));
     }
 
 

@@ -1,0 +1,27 @@
+{# src/SD/CoreBundle/Resources/views/Planification/resource.update.html.twig #}
+
+{% extends "SDCoreBundle:Planification:resource.html.twig" %}
+
+{% block link_sortBefore %}
+	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a>
+{% endblock %}
+
+{% block link_sortAfter %}
+	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a>
+{% endblock %}
+
+{% block link_unselect %}
+	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'planification.resource.unselect'|trans }}"></a>
+{% endblock %}
+
+{% block link_select %}
+	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a>
+{% endblock %}
+
+{% block link_cancel %}
+	<a href="{{ path('sd_core_planification_edit', { 'planificationID': planification.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
+{% endblock %}
+
+{% block link_validate %}
+	<a href="{{ path('sd_core_planification_edit', { 'planificationID': planification.ID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
+{% endblock %}

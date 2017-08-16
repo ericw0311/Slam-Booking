@@ -9,15 +9,19 @@
 
 <div class="panel panel-default">
 
-  <div class="panel-body">
-<p><img src="{{ asset('bundles/sdcore/images/planification-32.png') }}">&nbsp;<strong>{{ planification.name }}</strong></p>
+<div class="panel-body">
+
+<p>
+<img src="{{ asset('bundles/sdcore/images/planification-32.png') }}">&nbsp;<strong>{{ planification.name }}</strong>&nbsp;
+<a href="{{ path('sd_core_planification_modify', { 'planificationID': planification.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+</p>
 
 {% if listPlanificationResources|length > 0 %}
 <table class="table table-striped">
     <thead>
     <tr>
-    <th>{{ 'resource.plural'|trans }}
-<a href="{{ path('sd_core_planification_modify', { 'planificationID': planification.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+    <th>{{ 'resource.plural'|trans }}&nbsp;
+<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resourceIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
     </th>
     </tr>
     </thead>
@@ -34,18 +38,16 @@
     </tbody>
 </table>
 {% endif %}
-  </div>
 
-  <div class="panel-footer">
+</div class="panel-body">
 
-  <div class="btn-group">
+<div class="panel-footer">
+	<div class="btn-group">
 <a href="{{ path('sd_core_planification_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'planification.back.to.list'|trans }}</a>
-<a href="{{ path('sd_core_planification_modify', { 'planificationID': planification.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
 <a href="{{ path('sd_core_planification_delete', { 'planificationID': planification.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
-</div>
-
-  </div>
-</div>
+	</div>
+</div class="panel-footer">
+</div class="panel panel-default">
 
 {% for flash_message in app.session.flashBag.get('notice') %}
 <div class="alert alert-success">

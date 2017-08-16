@@ -26,12 +26,12 @@
 	<tr>
 {% if selectedResources|length > 1 %}
 {% if loop.index > 1 %}
-	<td><a href="{{ path('sd_core_planification_select_resource', { 'type': type, 'resourceIDList': resource.resourceIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a></td>
+	<td><a href="{{ path('sd_core_planification_init_resource', { 'type': type, 'resourceIDList': resource.resourceIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a></td>
 {% else %}
 	<td></td>
 {% endif %}
 {% if loop.index < selectedResources|length %}
-	<td><a href="{{ path('sd_core_planification_select_resource', { 'type': type, 'resourceIDList': resource.resourceIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a></td>
+	<td><a href="{{ path('sd_core_planification_init_resource', { 'type': type, 'resourceIDList': resource.resourceIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a></td>
 {% else %}
 	<td></td>
 {% endif %}
@@ -41,7 +41,7 @@
 {% else %}
 	<td><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
 {% endif %}
-	<td><a href="{{ path('sd_core_planification_select_resource', { 'type': type, 'resourceIDList': resource.resourceIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'planification.resource.unselect'|trans }}"></a></td>
+	<td><a href="{{ path('sd_core_planification_init_resource', { 'type': type, 'resourceIDList': resource.resourceIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'planification.resource.unselect'|trans }}"></a></td>
 	</tr>
 {% endfor %}
 	</tbody>
@@ -56,7 +56,7 @@
 	<tbody>
 {% for resource in resourcesToPlanify %}
 	<tr>
-	<td><a href="{{ path('sd_core_planification_select_resource', { 'type': type, 'resourceIDList': resource.resourceIDList }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a></td>
+	<td><a href="{{ path('sd_core_planification_init_resource', { 'type': type, 'resourceIDList': resource.resourceIDList }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a></td>
 {% if resource.internal %}
 	<td><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
 {% else %}
@@ -74,7 +74,7 @@
 {% if selectedResources|length < 1 %}
 	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#validateModal"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'validate'|trans }}</del></button>
 {% else %}
-	<a href="{{ path('sd_core_planification_validate_resource', { 'type': type, 'resourceIDList': selectedResourcesIDList }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
+	<a href="{{ path('sd_core_planification_validate_init_resource', { 'type': type, 'resourceIDList': selectedResourcesIDList }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
 {% endif %}
 </div>
 

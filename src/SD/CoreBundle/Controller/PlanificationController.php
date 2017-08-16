@@ -20,42 +20,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class PlanificationController extends Controller
 {
-	// Affichage des planifications du dossier en cours
-	public function indexAction($pageNumber)
+    // Retourne un tableau des ressources selectionnées
+    static function getSelectedResources($em, $resourceIDList)
     {
-	$connectedUser = $this->getUser();
-    $em = $this->getDoctrine()->getManager();
-    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-    $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
-    $numberRecords = $planificationRepository->getPlanificationsCount($userContext->getCurrentFile());
-    $listContext = new ListContext($em, $connectedUser, 'core', 'planification', $pageNumber, $numberRecords, 'sd_core_planification_list', 'sd_core_planification_type');
-    $listPlanifications = $planificationRepository->getDisplayedPlanifications($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
-                
-    return $this->render('SDCoreBundle:Planification:index.html.twig', array(
-                'userContext' => $userContext,
-                'listContext' => $listContext,
-		'listPlanifications' => $listPlanifications));
-    }
-
-	// Ajout d'une planification: Sélection du type de ressources à planifier
-    public function typeAction(Request $request)
-    {
-	$connectedUser = $this->getUser();
-	$em = $this->getDoctrine()->getManager();
-	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-
-    return $this->render('SDCoreBundle:Planification:type.html.twig', array('userContext' => $userContext));
-    }
-	
-	// Sélection des ressources à planifier
-    public function selectresourceAction($type, $resourceIDList, Request $request)
-    {
-	$connectedUser = $this->getUser();
-	$em = $this->getDoctrine()->getManager();
-	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-
 	$resourceIDArray = explode('-', $resourceIDList);
-	
     $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
 
 	$selectedResources = array();
@@ -75,7 +43,6 @@ class PlanificationController extends Controller
 			unset($resourceIDArray_tprr[$i]);
 			$resource->setResourceIDList_unselect(implode('-', $resourceIDArray_tprr));
 
-
 			if (count($resourceIDArray) > 1) {
 				if ($i > 0) {
 					$resourceIDArray_tprr = $resourceIDArray;
@@ -94,8 +61,16 @@ class PlanificationController extends Controller
 			array_push($selectedResources, $resource);
 		}
 	}
+	return $selectedResources;
+    }
 
-    $resourcesToPlanifyDB = $resourceRepository->getResourcesToPlanify($userContext->getCurrentFile(), $type);
+
+    // Retourne un tableau des ressources à planifier
+    static function getResourcesToPlanify($em, \SD\CoreBundle\Entity\File $file, $type, $resourceIDList)
+    {
+	$resourceIDArray = explode('-', $resourceIDList);
+    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+    $resourcesToPlanifyDB = $resourceRepository->getResourcesToPlanify($file, $type);
                 
 	$resourcesToPlanify = array();
     foreach ($resourcesToPlanifyDB as $resourceDB) {
@@ -111,12 +86,57 @@ class PlanificationController extends Controller
 		}
 	}
 
-    return $this->render('SDCoreBundle:Planification:resource.html.twig', array('userContext' => $userContext, 'type' => $type, 'selectedResources' => $selectedResources, 'selectedResourcesIDList' => $resourceIDList, 'resourcesToPlanify' => $resourcesToPlanify));
+	return $resourcesToPlanify;
+    }
+
+
+	// Affichage des planifications du dossier en cours
+	public function indexAction($pageNumber)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+    $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
+    $numberRecords = $planificationRepository->getPlanificationsCount($userContext->getCurrentFile());
+    $listContext = new ListContext($em, $connectedUser, 'core', 'planification', $pageNumber, $numberRecords, 'sd_core_planification_list', 'sd_core_planification_type');
+    $listPlanifications = $planificationRepository->getDisplayedPlanifications($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+                
+    return $this->render('SDCoreBundle:Planification:index.html.twig', array(
+                'userContext' => $userContext,
+                'listContext' => $listContext,
+		'listPlanifications' => $listPlanifications));
+    }
+
+	// Ajout d'une planification: Sélection du type de ressources à planifier
+    public function typeAction()
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    return $this->render('SDCoreBundle:Planification:type.html.twig', array('userContext' => $userContext));
+    }
+	
+
+	// Initialisation des ressources à planifier
+    public function initresourceAction($type, $resourceIDList)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$selectedResources = PlanificationController::getSelectedResources($em, $resourceIDList);
+
+	$resourcesToPlanify = PlanificationController::getResourcesToPlanify($em, $userContext->getCurrentFile(), $type, $resourceIDList);
+
+    return $this->render('SDCoreBundle:Planification:resource.html.twig', 
+		array('userContext' => $userContext, 'type' => $type, 'selectedResources' => $selectedResources, 
+		'selectedResourcesIDList' => $resourceIDList, 'resourcesToPlanify' => $resourcesToPlanify));
     }
 
 
 	// Validation des ressources à planifier
-    public function validateresourceAction($type, $resourceIDList, Request $request)
+    public function validateinitresourceAction($type, $resourceIDList, Request $request)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -149,6 +169,25 @@ class PlanificationController extends Controller
     }
 
 
+	// Mise a jour des ressources à planifier
+    /**
+    * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    */
+    public function updateresourceAction(Planification $planification, PlanificationPeriod $planificationPeriod, $resourceIDList)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$selectedResources = PlanificationController::getSelectedResources($em, $resourceIDList);
+
+	$resourcesToPlanify = PlanificationController::getResourcesToPlanify($em, $userContext->getCurrentFile(), $planification->getType(), $resourceIDList);
+
+    return $this->render('SDCoreBundle:Planification:resource.html.twig', array('userContext' => $userContext, 'type' => $planification->getType(), 'selectedResources' => $selectedResources, 'selectedResourcesIDList' => $resourceIDList, 'resourcesToPlanify' => $resourcesToPlanify));
+    }
+
+
     // Edition du detail d'une planification
     /**
     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
@@ -166,8 +205,14 @@ class PlanificationController extends Controller
     $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
     $listPlanificationResources = $planificationResourceRepository->getResources($planificationPeriod);
 
+	$resourceIDList = '';
+    foreach ($listPlanificationResources as $planificationResourceDB) {
+$resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResource()->getId() : ($resourceIDList.'-'.$planificationResourceDB->getResource()->getId());
+	}
+
     return $this->render('SDCoreBundle:Planification:edit.html.twig',
-array('userContext' => $userContext, 'planification' => $planification, 'listPlanificationResources' => $listPlanificationResources));
+		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
+		'listPlanificationResources' => $listPlanificationResources, 'resourceIDList' => $resourceIDList));
     }
 	
     // Modification d'une planification

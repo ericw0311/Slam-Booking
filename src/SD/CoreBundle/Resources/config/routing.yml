@@ -225,17 +225,20 @@ sd_core_planification_type:
     path:     /planification/type
     defaults: { _controller: SDCoreBundle:Planification:type }
 
-sd_core_planification_select_resource:
-    path:     /planification/selectresource/{type}/{resourceIDList}
-    defaults: { _controller: SDCoreBundle:Planification:selectresource, resourceIDList: null }
+sd_core_planification_init_resource:
+    path:     /planification/initresource/{type}/{resourceIDList}
+    defaults: { _controller: SDCoreBundle:Planification:initresource, resourceIDList: null }
 
-sd_core_planification_validate_resource:
-    path:     /planification/validateresource/{type}/{resourceIDList}
-    defaults: { _controller: SDCoreBundle:Planification:validateresource, resourceIDList: null }
+sd_core_planification_validate_init_resource:
+    path:     /planification/validateinitresource/{type}/{resourceIDList}
+    defaults: { _controller: SDCoreBundle:Planification:validateinitresource, resourceIDList: null }
 
-sd_core_planification_add:
-    path:     /planification/add/{type}/{resourceIDList}
-    defaults: { _controller: SDCoreBundle:Planification:add, resourceIDList: null }
+sd_core_planification_update_resource:
+    path:     /planification/updateresource/{planificationID}/{planificationPeriodID}/{resourceIDList}
+    defaults: { _controller: SDCoreBundle:Planification:updateresource }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
 
 sd_core_planification_edit:
     path:     /planification/edit/{planificationID}

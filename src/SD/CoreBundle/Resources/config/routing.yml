@@ -6,6 +6,7 @@ sd_core_administration:
     path:     /administration
     defaults: { _controller: SDCoreBundle:Default:administration }
 
+
 sd_core_file_list:
     path:     /file/list/{pageNumber}
     defaults: { _controller: SDCoreBundle:File:index }
@@ -34,9 +35,10 @@ sd_core_file_delete:
 
 sd_core_file_set_current:
     path:     /file/setcurrent/{fileID}
-    defaults: { _controller: SDCoreBundle:File:setCurrent }
+    defaults: { _controller: SDCoreBundle:File:set_current }
     requirements:
         fileID: \d+
+
 
 sd_core_userFile_list:
     path:     /userfile/list/{pageNumber}
@@ -68,6 +70,7 @@ sd_core_userFile_delete:
     requirements:
         userFileID: \d+
 
+
 sd_core_activity_list:
     path:     /activity/list/{pageNumber}
     defaults: { _controller: SDCoreBundle:Activity:index }
@@ -93,6 +96,7 @@ sd_core_activity_delete:
     defaults: { _controller: SDCoreBundle:Activity:delete }
     requirements:
         activityID: \d+
+
 
 sd_core_timetable_list:
     path:     /timetable/list/{pageNumber}
@@ -122,20 +126,20 @@ sd_core_timetable_delete:
 
 sd_core_timetable_addline:
     path:     /timetable/addline/{timetableID}
-    defaults: { _controller: SDCoreBundle:Timetable:addline }
+    defaults: { _controller: SDCoreBundle:Timetable:add_line }
     requirements:
         timetableID: \d+
 
 sd_core_timetable_modifyline:
     path:     /timetable/modifyline/{timetableID}/{timetableLineID}
-    defaults: { _controller: SDCoreBundle:Timetable:modifyline }
+    defaults: { _controller: SDCoreBundle:Timetable:modify_line }
     requirements:
         timetableID: \d+
         timetableLineID: \d+
 
 sd_core_timetable_deleteline:
     path:     /timetable/deleteline/{timetableID}/{timetableLineID}
-    defaults: { _controller: SDCoreBundle:Timetable:deleteline }
+    defaults: { _controller: SDCoreBundle:Timetable:delete_line }
     requirements:
         timetableID: \d+
         timetableLineID: \d+
@@ -147,19 +151,19 @@ sd_core_resourceclassification_display:
 
 sd_core_resourceclassification_activateinternal:
     path:     /resourceclassification/activateinternal/{resourceType}/{classificationCode}
-    defaults: { _controller: SDCoreBundle:ResourceClassification:activateinternal }
+    defaults: { _controller: SDCoreBundle:ResourceClassification:activate_internal }
 
 sd_core_resourceclassification_unactivateinternal:
     path:     /resourceclassification/unactivateinternal/{resourceType}/{classificationCode}
-    defaults: { _controller: SDCoreBundle:ResourceClassification:unactivateinternal }
+    defaults: { _controller: SDCoreBundle:ResourceClassification:unactivate_internal }
 
 sd_core_resourceclassification_activateexternal:
     path:     /resourceclassification/activateexternal/{resourceType}/{resourceClassificationID}
-    defaults: { _controller: SDCoreBundle:ResourceClassification:activateexternal }
+    defaults: { _controller: SDCoreBundle:ResourceClassification:activate_external }
 
 sd_core_resourceclassification_unactivateexternal:
     path:     /resourceclassification/unactivateexternal/{resourceType}/{resourceClassificationID}
-    defaults: { _controller: SDCoreBundle:ResourceClassification:unactivateexternal }
+    defaults: { _controller: SDCoreBundle:ResourceClassification:unactivate_external }
 
 sd_core_resourceclassification_add:
     path:     /resourceclassification/add/{resourceType}
@@ -192,11 +196,11 @@ sd_core_resource_add:
 
 sd_core_resource_addinternal:
     path:     /resource/addinternal/{type}/{code}
-    defaults: { _controller: SDCoreBundle:Resource:addinternal }
+    defaults: { _controller: SDCoreBundle:Resource:add_internal }
 
 sd_core_resource_addexternal:
     path:     /resource/addexternal/{type}/{resourceClassificationID}
-    defaults: { _controller: SDCoreBundle:Resource:addexternal }
+    defaults: { _controller: SDCoreBundle:Resource:add_external }
 
 sd_core_resource_edit:
     path:     /resource/edit/{resourceID}
@@ -227,22 +231,22 @@ sd_core_planification_type:
 
 sd_core_planification_init_resource:
     path:     /planification/initresource/{type}/{resourceIDList}
-    defaults: { _controller: SDCoreBundle:Planification:initresource, resourceIDList: null }
+    defaults: { _controller: SDCoreBundle:Planification:init_resource, resourceIDList: null }
 
 sd_core_planification_validate_init_resource:
     path:     /planification/validateinitresource/{type}/{resourceIDList}
-    defaults: { _controller: SDCoreBundle:Planification:validateinitresource, resourceIDList: null }
+    defaults: { _controller: SDCoreBundle:Planification:validate_init_resource }
 
 sd_core_planification_update_resource:
     path:     /planification/updateresource/{planificationID}/{planificationPeriodID}/{resourceIDList}
-    defaults: { _controller: SDCoreBundle:Planification:updateresource, resourceIDList: null }
+    defaults: { _controller: SDCoreBundle:Planification:update_resource, resourceIDList: null }
     requirements:
         planificationID: \d+
         planificationPeriodID: \d+
 
 sd_core_planification_validate_update_resource:
     path:     /planification/validateupdateresource/{planificationID}/{planificationPeriodID}/{resourceIDList}
-    defaults: { _controller: SDCoreBundle:Planification:validateupdateresource }
+    defaults: { _controller: SDCoreBundle:Planification:validate_update_resource }
     requirements:
         planificationID: \d+
         planificationPeriodID: \d+
@@ -264,6 +268,7 @@ sd_core_planification_delete:
     defaults: { _controller: SDCoreBundle:Planification:delete }
     requirements:
         planificationID: \d+
+
 
 sd_core_queryBooking_list:
     path:     /queryBooking/list/{pageNumber}

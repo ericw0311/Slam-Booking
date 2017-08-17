@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block link_select %}
-	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a>
+	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a>
 {% endblock %}
 
 {% block link_cancel %}

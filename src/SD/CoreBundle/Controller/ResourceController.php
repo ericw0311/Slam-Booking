@@ -93,7 +93,7 @@ class ResourceController extends Controller
 
 
 	// Ajout d'une ressource de classification interne
-    public function addinternalAction($type, $code, Request $request)
+    public function add_internalAction($type, $code, Request $request)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -129,7 +129,7 @@ class ResourceController extends Controller
     /**
     * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
     */
-    public function addexternalAction($type, ResourceClassification $resourceClassification, Request $request)
+    public function add_externalAction($type, ResourceClassification $resourceClassification, Request $request)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();

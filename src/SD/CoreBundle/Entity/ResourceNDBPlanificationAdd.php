@@ -10,7 +10,7 @@ class ResourceNDBPlanificationAdd
     private $internal;
     private $type;
     private $code;
-    private $resourceIDList;
+    private $resourceIDList_select;
 
     public function setId($id)
     {
@@ -67,14 +67,14 @@ class ResourceNDBPlanificationAdd
 		return $this->code;
     }
 
-    public function setResourceIDList($resourceIDList)
+    public function setResourceIDList_select($resourceIDList)
     {
-        $this->resourceIDList = $resourceIDList;
+        $this->resourceIDList_select = $resourceIDList;
         return $this;
     }
 
-    public function getResourceIDList()
+    public function getResourceIDList_select()
     {
-        return $this->resourceIDList;
+        return $this->resourceIDList_select;
     }
 }

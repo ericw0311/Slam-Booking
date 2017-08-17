@@ -136,7 +136,7 @@ class FileController extends Controller {
     /**
     * @ParamConverter("file", options={"mapping": {"fileID": "id"}})
     */
-    public function setCurrentAction(File $file, Request $request)
+    public function set_currentAction(File $file, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();

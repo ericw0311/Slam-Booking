@@ -140,8 +140,8 @@ public function modifyAction(Timetable $timetable, Request $request)
 /**
 * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
 */
-public function addlineAction(Timetable $timetable, Request $request)
-{
+public function add_lineAction(Timetable $timetable, Request $request)
+	{
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
@@ -171,7 +171,7 @@ public function addlineAction(Timetable $timetable, Request $request)
 
     return $this->render('SDCoreBundle:Timetable:addline.html.twig',
         array('userContext' => $userContext, 'timetable' => $timetable, 'listLastTimetableLines' => $listLastTimetableLines, 'form' => $form->createView()));
-}
+	}
 
 
     // Modification d'un creneau horaire
@@ -179,7 +179,7 @@ public function addlineAction(Timetable $timetable, Request $request)
     * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
     * @ParamConverter("timetableLine", options={"mapping": {"timetableLineID": "id"}})
     */
-    public function modifylineAction(Timetable $timetable, TimetableLine $timetableLine, Request $request)
+    public function modify_lineAction(Timetable $timetable, TimetableLine $timetableLine, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -212,7 +212,7 @@ public function addlineAction(Timetable $timetable, Request $request)
     /**
     * @ParamConverter("timetableLine", options={"mapping": {"timetableLineID": "id"}})
     */
-    public function deletelineAction($timetableID, TimetableLine $timetableLine, Request $request)
+    public function delete_lineAction($timetableID, TimetableLine $timetableLine, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();

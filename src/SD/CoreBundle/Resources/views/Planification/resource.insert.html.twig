@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block link_select %}
-	<a href="{{ path('sd_core_planification_init_resource', { 'type': type, 'resourceIDList': resource.resourceIDList }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a>
+	<a href="{{ path('sd_core_planification_init_resource', { 'type': type, 'resourceIDList': resource.resourceIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a>
 {% endblock %}
 
 {% block link_cancel %}

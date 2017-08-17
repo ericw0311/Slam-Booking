@@ -56,7 +56,7 @@ class ResourceClassificationController extends Controller
     }
 
 	// Activation d'une classification interne
-	public function activateinternalAction($resourceType, $classificationCode, Request $request)
+	public function activate_internalAction($resourceType, $classificationCode, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -83,7 +83,7 @@ class ResourceClassificationController extends Controller
     }
 
 	// Désactivation d'une classification interne
-	public function unactivateinternalAction($resourceType, $classificationCode, Request $request)
+	public function unactivate_internalAction($resourceType, $classificationCode, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -114,7 +114,7 @@ class ResourceClassificationController extends Controller
     /**
     * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
     */
-    public function activateexternalAction($resourceType, ResourceClassification $resourceClassification, Request $request)
+    public function activate_externalAction($resourceType, ResourceClassification $resourceClassification, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -132,7 +132,7 @@ class ResourceClassificationController extends Controller
     /**
     * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
     */
-    public function unactivateexternalAction($resourceType, ResourceClassification $resourceClassification, Request $request)
+    public function unactivate_externalAction($resourceType, ResourceClassification $resourceClassification, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();

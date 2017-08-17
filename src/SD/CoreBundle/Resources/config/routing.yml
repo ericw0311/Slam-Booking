@@ -235,7 +235,14 @@ sd_core_planification_validate_init_resource:
 
 sd_core_planification_update_resource:
     path:     /planification/updateresource/{planificationID}/{planificationPeriodID}/{resourceIDList}
-    defaults: { _controller: SDCoreBundle:Planification:updateresource }
+    defaults: { _controller: SDCoreBundle:Planification:updateresource, resourceIDList: null }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+
+sd_core_planification_validate_update_resource:
+    path:     /planification/validateupdateresource/{planificationID}/{planificationPeriodID}/{resourceIDList}
+    defaults: { _controller: SDCoreBundle:Planification:validateupdateresource }
     requirements:
         planificationID: \d+
         planificationPeriodID: \d+

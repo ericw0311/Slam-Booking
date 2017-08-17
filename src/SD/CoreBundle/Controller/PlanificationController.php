@@ -191,6 +191,50 @@ class PlanificationController extends Controller
     }
 
 
+	// Validation des ressources à planifier
+    /**
+    * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    */
+    public function validateupdateresourceAction(Planification $planification, PlanificationPeriod $planificationPeriod, $resourceIDList, Request $request)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+    $listPlanificationResources = $planificationResourceRepository->getResources($planificationPeriod);
+	$resourceIDArray = explode('-', $resourceIDList);
+
+    foreach ($listPlanificationResources as $planificationResource) { // Parcours des ressources existantes de la période de planification
+		if (array_search($planificationResource->getResource()->getId(), $resourceIDArray) === false) { // Si la ressource n'est pas dans la liste actuelle, on la supprime
+			$em->remove($planificationResource);
+		}
+	}
+
+    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+	$i = 0;
+    foreach ($resourceIDArray as $resourceID) {
+		$resource = $resourceRepository->find($resourceID);
+		if ($resource !== null) {
+			$i++;
+$planificationResource = $planificationResourceRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'resource' => $resource));
+			if ($planificationResource === null) {
+				$planificationResource = new PlanificationResource($connectedUser, $planificationPeriod, $resource);
+				$planificationResource->setOrder($i);
+			} else {
+				$planificationResource->setOrder($i);
+			}
+			$em->persist($planificationResource);
+		}
+	}
+
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'planification.resource.updated.ok');
+	return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getID()));
+    }
+
+
     // Edition du detail d'une planification
     /**
     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})

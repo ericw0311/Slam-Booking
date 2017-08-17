@@ -49,6 +49,7 @@ planification.resource.select: Select resource
 planification.resource.selected: Selected resources
 planification.resource.to.planify: Resources to planify
 planification.resource.unselect: Unselect resource
+planification.resource.updated.ok: The resources have been updated
 planification.singular: Planification
 planification.type.select: Select type of resources to planify
 planification.updated.ok: The planification has been updated

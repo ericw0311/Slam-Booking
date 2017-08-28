@@ -56,6 +56,7 @@ class TimetableController extends Controller
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
 	$timetable = new Timetable($connectedUser, $userContext->getCurrentFile());
+	$timetable->setType("T");
 
 	$form = $this->createForm(TimetableType::class, $timetable);
 
@@ -150,6 +151,7 @@ public function add_lineAction(Timetable $timetable, Request $request)
     $listLastTimetableLines = $timetableLineRepository->getLastTimetableLines($timetable, Constants::NUMBER_LINES_BEFORE_AFTER_UPDATE);
 
     $timetableLine = new TimetableLine($connectedUser, $timetable);
+	$timetableLine->setType("T");
 
     if (count($listLastTimetableLines) > 0) { // On initialise la date de début avec la date de fin du dernier créneau
 		$timetableLine->setBeginningTime(current($listLastTimetableLines)->getEndTime());

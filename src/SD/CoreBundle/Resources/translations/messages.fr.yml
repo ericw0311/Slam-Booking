@@ -166,7 +166,9 @@ timetable.ask.delete: Voulez-vous vraiment supprimer la grille horaire %name% ?
 timetable.back.to.list: Retour à la liste des grilles horaires
 timetable.create: Créer une grille horaire
 timetable.created.ok: La grille horaire a bien été créée
+timetable.day: Journée
 timetable.deleted.ok: La grille horaire a bien été supprimée
+timetable.half.day: Demi journée
 timetable.name: Nom de la grille horaire
 timetable.plural: Grilles horaires
 timetable.singular: Grille horaire

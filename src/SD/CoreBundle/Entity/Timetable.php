@@ -4,6 +4,7 @@ namespace SD\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Timetable
@@ -45,6 +46,14 @@ class Timetable
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255)
+     * @Assert\Choice({"T", "D", "HD"})
+     */
+    private $type;
+
+    /**
      * @ORM\OneToMany(targetEntity="TimetableLine", mappedBy="timetable", cascade={"persist", "remove"})
      */
     private $timetableLines;
@@ -82,6 +91,29 @@ class Timetable
         return $this->name;
     }
     
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Timetable
+     */
+    public function setType($type)
+    {
+		$this->type = $type;
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
     /**
     * @ORM\Column(name="created_at", type="datetime", nullable=false)
     */

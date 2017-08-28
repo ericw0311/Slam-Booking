@@ -38,6 +38,14 @@ class TimetableLine
     private $timetable;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255)
+     * @Assert\Choice({"T", "D", "AM", "PM"})
+     */
+    private $type;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="time")
@@ -69,6 +77,29 @@ class TimetableLine
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return TimetableLine
+     */
+    public function setType($type)
+    {
+		$this->type = $type;
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**

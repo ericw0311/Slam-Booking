@@ -166,7 +166,9 @@ timetable.ask.delete: Do you really want to delete timetable %name% ?
 timetable.back.to.list: Back to timetables list
 timetable.create: Create a timetable
 timetable.created.ok: The timetable has been created
+timetable.day: Day
 timetable.deleted.ok: The timetable has been deleted
+timetable.half.day: Half day
 timetable.name: Timetable name
 timetable.plural: Timetables
 timetable.singular: Timetable

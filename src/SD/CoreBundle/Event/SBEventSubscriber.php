@@ -13,10 +13,12 @@ use SD\CoreBundle\Entity\File;
 class SBEventSubscriber implements EventSubscriber
 {
     private $security;
+    private $translator;
 
-    public function __construct($security)
+    public function __construct($security, $translator)
     {
     $this->security = $security;
+    $this->translator = $translator;
     }
 
     public function getSecurity()
@@ -27,6 +29,11 @@ class SBEventSubscriber implements EventSubscriber
     public function getUser()
     {
     return $this->getSecurity()->getToken()->getUser();
+    }
+
+    public function getTranslator()
+    {
+    return $this->translator;
     }
 
     public function getSubscribedEvents()
@@ -40,7 +47,7 @@ class SBEventSubscriber implements EventSubscriber
     $entityManager = $args->getObjectManager();
 
     if ($entity instanceof File) {
-        FileEvent::postPersist($entityManager, $this->getUser(), $entity);
+        FileEvent::postPersist($entityManager, $this->getUser(), $entity, $this->getTranslator());
     }
 
     }

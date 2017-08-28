@@ -9,8 +9,7 @@ services:
         class: SD\CoreBundle\Event\SBEventSubscriber
         tags:
             - { name: doctrine.event_subscriber, connection: default }
-        arguments:
-            - "@security.token_storage"
+        arguments: ["@security.token_storage", "@translator"]
 
     sb_user.user_listener:
         class: SD\UserBundle\Event\UserListener

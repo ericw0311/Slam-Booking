@@ -9,6 +9,7 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\Trace;
 use SD\CoreBundle\Entity\File;
+use SD\CoreBundle\Entity\PlanificationPeriod;
 
 class SBEventSubscriber implements EventSubscriber
 {
@@ -43,13 +44,14 @@ class SBEventSubscriber implements EventSubscriber
 
     public function postPersist(LifecycleEventArgs $args)
     {
-    $entity = $args->getObject();
-    $entityManager = $args->getObjectManager();
+		$entity = $args->getObject();
+		$entityManager = $args->getObjectManager();
 
-    if ($entity instanceof File) {
-        FileEvent::postPersist($entityManager, $this->getUser(), $entity, $this->getTranslator());
-    }
-
+		if ($entity instanceof File) {
+			FileEvent::postPersist($entityManager, $this->getUser(), $entity, $this->getTranslator());
+		} else if ($entity instanceof PlanificationPeriod) {
+			PlanificationPeriodEvent::postPersist($entityManager, $this->getUser(), $entity);
+		}
     }
 
     public function postUpdate(LifecycleEventArgs $args)

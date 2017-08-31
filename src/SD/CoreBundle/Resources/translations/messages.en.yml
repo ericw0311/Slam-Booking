@@ -167,11 +167,15 @@ timetable.back.to.list: Back to timetables list
 timetable.create: Create a timetable
 timetable.created.ok: The timetable has been created
 timetable.day: Day
+timetable.delete.not.allowed.1: The timetable Day cannot be deleted
+timetable.delete.not.allowed.2: The timetable Half day cannot be deleted
 timetable.deleted.ok: The timetable has been deleted
 timetable.half.day: Half day
 timetable.name: Timetable name
 timetable.plural: Timetables
 timetable.singular: Timetable
+timetable.update.not.allowed.1: The timetable Day cannot be updated
+timetable.update.not.allowed.2: The timetable Half day cannot be updated
 timetable.updated.ok: The timetable has been updated
 
 timetableLine.create: Add a timetable slot

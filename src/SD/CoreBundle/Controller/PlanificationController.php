@@ -136,10 +136,10 @@ class PlanificationController extends Controller
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
-    $listPlanificationResources = $planificationResourceRepository->getResources($planificationPeriod);
+    $planificationResources = $planificationResourceRepository->getResources($planificationPeriod);
 	$resourceIDArray = explode('-', $resourceIDList);
 
-    foreach ($listPlanificationResources as $planificationResource) { // Parcours des ressources existantes de la période de planification
+    foreach ($planificationResources as $planificationResource) { // Parcours des ressources existantes de la période de planification
 		if (array_search($planificationResource->getResource()->getId(), $resourceIDArray) === false) { // Si la ressource n'est pas dans la liste actuelle, on la supprime
 			$em->remove($planificationResource);
 		}
@@ -183,16 +183,20 @@ $planificationResource = $planificationResourceRepository->findOneBy(array('plan
     $planificationPeriod = $planificationPeriodRepository->findOneBy(array('planification' => $planification), array('id' => 'DESC'));
 
     $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
-    $listPlanificationResources = $planificationResourceRepository->getResources($planificationPeriod);
+    $planificationResources = $planificationResourceRepository->getResources($planificationPeriod);
 
 	$resourceIDList = '';
-    foreach ($listPlanificationResources as $planificationResourceDB) {
+    foreach ($planificationResources as $planificationResourceDB) {
 $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResource()->getId() : ($resourceIDList.'-'.$planificationResourceDB->getResource()->getId());
 	}
 
+    $planificationLineRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
+    $planificationLines = $planificationLineRepository->getLines($planificationPeriod);
+
     return $this->render('SDCoreBundle:Planification:edit.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
-		'listPlanificationResources' => $listPlanificationResources, 'resourceIDList' => $resourceIDList));
+		'planificationResources' => $planificationResources, 'resourceIDList' => $resourceIDList,
+		'planificationLines' => $planificationLines));
     }
 
 

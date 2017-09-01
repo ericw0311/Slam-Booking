@@ -16,7 +16,9 @@
 <a href="{{ path('sd_core_planification_modify', { 'planificationID': planification.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
 </p>
 
-{% if listPlanificationResources|length > 0 %}
+<div class="col-sm-6">
+
+{% if planificationResources|length > 0 %}
 <table class="table table-striped">
     <thead>
     <tr>
@@ -26,7 +28,7 @@
     </tr>
     </thead>
     <tbody>
-{% for planificationResource in listPlanificationResources %}
+{% for planificationResource in planificationResources %}
 <tr>
 {% if planificationResource.resource.internal %}
 	<td><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[planificationResource.resource.code] ~ '-32.png') }}">&nbsp;{{ planificationResource.resource.name }}</td>
@@ -38,6 +40,33 @@
     </tbody>
 </table>
 {% endif %}
+
+</div>
+
+<div class="col-sm-6">
+
+{% if planificationLines|length > 0 %}
+<table class="table table-striped">
+    <thead>
+    <tr>
+    <th colspan=3>{{ 'timetable.plural'|trans }}&nbsp;
+<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resourceIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+    </th>
+    </tr>
+    </thead>
+    <tbody>
+{% for planificationLine in planificationLines %}
+<tr>
+	<td><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ ('day.' ~ planificationLine.weekDay)|trans }}</td>
+	<td><img src="{{ asset('bundles/sdcore/images/red-cross-32.png') }}"></td>
+	<td>&nbsp;</td>
+</tr>
+{% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+</div>
 
 </div class="panel-body">
 

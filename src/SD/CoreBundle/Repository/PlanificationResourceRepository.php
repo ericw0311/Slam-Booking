@@ -10,7 +10,7 @@ namespace SD\CoreBundle\Repository;
  */
 class PlanificationResourceRepository extends \Doctrine\ORM\EntityRepository
 {
-	// Recherche les ressources d'une planification
+	// Recherche les ressources d'une periode de planification
 	public function getResources($planificationPeriod)
     {
     $queryBuilder = $this->createQueryBuilder('pr');

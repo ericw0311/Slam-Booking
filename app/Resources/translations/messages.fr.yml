@@ -6,6 +6,13 @@ back: Retour
 beginning.time: Heure de début
 cancel: Annuler
 close: Fermer
+day.MON: Lundi
+day.TUE: Mardi
+day.WED: Mercredi
+day.THU: Jeudi
+day.FRI: Vendredi
+day.SAT: Samedi
+day.SUN: Dimanche
 delete: Supprimer
 delete.not.allowed: Suppression interdite
 end.time: Heure de fin

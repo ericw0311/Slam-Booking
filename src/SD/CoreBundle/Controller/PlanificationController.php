@@ -9,8 +9,10 @@ use SD\CoreBundle\Entity\Trace;
 use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
 use SD\CoreBundle\Entity\PlanificationResource;
+use SD\CoreBundle\Entity\PlanificationLinesNDB;
 
 use SD\CoreBundle\Form\PlanificationType;
+use SD\CoreBundle\Form\PlanificationLinesNDBType;
 use SD\CoreBundle\Api\ResourceApi;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -197,6 +199,33 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 		'planificationResources' => $planificationResources, 'resourceIDList' => $resourceIDList,
 		'planificationLines' => $planificationLines));
+    }
+
+
+	// Mise a jour des lignes de planification
+    /**
+    * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    */
+    public function lineAction(Planification $planification, PlanificationPeriod $planificationPeriod, Request $request)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$planificationLinesNDB = new PlanificationLinesNDB($planificationPeriod);
+
+    $form = $this->createForm(PlanificationLinesNDBType::class, $planificationLinesNDB);
+
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+        // Inutile de persister ici, Doctrine connait déjà l'activite
+        $em->flush();
+        $request->getSession()->getFlashBag()->add('notice', 'planification.updated.ok');
+        return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getId()));
+    }
+
+    return $this->render('SDCoreBundle:Planification:line.html.twig',
+		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'form' => $form->createView()));
     }
 
 

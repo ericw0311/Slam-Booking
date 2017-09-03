@@ -7,10 +7,6 @@
 {% set rtIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-<div class="panel panel-default">
-
-<div class="panel-body">
-
 <p>
 <img src="{{ asset('bundles/sdcore/images/planification-32.png') }}">&nbsp;<strong>{{ planification.name }}</strong>&nbsp;
 <a href="{{ path('sd_core_planification_modify', { 'planificationID': planification.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
@@ -50,7 +46,7 @@
     <thead>
     <tr>
     <th colspan=3>{{ 'timetable.plural'|trans }}&nbsp;
-<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resourceIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+<a href="{{ path('sd_core_planification_line', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
     </th>
     </tr>
     </thead>
@@ -68,15 +64,10 @@
 
 </div>
 
-</div class="panel-body">
-
-<div class="panel-footer">
-	<div class="btn-group">
+<div class="col-sm-12 well well-sm btn-group">
 <a href="{{ path('sd_core_planification_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'planification.back.to.list'|trans }}</a>
 <a href="{{ path('sd_core_planification_delete', { 'planificationID': planification.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
-	</div>
-</div class="panel-footer">
-</div class="panel panel-default">
+</div>
 
 {% for flash_message in app.session.flashBag.get('notice') %}
 <div class="alert alert-success">

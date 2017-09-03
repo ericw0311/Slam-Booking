@@ -1,0 +1,22 @@
+{# src/SD/CoreBundle/Resources/views/Planification/line.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block title %}{{ parent() }} line{% endblock %}
+
+{% block body %}
+
+<p>
+<img src="{{ asset('bundles/sdcore/images/planification-32.png') }}">&nbsp;<strong>{{ planification.name }}</strong>
+</p>
+
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+{{ form_errors(form) }}
+{{ form_row(form.timetable_MON) }}
+{{ form_rest(form) }}
+
+<div class="col-sm-12 well well-sm btn-group">
+	<a href="{{ path('sd_core_planification_edit', { 'planificationID': planification.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
+</div>
+
+{% endblock %}

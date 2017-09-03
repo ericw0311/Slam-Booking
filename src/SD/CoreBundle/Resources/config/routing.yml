@@ -269,6 +269,13 @@ sd_core_planification_delete:
     requirements:
         planificationID: \d+
 
+sd_core_planification_line:
+    path:     /planification/line/{planificationID}/{planificationPeriodID}
+    defaults: { _controller: SDCoreBundle:Planification:line }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+
 
 sd_core_queryBooking_list:
     path:     /queryBooking/list/{pageNumber}

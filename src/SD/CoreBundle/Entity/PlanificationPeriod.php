@@ -57,7 +57,7 @@ class PlanificationPeriod
     /**
      * @ORM\OneToMany(targetEntity="PlanificationLine", mappedBy="planificationPeriod", cascade={"persist", "remove"})
      */
-    private $planificationPeriods;
+    private $planificationLines;
 
     /**
     * @ORM\Column(name="created_at", type="datetime", nullable=false)

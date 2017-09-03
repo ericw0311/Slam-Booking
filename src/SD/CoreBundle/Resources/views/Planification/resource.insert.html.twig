@@ -2,6 +2,9 @@
 
 {% extends "SDCoreBundle:Planification:resource.html.twig" %}
 
+{% block planification %}
+{% endblock %}
+
 {% block link_sortBefore %}
 	<a href="{{ path('sd_core_planification_init_resource', { 'type': type, 'resourceIDList': resource.resourceIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a>
 {% endblock %}

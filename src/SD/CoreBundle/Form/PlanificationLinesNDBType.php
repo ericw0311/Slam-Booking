@@ -9,13 +9,17 @@ use SD\CoreBundle\Repository\TimetableRepository;
 
 class PlanificationLinesNDBType extends AbstractType
 {
+    private $currentFile;
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+	$this->currentFile = $options['current_file'];
+
 	$builder->add('timetable_MON', EntityType::class, array(
 		'class' => 'SDCoreBundle:Timetable',
 		'query_builder' => function(TimetableRepository $tr)
 						{
-						return $tr->getTimetablesQB();
+						return $tr->getTimetablesQB($this->currentFile);
 						},
 		'choice_label' => 'name'));
 	}
@@ -23,6 +27,7 @@ class PlanificationLinesNDBType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array('data_class' => 'SD\CoreBundle\Entity\PlanificationLinesNDB'));
+		$resolver->setRequired('current_file');
     }
 
     public function getBlockPrefix()

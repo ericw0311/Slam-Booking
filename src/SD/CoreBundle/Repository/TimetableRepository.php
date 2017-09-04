@@ -34,10 +34,10 @@ class TimetableRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 	
-    public function getTimetablesQB()
+    public function getTimetablesQB($file)
     {
     $queryBuilder = $this->createQueryBuilder('t');
-    // $queryBuilder->where('t.file = :file')->setParameter('file', $file);
+	$queryBuilder->where('t.file = :file')->setParameter('file', $file);
     $queryBuilder->orderBy('t.name', 'ASC');
    
     return $queryBuilder;

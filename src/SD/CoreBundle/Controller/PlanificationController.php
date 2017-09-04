@@ -215,7 +215,7 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
 
 	$planificationLinesNDB = new PlanificationLinesNDB($planificationPeriod);
 
-    $form = $this->createForm(PlanificationLinesNDBType::class, $planificationLinesNDB);
+    $form = $this->createForm(PlanificationLinesNDBType::class, $planificationLinesNDB, array('current_file' => $userContext->getCurrentFile()));
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
         // Inutile de persister ici, Doctrine connait déjà l'activite

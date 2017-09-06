@@ -5,6 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use SD\CoreBundle\Repository\TimetableRepository;
 
 class PlanificationLinesNDBType extends AbstractType
@@ -15,13 +16,26 @@ class PlanificationLinesNDBType extends AbstractType
     {
 	$this->currentFile = $options['current_file'];
 
+
 	$builder->add('timetable_MON', EntityType::class, array(
+		'label' => false,
 		'class' => 'SDCoreBundle:Timetable',
 		'query_builder' => function(TimetableRepository $tr)
 						{
 						return $tr->getTimetablesQB($this->currentFile);
 						},
-		'choice_label' => 'name'));
+		'choice_label' => 'name'))
+			->add('timetable_TUE', EntityType::class, array(
+		'label' => false,
+		'class' => 'SDCoreBundle:Timetable',
+		'query_builder' => function(TimetableRepository $tr)
+						{
+						return $tr->getTimetablesQB($this->currentFile);
+						},
+		'choice_label' => 'name'))
+			->add('activate_MON', CheckboxType::class, array(
+		'label' => false,
+		'required' => false));
 	}
     
     public function configureOptions(OptionsResolver $resolver)

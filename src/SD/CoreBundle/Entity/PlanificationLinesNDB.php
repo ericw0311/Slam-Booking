@@ -8,6 +8,8 @@ class PlanificationLinesNDB
 {
     private $planificationPeriod;
 
+    private $activate_MON;
+
     private $timetable_MON;
     private $timetable_TUE;
     private $timetable_WED;
@@ -38,13 +40,13 @@ class PlanificationLinesNDB
         return $this->timetable_MON;
     }
 
-    public function setTimetable_TUE(\SD\CoreBundle\Entity\Timetable $timetable)
+    public function setTimetableTUE(\SD\CoreBundle\Entity\Timetable $timetable)
     {
         $this->timetable_TUE = $timetable;
         return $this;
     }
 
-    public function getTimetable_TUE()
+    public function getTimetableTUE()
     {
         return $this->timetable_TUE;
     }
@@ -102,6 +104,17 @@ class PlanificationLinesNDB
     public function getTimetable_SUN()
     {
         return $this->timetable_SUN;
+    }
+
+    public function setActivateMON($activate)
+    {
+        $this->activate_MON = $activate;
+        return $this;
+    }
+
+    public function getActivateMON()
+    {
+        return $this->activate_MON;
     }
 
     public function __construct(\SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)

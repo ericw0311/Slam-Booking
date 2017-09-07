@@ -27,7 +27,7 @@
 </tr>
 <tr>
 	<td><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ ('day.TUE')|trans }}</td>
-	<td>&nbsp;</td>
+	<td>{{ form_row(form.activate_TUE) }}</td>
 	<td>{{ form_row(form.timetable_TUE) }}</td>
 </tr>
     </tbody>
@@ -39,8 +39,42 @@
 
 <div class="col-sm-12 well well-sm btn-group">
 	<a href="{{ path('sd_core_planification_edit', { 'planificationID': planification.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
+	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
 </div>
 
-<script src="{{ asset('bundles/sdcore/js/planification.js') }}"></script>
+<script>
+var activate_MON = document.getElementById('sd_corebundle_planificationLinesNDB_activate_MON');
+var activate_TUE = document.getElementById('sd_corebundle_planificationLinesNDB_activate_TUE');
+
+var timetable_MON = document.getElementById('sd_corebundle_planificationLinesNDB_timetable_MON');
+var timetable_TUE = document.getElementById('sd_corebundle_planificationLinesNDB_timetable_TUE');
+
+if (activate_MON.checked) {
+	timetable_MON.disabled = false;
+} else {
+	timetable_MON.disabled = true;
+}
+if (activate_TUE.checked) {
+	timetable_TUE.disabled = false;
+} else {
+	timetable_TUE.disabled = true;
+}
+
+activate_MON.addEventListener('change', function() {
+	if (activate_MON.checked) {
+		timetable_MON.disabled = false;
+	} else {
+		timetable_MON.disabled = true;
+	}
+});
+
+activate_TUE.addEventListener('change', function() {
+	if (activate_TUE.checked) {
+		timetable_TUE.disabled = false;
+	} else {
+		timetable_TUE.disabled = true;
+	}
+});
+</script>
 
 {% endblock %}

@@ -70,7 +70,7 @@
 </div>
 
 {% for flash_message in app.session.flashBag.get('notice') %}
-<div class="alert alert-success">
+<div class="col-sm-12 alert alert-success">
 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     {{ flash_message|trans }}
 </div>

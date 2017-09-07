@@ -9,6 +9,7 @@ class PlanificationLinesNDB
     private $planificationPeriod;
 
     private $activate_MON;
+    private $activate_TUE;
 
     private $timetable_MON;
     private $timetable_TUE;
@@ -115,6 +116,17 @@ class PlanificationLinesNDB
     public function getActivateMON()
     {
         return $this->activate_MON;
+    }
+
+    public function setActivateTUE($activate)
+    {
+        $this->activate_TUE = $activate;
+        return $this;
+    }
+
+    public function getActivateTUE()
+    {
+        return $this->activate_TUE;
     }
 
     public function __construct(\SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)

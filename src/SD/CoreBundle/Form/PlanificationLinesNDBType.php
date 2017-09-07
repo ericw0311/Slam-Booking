@@ -35,6 +35,9 @@ class PlanificationLinesNDBType extends AbstractType
 		'choice_label' => 'name'))
 			->add('activate_MON', CheckboxType::class, array(
 		'label' => false,
+		'required' => false))
+			->add('activate_TUE', CheckboxType::class, array(
+		'label' => false,
 		'required' => false));
 	}
     

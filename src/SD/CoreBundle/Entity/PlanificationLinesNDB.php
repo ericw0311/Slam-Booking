@@ -10,6 +10,11 @@ class PlanificationLinesNDB
 
     private $activate_MON;
     private $activate_TUE;
+    private $activate_WED;
+    private $activate_THU;
+    private $activate_FRI;
+    private $activate_SAT;
+    private $activate_SUN;
 
     private $timetable_MON;
     private $timetable_TUE;
@@ -52,57 +57,57 @@ class PlanificationLinesNDB
         return $this->timetable_TUE;
     }
 
-    public function setTimetable_WED(\SD\CoreBundle\Entity\Timetable $timetable)
+    public function setTimetableWED(\SD\CoreBundle\Entity\Timetable $timetable)
     {
         $this->timetable_WED = $timetable;
         return $this;
     }
 
-    public function getTimetable_WED()
+    public function getTimetableWED()
     {
         return $this->timetable_WED;
     }
 
-    public function setTimetable_THU(\SD\CoreBundle\Entity\Timetable $timetable)
+    public function setTimetableTHU(\SD\CoreBundle\Entity\Timetable $timetable)
     {
         $this->timetable_THU = $timetable;
         return $this;
     }
 
-    public function getTimetable_THU()
+    public function getTimetableTHU()
     {
         return $this->timetable_THU;
     }
 
-    public function setTimetable_FRI(\SD\CoreBundle\Entity\Timetable $timetable)
+    public function setTimetableFRI(\SD\CoreBundle\Entity\Timetable $timetable)
     {
         $this->timetable_FRI = $timetable;
         return $this;
     }
 
-    public function getTimetable_FRI()
+    public function getTimetableFRI()
     {
         return $this->timetable_FRI;
     }
 
-    public function setTimetable_SAT(\SD\CoreBundle\Entity\Timetable $timetable)
+    public function setTimetableSAT(\SD\CoreBundle\Entity\Timetable $timetable)
     {
         $this->timetable_SAT = $timetable;
         return $this;
     }
 
-    public function getTimetable_SAT()
+    public function getTimetableSAT()
     {
         return $this->timetable_SAT;
     }
 
-    public function setTimetable_SUN(\SD\CoreBundle\Entity\Timetable $timetable)
+    public function setTimetableSUN(\SD\CoreBundle\Entity\Timetable $timetable)
     {
         $this->timetable_SUN = $timetable;
         return $this;
     }
 
-    public function getTimetable_SUN()
+    public function getTimetableSUN()
     {
         return $this->timetable_SUN;
     }
@@ -128,6 +133,61 @@ class PlanificationLinesNDB
     {
         return $this->activate_TUE;
     }
+
+	public function setActivateWED($activate)
+	{
+		$this->activate_WED = $activate;
+		return $this;
+	}
+
+	public function getActivateWED()
+	{
+	return $this->activate_WED;
+	}
+
+	public function setActivateTHU($activate)
+	{
+		$this->activate_THU = $activate;
+		return $this;
+	}
+
+	public function getActivateTHU()
+	{
+		return $this->activate_THU;
+	}
+
+	public function setActivateFRI($activate)
+	{
+		$this->activate_FRI = $activate;
+		return $this;
+	}
+
+	public function getActivateFRI()
+	{
+		return $this->activate_FRI;
+	}
+
+	public function setActivateSAT($activate)
+	{
+		$this->activate_SAT = $activate;
+		return $this;
+	}
+
+	public function getActivateSAT()
+	{
+		return $this->activate_SAT;
+	}
+
+	public function setActivateSUN($activate)
+	{
+		$this->activate_SUN = $activate;
+		return $this;
+	}
+
+	public function getActivateSUN()
+	{
+		return $this->activate_SUN;
+	}
 
     public function __construct(\SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)
     {

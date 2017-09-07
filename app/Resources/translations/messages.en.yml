@@ -6,6 +6,7 @@ back: Retour
 beginning.time: Beginning time
 cancel: Cancel
 close: Close
+day: Day
 day.MON: Monday
 day.TUE: Tuesday
 day.WED: Wednesday
@@ -21,6 +22,7 @@ modify: Modify
 number.columns: Number of columns
 number.lines: Number of lines
 number.lines.columns.updated.ok: Number of lines and columns displayed have been updated
+open: Open
 parameters: Parameters
 sort.after: Sort after
 sort.before: Sort before

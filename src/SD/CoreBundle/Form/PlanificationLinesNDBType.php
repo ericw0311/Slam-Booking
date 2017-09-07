@@ -33,10 +33,65 @@ class PlanificationLinesNDBType extends AbstractType
 						return $tr->getTimetablesQB($this->currentFile);
 						},
 		'choice_label' => 'name'))
+			->add('timetable_WED', EntityType::class, array(
+		'label' => false,
+		'class' => 'SDCoreBundle:Timetable',
+		'query_builder' => function(TimetableRepository $tr)
+						{
+						return $tr->getTimetablesQB($this->currentFile);
+						},
+		'choice_label' => 'name'))
+			->add('timetable_THU', EntityType::class, array(
+		'label' => false,
+		'class' => 'SDCoreBundle:Timetable',
+		'query_builder' => function(TimetableRepository $tr)
+						{
+						return $tr->getTimetablesQB($this->currentFile);
+						},
+		'choice_label' => 'name'))
+			->add('timetable_FRI', EntityType::class, array(
+		'label' => false,
+		'class' => 'SDCoreBundle:Timetable',
+		'query_builder' => function(TimetableRepository $tr)
+						{
+						return $tr->getTimetablesQB($this->currentFile);
+						},
+		'choice_label' => 'name'))
+			->add('timetable_SAT', EntityType::class, array(
+		'label' => false,
+		'class' => 'SDCoreBundle:Timetable',
+		'query_builder' => function(TimetableRepository $tr)
+						{
+						return $tr->getTimetablesQB($this->currentFile);
+						},
+		'choice_label' => 'name'))
+			->add('timetable_SUN', EntityType::class, array(
+		'label' => false,
+		'class' => 'SDCoreBundle:Timetable',
+		'query_builder' => function(TimetableRepository $tr)
+						{
+						return $tr->getTimetablesQB($this->currentFile);
+						},
+		'choice_label' => 'name'))
 			->add('activate_MON', CheckboxType::class, array(
 		'label' => false,
 		'required' => false))
 			->add('activate_TUE', CheckboxType::class, array(
+		'label' => false,
+		'required' => false))
+			->add('activate_WED', CheckboxType::class, array(
+		'label' => false,
+		'required' => false))
+			->add('activate_THU', CheckboxType::class, array(
+		'label' => false,
+		'required' => false))
+			->add('activate_FRI', CheckboxType::class, array(
+		'label' => false,
+		'required' => false))
+			->add('activate_SAT', CheckboxType::class, array(
+		'label' => false,
+		'required' => false))
+			->add('activate_SUN', CheckboxType::class, array(
 		'label' => false,
 		'required' => false));
 	}

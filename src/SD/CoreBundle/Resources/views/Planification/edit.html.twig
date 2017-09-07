@@ -54,8 +54,13 @@
 {% for planificationLine in planificationLines %}
 <tr>
 	<td><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ ('day.' ~ planificationLine.weekDay)|trans }}</td>
+{% if planificationLine.active %}
+	<td><img src="{{ asset('bundles/sdcore/images/green-check-32.png') }}"></td>
+	<td>{{ planificationLine.timetable.name }}</td>
+{% else %}
 	<td><img src="{{ asset('bundles/sdcore/images/red-cross-32.png') }}"></td>
 	<td>&nbsp;</td>
+{% endif %}
 </tr>
 {% endfor %}
     </tbody>

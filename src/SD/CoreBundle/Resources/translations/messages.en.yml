@@ -43,6 +43,7 @@ planification.back.to.list: Back to planifications list
 planification.create: Create a planification
 planification.created.ok: The planification has been created
 planification.deleted.ok: The planification has been deleted
+planification.line.updated.ok: Per day planifications have been updated
 planification.name: Planification name
 planification.plural: Planifications
 planification.resource.select: Select resource

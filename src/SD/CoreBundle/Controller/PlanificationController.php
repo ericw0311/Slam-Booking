@@ -212,15 +212,92 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+    $planificationLineRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
+    $timetableRepository = $em->getRepository('SDCoreBundle:Timetable');
+
+	// Premiere grille horaire du dossier
+    $firstTimetable = $timetableRepository->getFirstTimetable($userContext->getCurrentFile());
+
+	$line_MON = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => 'MON'));
+	$line_TUE = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => 'TUE'));
+	$line_WED = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => 'WED'));
+	$line_THU = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => 'THU'));
+	$line_FRI = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => 'FRI'));
+	$line_SAT = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => 'SAT'));
+	$line_SUN = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => 'SUN'));
 
 	$planificationLinesNDB = new PlanificationLinesNDB($planificationPeriod);
+	if ($line_MON->getActive()) {
+		$planificationLinesNDB->setTimetableMON($line_MON->getTimetable());
+	} else {
+		$planificationLinesNDB->setTimetableMON($firstTimetable);
+	}
+	$planificationLinesNDB->setActivateMON($line_MON->getActive());
+	if ($line_TUE->getActive()) {
+		$planificationLinesNDB->setTimetableTUE($line_TUE->getTimetable());
+	} else {
+		$planificationLinesNDB->setTimetableTUE($firstTimetable);
+	}
+	$planificationLinesNDB->setActivateTUE($line_TUE->getActive());
+	if ($line_WED->getActive()) {
+		$planificationLinesNDB->setTimetableWED($line_WED->getTimetable());
+	} else {
+		$planificationLinesNDB->setTimetableWED($firstTimetable);
+	}
+	$planificationLinesNDB->setActivateWED($line_WED->getActive());
+	if ($line_THU->getActive()) {
+		$planificationLinesNDB->setTimetableTHU($line_THU->getTimetable());
+	} else {
+		$planificationLinesNDB->setTimetableTHU($firstTimetable);
+	}
+	$planificationLinesNDB->setActivateTHU($line_THU->getActive());
+	if ($line_FRI->getActive()) {
+		$planificationLinesNDB->setTimetableFRI($line_FRI->getTimetable());
+	} else {
+		$planificationLinesNDB->setTimetableFRI($firstTimetable);
+	}
+	$planificationLinesNDB->setActivateFRI($line_FRI->getActive());
+	if ($line_SAT->getActive()) {
+		$planificationLinesNDB->setTimetableSAT($line_SAT->getTimetable());
+	} else {
+		$planificationLinesNDB->setTimetableSAT($firstTimetable);
+	}
+	$planificationLinesNDB->setActivateSAT($line_SAT->getActive());
+	if ($line_SUN->getActive()) {
+		$planificationLinesNDB->setTimetableSUN($line_SUN->getTimetable());
+	} else {
+		$planificationLinesNDB->setTimetableSUN($firstTimetable);
+	}
+	$planificationLinesNDB->setActivateSUN($line_SUN->getActive());
 
     $form = $this->createForm(PlanificationLinesNDBType::class, $planificationLinesNDB, array('current_file' => $userContext->getCurrentFile()));
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-        // Inutile de persister ici, Doctrine connait déjà l'activite
+
+		$line_MON->setTimetable($planificationLinesNDB->getTimetableMON());
+		$line_MON->setActive($planificationLinesNDB->getActivateMON());
+		$em->persist($line_MON);
+		$line_TUE->setTimetable($planificationLinesNDB->getTimetableTUE());
+		$line_TUE->setActive($planificationLinesNDB->getActivateTUE());
+		$em->persist($line_TUE);
+		$line_WED->setTimetable($planificationLinesNDB->getTimetableWED());
+		$line_WED->setActive($planificationLinesNDB->getActivateWED());
+		$em->persist($line_WED);
+		$line_THU->setTimetable($planificationLinesNDB->getTimetableTHU());
+		$line_THU->setActive($planificationLinesNDB->getActivateTHU());
+		$em->persist($line_THU);
+		$line_FRI->setTimetable($planificationLinesNDB->getTimetableFRI());
+		$line_FRI->setActive($planificationLinesNDB->getActivateFRI());
+		$em->persist($line_FRI);
+		$line_SAT->setTimetable($planificationLinesNDB->getTimetableSAT());
+		$line_SAT->setActive($planificationLinesNDB->getActivateSAT());
+		$em->persist($line_SAT);
+		$line_SUN->setTimetable($planificationLinesNDB->getTimetableSUN());
+		$line_SUN->setActive($planificationLinesNDB->getActivateSUN());
+		$em->persist($line_SUN);
+
         $em->flush();
-        $request->getSession()->getFlashBag()->add('notice', 'planification.updated.ok');
+        $request->getSession()->getFlashBag()->add('notice', 'planification.line.updated.ok');
         return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getId()));
     }
 

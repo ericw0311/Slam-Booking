@@ -41,11 +41,18 @@ class TimetableRepository extends \Doctrine\ORM\EntityRepository
     $queryBuilder->orderBy('t.name', 'ASC');
    
     return $queryBuilder;
-
-/*
-    $query = $queryBuilder->getQuery();
-    $results = $query->getResult();
-    return $results;
-*/
     }
+
+	// Retourne la premiere grille horaire
+	public function getFirstTimetable($file)
+    {
+    $queryBuilder = $this->createQueryBuilder('t');
+	$queryBuilder->where('t.file = :file')->setParameter('file', $file);
+    $queryBuilder->orderBy('t.name', 'ASC');
+	$queryBuilder->setMaxResults(1);
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
 }

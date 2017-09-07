@@ -6,6 +6,7 @@ back: Retour
 beginning.time: Heure de début
 cancel: Annuler
 close: Fermer
+day: Jour
 day.MON: Lundi
 day.TUE: Mardi
 day.WED: Mercredi
@@ -21,6 +22,7 @@ modify: Modifier
 number.columns: Nombre de colonnes
 number.lines: Nombre de lignes
 number.lines.columns.updated.ok: Les nombres de lignes et de colonnes affichées ont été mis à jour
+open: Ouvert
 parameters: Paramètres
 sort.after: Trier après
 sort.before: Trier avant

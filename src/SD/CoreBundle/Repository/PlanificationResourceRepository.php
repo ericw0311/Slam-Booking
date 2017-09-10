@@ -21,4 +21,16 @@ class PlanificationResourceRepository extends \Doctrine\ORM\EntityRepository
     $results = $query->getResult();
     return $results;
     }
+
+	// Compte les periodes de planification d'une ressource
+    public function getPlanificationPeriodsCount($resource)
+    {
+    $queryBuilder = $this->createQueryBuilder('pr');
+    $queryBuilder->select($queryBuilder->expr()->count('pr'));
+    $queryBuilder->where('pr.resource = :resource')->setParameter('resource', $resource);
+
+    $query = $queryBuilder->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
 }

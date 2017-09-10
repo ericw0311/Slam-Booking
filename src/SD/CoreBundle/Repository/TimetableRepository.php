@@ -34,6 +34,7 @@ class TimetableRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 	
+	// Les grilles horaires du dossier. Query builder uniquement: utilisé pour le formulaire des lignes de planification.
     public function getTimetablesQB($file)
     {
     $queryBuilder = $this->createQueryBuilder('t');

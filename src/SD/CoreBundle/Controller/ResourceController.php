@@ -21,6 +21,7 @@ use SD\CoreBundle\Entity\ListContext;
 use SD\CoreBundle\Entity\Trace;
 use SD\CoreBundle\Entity\Constants;
 use SD\CoreBundle\Entity\ResourceClassificationNDB;
+use SD\CoreBundle\Entity\ResourceContext;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -169,7 +170,9 @@ class ResourceController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    return $this->render('SDCoreBundle:Resource:edit.html.twig', array('userContext' => $userContext, 'resource' => $resource));
+    $resourceContext = new ResourceContext($em, $resource); // contexte ressource
+
+    return $this->render('SDCoreBundle:Resource:edit.html.twig', array('userContext' => $userContext, 'resource' => $resource, 'resourceContext' => $resourceContext));
     }
 
 	
@@ -217,5 +220,25 @@ class ResourceController extends Controller
         return $this->redirectToRoute('sd_core_resource_list', array('pageNumber' => 1));
     }
     return $this->render('SDCoreBundle:Resource:delete.html.twig', array('userContext' => $userContext, 'resource' => $resource, 'form' => $form->createView()));
+    }
+
+
+    // Affichage des periodes de planification d'une ressource
+    /**
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+    */
+    public function foreignAction(Resource $resource, Request $request)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $planificationPeriodRepository = $em->getRepository('SDCoreBundle:PlanificationPeriod');
+
+    $listPlanificationPeriod = $planificationPeriodRepository->getResourcePlanificationPeriods($resource);
+                
+    return $this->render('SDCoreBundle:Resource:foreign.html.twig', array(
+                'userContext' => $userContext, 'resource' => $resource,
+		'listPlanificationPeriod' => $listPlanificationPeriod));
     }
 }

@@ -2,6 +2,10 @@
 
 namespace SD\CoreBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr;
+
 /**
  * PlanificationPeriodRepository
  *
@@ -10,4 +14,16 @@ namespace SD\CoreBundle\Repository;
  */
 class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
 {
+    // Retourne les periodes de planification d'une ressource
+    public function getResourcePlanificationPeriods($resource)
+    {
+	$queryBuilder = $this->createQueryBuilder('pp');
+	$queryBuilder->innerJoin('pp.planificationResources', 'pr', Expr\Join::WITH, $queryBuilder->expr()->eq('pr.resource', '?1'));
+	$queryBuilder->orderBy('pp.id', 'ASC');
+	$queryBuilder->setParameter(1, $resource); 
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getResult();
+	return $results;
+    }
 }

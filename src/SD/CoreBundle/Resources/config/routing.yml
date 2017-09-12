@@ -220,6 +220,12 @@ sd_core_resource_delete:
     requirements:
         resourceID: \d+
 
+sd_core_resource_foreign:
+    path:     /resource/foreign/{resourceID}
+    defaults: { _controller: SDCoreBundle:Resource:foreign }
+    requirements:
+        resourceID: \d+
+
 
 sd_core_planification_list:
     path:     /planification/list/{pageNumber}

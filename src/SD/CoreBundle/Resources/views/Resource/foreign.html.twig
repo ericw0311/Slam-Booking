@@ -4,7 +4,11 @@
 
 {% block body %}
 
-<div class="panel panel-default">
+<div class="panel panel-danger">
+
+	<div class="panel-heading">{{ 'resource.delete.not.allowed'|trans }}&nbsp;
+<a href="{{ path('sd_core_resource_edit', { 'resourceID': resource.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'back'|trans }}</a>
+	</div>
 
 	<div class="panel-body">
 {% for planificationPeriod in listPlanificationPeriod %}
@@ -12,9 +16,6 @@
 {% endfor %}
 	</div>
 
-	<div class="panel-footer">
-<a href="{{ path('sd_core_resource_edit', { 'resourceID': resource.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'back'|trans }}</a>
-	</div>
 </div>
 
 {% endblock %}

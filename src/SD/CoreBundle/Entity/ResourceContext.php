@@ -4,23 +4,23 @@ namespace SD\CoreBundle\Entity;
 
 class ResourceContext
 {
-    protected $planificationCount;
+    protected $planificationPeriodsCount;
 
-    public function setPlanificationCount($planificationCount)
+    public function setPlanificationPeriodsCount($planificationPeriodsCount)
     {
-    $this->planificationCount = $planificationCount;
+    $this->planificationPeriodsCount = $planificationPeriodsCount;
     return $this;
     }
 
-    public function getPlanificationCount()
+    public function getPlanificationPeriodsCount()
     {
-    return $this->planificationCount;
+    return $this->planificationPeriodsCount;
     }
 
     function __construct($em, \SD\CoreBundle\Entity\Resource $resource)
     {
     $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
-    $this->setPlanificationCount($planificationResourceRepository->getPlanificationPeriodsCount($resource));
+    $this->setPlanificationPeriodsCount($planificationResourceRepository->getPlanificationPeriodsCount($resource));
 
     return $this;
     }

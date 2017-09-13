@@ -72,6 +72,7 @@ resource.ask.delete: Voulez-vous vraiment supprimer la ressource %name% ?
 resource.back.to.list: Retour à la liste des ressources
 resource.create: Créer une ressource
 resource.created.ok: La ressource a bien été créée
+resource.delete.not.allowed: La ressource est référencée. Suppression impossible
 resource.deleted.ok: La ressource a bien été supprimée
 resource.name: Nom de la ressource
 resource.planning.background.color: Couleur de fond sur le planning

@@ -21,4 +21,17 @@ class PlanificationLineRepository extends \Doctrine\ORM\EntityRepository
     $results = $query->getResult();
     return $results;
     }
+
+
+	// Compte les periodes de planification d'une grille horaire
+    public function getPlanificationPeriodsCount($timetable)
+    {
+    $queryBuilder = $this->createQueryBuilder('pl');
+    $queryBuilder->select($queryBuilder->expr()->count('pl'));
+    $queryBuilder->where('pl.timetable = :timetable')->setParameter('timetable', $timetable);
+
+    $query = $queryBuilder->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
 }

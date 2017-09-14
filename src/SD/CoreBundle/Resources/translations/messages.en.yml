@@ -171,6 +171,7 @@ timetable.created.ok: The timetable has been created
 timetable.day: Day
 timetable.delete.not.allowed.1: The timetable Day cannot be deleted
 timetable.delete.not.allowed.2: The timetable Half day cannot be deleted
+timetable.delete.not.allowed.3: Timetable is referenced. Delete not allowed
 timetable.deleted.ok: The timetable has been deleted
 timetable.half.day: Half day
 timetable.name: Timetable name

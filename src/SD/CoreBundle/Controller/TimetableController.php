@@ -11,6 +11,7 @@ use SD\CoreBundle\Entity\Trace;
 use SD\CoreBundle\Entity\Timetable;
 use SD\CoreBundle\Entity\TimetableLine;
 use SD\CoreBundle\Entity\Constants;
+use SD\CoreBundle\Entity\TimetableContext;
 
 use SD\CoreBundle\Form\TimetableType;
 use SD\CoreBundle\Form\TimetableLineType;
@@ -85,8 +86,10 @@ class TimetableController extends Controller
     $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
     $listTimetableLines = $timetableLineRepository->getTimetableLines($timetable);
 
+    $timetableContext = new TimetableContext($em, $timetable); // contexte grille horaire
+
     return $this->render('SDCoreBundle:Timetable:edit.html.twig', 
-        array('userContext' => $userContext, 'timetable' => $timetable, 'listTimetableLines' => $listTimetableLines));
+        array('userContext' => $userContext, 'timetable' => $timetable, 'listTimetableLines' => $listTimetableLines, 'timetableContext' => $timetableContext));
     }
 
 	
@@ -135,7 +138,27 @@ public function modifyAction(Timetable $timetable, Request $request)
     }
     return $this->render('SDCoreBundle:Timetable:delete.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'form' => $form->createView()));
     }
-    
+
+
+    // Affichage des periodes de planification d'une grille haoraire
+    /**
+    * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
+    */
+    public function foreignAction(Timetable $timetable, Request $request)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $planificationPeriodRepository = $em->getRepository('SDCoreBundle:PlanificationPeriod');
+
+    $listPlanificationPeriod = $planificationPeriodRepository->getTimetablePlanificationPeriods($timetable);
+                
+    return $this->render('SDCoreBundle:Timetable:foreign.html.twig', array(
+                'userContext' => $userContext, 'timetable' => $timetable,
+		'listPlanificationPeriod' => $listPlanificationPeriod));
+    }
+
     
 // Ajout d'un creneau horaire
 /**

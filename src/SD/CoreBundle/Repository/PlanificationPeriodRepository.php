@@ -26,4 +26,18 @@ class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
 	$results = $query->getResult();
 	return $results;
     }
+
+    // Retourne les periodes de planification d'une grille horaire
+    public function getTimetablePlanificationPeriods($timetable)
+    {
+	$queryBuilder = $this->createQueryBuilder('pp');
+	$queryBuilder->innerJoin('pp.planificationLines', 'pl', Expr\Join::WITH, $queryBuilder->expr()->eq('pl.timetable', '?1'));
+	$queryBuilder->groupBy('pp.id');
+	$queryBuilder->orderBy('pp.id', 'ASC');
+	$queryBuilder->setParameter(1, $timetable); 
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getResult();
+	return $results;
+    }
 }

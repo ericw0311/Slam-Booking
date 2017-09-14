@@ -144,6 +144,12 @@ sd_core_timetable_deleteline:
         timetableID: \d+
         timetableLineID: \d+
 
+sd_core_timetable_foreign:
+    path:     /timetable/foreign/{timetableID}
+    defaults: { _controller: SDCoreBundle:Timetable:foreign }
+    requirements:
+        timetableID: \d+
+
 
 sd_core_resourceclassification_display:
     path:     /resourceclassification/display/{resourceType}

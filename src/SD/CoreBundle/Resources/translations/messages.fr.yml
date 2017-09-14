@@ -171,6 +171,7 @@ timetable.created.ok: La grille horaire a bien été créée
 timetable.day: Journée
 timetable.delete.not.allowed.1: La grille horaire journée ne peut pas être suprimée
 timetable.delete.not.allowed.2: La grille horaire demi-journée ne peut pas être suprimée
+timetable.delete.not.allowed.3: La grille horaire est référencée. Suppression impossible
 timetable.deleted.ok: La grille horaire a bien été supprimée
 timetable.half.day: Demi journée
 timetable.name: Nom de la grille horaire

@@ -1,0 +1,21 @@
+{# src/SD/CoreBundle/Resources/views/Timetable/foreign.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+
+<div class="panel panel-danger">
+
+	<div class="panel-heading">{{ 'timetable.delete.not.allowed.3'|trans }}&nbsp;
+<a href="{{ path('sd_core_timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'back'|trans }}</a>
+	</div>
+
+	<div class="panel-body">
+{% for planificationPeriod in listPlanificationPeriod %}
+	<a href="{{ path('sd_core_planification_edit', { 'planificationID': planificationPeriod.planification.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/planification-32.png') }}">&nbsp;{{ planificationPeriod.planification.name }}</a>
+{% endfor %}
+	</div>
+
+</div>
+
+{% endblock %}

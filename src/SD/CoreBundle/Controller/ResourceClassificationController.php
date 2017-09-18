@@ -224,7 +224,34 @@ class ResourceClassificationController extends Controller
 		return $this->redirectToRoute('sd_core_resourceclassification_display', array('resourceType' => $resourceType));
     }
 
+    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+
+    if ($resourceRepository->getResourcesCount_RC($resourceClassification) > 0) {
+		return $this->redirectToRoute('sd_core_resourceclassification_foreign',
+			array('resourceType' => $resourceType, 'resourceClassificationID' => $resourceClassification->getId()));
+	}
+
     return $this->render('SDCoreBundle:ResourceClassification:delete.html.twig',
 		array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification, 'form' => $form->createView()));
+    }
+
+
+    // Affichage des ressources d'une classification
+    /**
+    * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
+    */
+    public function foreignAction($resourceType, ResourceClassification $resourceClassification)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+
+    $listResources = $resourceRepository->getResources_RC($resourceClassification);
+                
+    return $this->render('SDCoreBundle:ResourceClassification:foreign.html.twig', array(
+                'userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification,
+		'listResources' => $listResources));
     }
 }

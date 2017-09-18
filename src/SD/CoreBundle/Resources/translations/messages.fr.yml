@@ -88,6 +88,7 @@ resourceClassification.back.to.list: Retour aux classifications de ressources
 resourceClassification.create: Créer une classification de ressources
 resourceClassification.create.warning: Attention, vous créez une nouvelle classification de ressource. Ceci n'est à faire que si les classifications proposées par défaut ne suffisent pas
 resourceClassification.created.ok: La classification a bien été créée
+resourceClassification.delete.not.allowed: La classification est référencée. Suppression impossible
 resourceClassification.deleted.ok: La classification a bien été supprimée
 resourceClassification.name: Nom de la classification de ressources
 resourceClassification.plural: Classifications de ressources
@@ -179,6 +180,7 @@ timetable.plural: Grilles horaires
 timetable.singular: Grille horaire
 timetable.update.not.allowed.1: La grille horaire journée ne peut pas être modifiée
 timetable.update.not.allowed.2: La grille horaire demi-journée ne peut pas être modifiée
+timetable.update.not.allowed.3: La grille horaire est référencée. Modification impossible
 timetable.updated.ok: La grille horaire a bien été modifiée
 
 timetableLine.create: Ajouter un créneau horaire

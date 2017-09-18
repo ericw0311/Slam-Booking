@@ -45,4 +45,28 @@ class ResourceRepository extends \Doctrine\ORM\EntityRepository
     $results = $query->getResult();
     return $results;
     }
+
+    // Retourne le nombre de ressources d'une classification
+    public function getResourcesCount_RC($resourceClassification)
+    {
+    $queryBuilder = $this->createQueryBuilder('r');
+    $queryBuilder->select($queryBuilder->expr()->count('r'));
+    $queryBuilder->where('r.classification = :classification')->setParameter('classification', $resourceClassification);
+
+    $query = $queryBuilder->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+
+    // Retourne les ressources d'une classification
+    public function getResources_RC($resourceClassification)
+    {
+	$queryBuilder = $this->createQueryBuilder('r');
+    $queryBuilder->where('r.classification = :classification')->setParameter('classification', $resourceClassification);
+	$queryBuilder->orderBy('r.name', 'ASC');
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getResult();
+	return $results;
+    }
 }

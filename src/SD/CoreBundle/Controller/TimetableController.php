@@ -140,11 +140,11 @@ public function modifyAction(Timetable $timetable, Request $request)
     }
 
 
-    // Affichage des periodes de planification d'une grille haoraire
+    // Affichage des periodes de planification d'une grille horaire (message de suppression)
     /**
     * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
     */
-    public function foreignAction(Timetable $timetable, Request $request)
+    public function foreign_deleteAction(Timetable $timetable, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -154,7 +154,27 @@ public function modifyAction(Timetable $timetable, Request $request)
 
     $listPlanificationPeriod = $planificationPeriodRepository->getTimetablePlanificationPeriods($timetable);
                 
-    return $this->render('SDCoreBundle:Timetable:foreign.html.twig', array(
+    return $this->render('SDCoreBundle:Timetable:foreign.delete.html.twig', array(
+                'userContext' => $userContext, 'timetable' => $timetable,
+		'listPlanificationPeriod' => $listPlanificationPeriod));
+    }
+
+    
+    // Affichage des periodes de planification d'une grille horaire (message de modification)
+    /**
+    * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
+    */
+    public function foreign_updateAction(Timetable $timetable, Request $request)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $planificationPeriodRepository = $em->getRepository('SDCoreBundle:PlanificationPeriod');
+
+    $listPlanificationPeriod = $planificationPeriodRepository->getTimetablePlanificationPeriods($timetable);
+                
+    return $this->render('SDCoreBundle:Timetable:foreign.update.html.twig', array(
                 'userContext' => $userContext, 'timetable' => $timetable,
 		'listPlanificationPeriod' => $listPlanificationPeriod));
     }

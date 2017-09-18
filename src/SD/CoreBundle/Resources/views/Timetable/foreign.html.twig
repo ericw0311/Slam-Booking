@@ -2,11 +2,13 @@
 
 {% extends "SDCoreBundle::layout.html.twig" %}
 
+{% block title %}{{ parent() }} foreign{% endblock %}
+
 {% block body %}
 
 <div class="panel panel-danger">
 
-	<div class="panel-heading">{{ 'timetable.delete.not.allowed.3'|trans }}&nbsp;
+	<div class="panel-heading">{% block foreign_message %}{% endblock %}&nbsp;
 <a href="{{ path('sd_core_timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'back'|trans }}</a>
 	</div>
 

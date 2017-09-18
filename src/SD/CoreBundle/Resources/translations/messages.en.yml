@@ -88,6 +88,7 @@ resourceClassification.back.to.list: Back to classifications
 resourceClassification.create: Create a resource classification
 resourceClassification.create.warning: Carefull, you are creating a new resource classification. This is do be done only if the default classifications are not sufficient
 resourceClassification.created.ok: The classification has been created
+resourceClassification.delete.not.allowed: Classification is referenced. Delete not allowed
 resourceClassification.deleted.ok: The classification has been deleted
 resourceClassification.name: Resource classification name
 resourceClassification.plural: Resource classifications
@@ -179,6 +180,7 @@ timetable.plural: Timetables
 timetable.singular: Timetable
 timetable.update.not.allowed.1: The timetable Day cannot be updated
 timetable.update.not.allowed.2: The timetable Half day cannot be updated
+timetable.update.not.allowed.3: Timetable is referenced. Update not allowed
 timetable.updated.ok: The timetable has been updated
 
 timetableLine.create: Add a timetable slot

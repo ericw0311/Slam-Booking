@@ -47,7 +47,7 @@ class SBEventSubscriber implements EventSubscriber
 		$entity = $args->getObject();
 		$entityManager = $args->getObjectManager();
 
-		if ($entity instanceof File) { /* ici et la */
+		if ($entity instanceof File) { /* ici et la et la... et la */
 			FileEvent::postPersist($entityManager, $this->getUser(), $entity, $this->getTranslator());
 		} else if ($entity instanceof PlanificationPeriod) {
 			PlanificationPeriodEvent::postPersist($entityManager, $this->getUser(), $entity);

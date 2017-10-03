@@ -166,13 +166,29 @@ $planificationResource = $planificationResourceRepository->findOneBy(array('plan
 
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'planification.resource.updated.ok');
-	return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getID()));
+	return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getId()));
     }
 
 
     // Edition du detail d'une planification
     /**
     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    */
+    public function editLastPeriodAction(Planification $planification)
+    {
+    $em = $this->getDoctrine()->getManager();
+
+    $planificationPeriodRepository = $em->getRepository('SDCoreBundle:PlanificationPeriod');
+    $planificationPeriod = $planificationPeriodRepository->findOneBy(array('planification' => $planification), array('id' => 'DESC'));
+
+	return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID()));
+    }
+
+
+    // Edition du detail d'une planification
+    /**
+    * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
     */
     public function editAction(Planification $planification)
     {
@@ -298,7 +314,7 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
 
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'planification.line.updated.ok');
-        return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getId()));
+        return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getId(), 'planificationPeriodID' => $planificationPeriod->getId()));
     }
 
     return $this->render('SDCoreBundle:Planification:line.html.twig',
@@ -309,8 +325,9 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
     // Modification d'une planification
     /**
     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
     */
-    public function modifyAction(Planification $planification, Request $request)
+    public function modifyAction(Planification $planification, PlanificationPeriod $planificationPeriod, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -322,18 +339,19 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
         // Inutile de persister ici, Doctrine connait déjà l'activite
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'planification.updated.ok');
-        return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getId()));
+        return $this->redirectToRoute('sd_core_planification_edit', array('planificationID' => $planification->getId(), 'planificationPeriodID' => $planificationPeriod->getId()));
     }
 
-    return $this->render('SDCoreBundle:Planification:modify.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'form' => $form->createView()));
+    return $this->render('SDCoreBundle:Planification:modify.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'form' => $form->createView()));
     }
 
 
     // Suppression d'une planification
     /**
     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
     */
-    public function deleteAction(Planification $planification, Request $request)
+    public function deleteAction(Planification $planification, PlanificationPeriod $planificationPeriod, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -346,6 +364,6 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
         $request->getSession()->getFlashBag()->add('notice', 'planification.deleted.ok');
         return $this->redirectToRoute('sd_core_planification_list', array('pageNumber' => 1));
     }
-    return $this->render('SDCoreBundle:Planification:delete.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'form' => $form->createView()));
+    return $this->render('SDCoreBundle:Planification:delete.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'form' => $form->createView()));
     }
 }

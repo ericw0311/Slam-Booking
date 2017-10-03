@@ -46,13 +46,13 @@ class SBEventSubscriber implements EventSubscriber
     {
 		$entity = $args->getObject();
 		$entityManager = $args->getObjectManager();
-/*
+
 		if ($entity instanceof File) {
 			FileEvent::postPersist($entityManager, $this->getUser(), $entity, $this->getTranslator());
 		} else if ($entity instanceof PlanificationPeriod) {
 			PlanificationPeriodEvent::postPersist($entityManager, $this->getUser(), $entity);
 		}
-*/
+
     }
 
     public function postUpdate(LifecycleEventArgs $args)

@@ -275,23 +275,32 @@ sd_core_planification_validate_update_resource:
         planificationID: \d+
         planificationPeriodID: \d+
 
+sd_core_planification_edit_lp:
+    path:     /planification/editlp/{planificationID}
+    defaults: { _controller: SDCoreBundle:Planification:editLastPeriod }
+    requirements:
+        planificationID: \d+
+
 sd_core_planification_edit:
-    path:     /planification/edit/{planificationID}
+    path:     /planification/edit/{planificationID}/{planificationPeriodID}
     defaults: { _controller: SDCoreBundle:Planification:edit }
     requirements:
         planificationID: \d+
+        planificationPeriodID: \d+
 
 sd_core_planification_modify:
-    path:     /planification/modify/{planificationID}
+    path:     /planification/modify/{planificationID}/{planificationPeriodID}
     defaults: { _controller: SDCoreBundle:Planification:modify }
     requirements:
         planificationID: \d+
+        planificationPeriodID: \d+
 
 sd_core_planification_delete:
-    path:     /planification/delete/{planificationID}
+    path:     /planification/delete/{planificationID}/{planificationPeriodID}
     defaults: { _controller: SDCoreBundle:Planification:delete }
     requirements:
         planificationID: \d+
+        planificationPeriodID: \d+
 
 sd_core_planification_line:
     path:     /planification/line/{planificationID}/{planificationPeriodID}

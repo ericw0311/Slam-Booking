@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block link_cancel %}
-	<a href="{{ path('sd_core_planification_edit', { 'planificationID': planification.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
+	<a href="{{ path('sd_core_planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
 {% endblock %}
 
 {% block link_validate %}

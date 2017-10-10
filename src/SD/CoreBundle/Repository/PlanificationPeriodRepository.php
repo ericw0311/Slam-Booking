@@ -40,4 +40,32 @@ class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
 	$results = $query->getResult();
 	return $results;
     }
+
+	// Retourne la periode de planification precedente
+	public function getPreviousPlanificationPeriod($planification, $planificationPeriodID)
+    {
+	$queryBuilder = $this->createQueryBuilder('pp');
+	$queryBuilder->where('pp.planification = :planification')->setParameter('planification', $planification);
+	$queryBuilder->andWhere('pp.id < :planificationPeriodID')->setParameter('planificationPeriodID', $planificationPeriodID);
+	$queryBuilder->orderBy('pp.id', 'DESC');
+	$queryBuilder->setMaxResults(1);
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
+
+	// Retourne la periode de planification suivante
+	public function getNextPlanificationPeriod($planification, $planificationPeriodID)
+    {
+	$queryBuilder = $this->createQueryBuilder('pp');
+	$queryBuilder->where('pp.planification = :planification')->setParameter('planification', $planification);
+	$queryBuilder->andWhere('pp.id > :planificationPeriodID')->setParameter('planificationPeriodID', $planificationPeriodID);
+	$queryBuilder->orderBy('pp.id', 'ASC');
+	$queryBuilder->setMaxResults(1);
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
 }

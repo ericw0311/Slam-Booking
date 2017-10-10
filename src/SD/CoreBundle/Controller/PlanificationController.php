@@ -10,6 +10,7 @@ use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
 use SD\CoreBundle\Entity\PlanificationResource;
 use SD\CoreBundle\Entity\PlanificationLinesNDB;
+use SD\CoreBundle\Entity\PlanificationContext;
 
 use SD\CoreBundle\Form\PlanificationType;
 use SD\CoreBundle\Form\PlanificationLinesNDBType;
@@ -190,15 +191,13 @@ $planificationResource = $planificationResourceRepository->findOneBy(array('plan
     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
     */
-    public function editAction(Planification $planification)
+    public function editAction(Planification $planification, PlanificationPeriod $planificationPeriod)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-
-    $planificationPeriodRepository = $em->getRepository('SDCoreBundle:PlanificationPeriod');
-    $planificationPeriod = $planificationPeriodRepository->findOneBy(array('planification' => $planification), array('id' => 'DESC'));
+    $planificationContext = new PlanificationContext($em, $planification, $planificationPeriod); // contexte planification
 
     $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
     $planificationResources = $planificationResourceRepository->getResources($planificationPeriod);
@@ -214,7 +213,7 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
     return $this->render('SDCoreBundle:Planification:edit.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 		'planificationResources' => $planificationResources, 'resourceIDList' => $resourceIDList,
-		'planificationLines' => $planificationLines));
+		'planificationLines' => $planificationLines, 'planificationContext' => $planificationContext));
     }
 
 

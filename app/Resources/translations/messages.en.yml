@@ -23,6 +23,11 @@ number.lines: Number of lines
 number.lines.columns.updated.ok: Number of lines and columns displayed have been updated
 open: Open
 parameters: Parameters
+period.from: From %beginningDate%
+period.from.to: From %beginningDate% to %endDate%
+period.next: Next period
+period.previous: Previous period
+period.until: Until %endDate%
 sort.after: Sort after
 sort.before: Sort before
 to: To

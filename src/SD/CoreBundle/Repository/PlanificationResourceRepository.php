@@ -33,4 +33,12 @@ class PlanificationResourceRepository extends \Doctrine\ORM\EntityRepository
     $singleScalar = $query->getSingleScalarResult();
     return $singleScalar;
     }
+
+	// Construit le Query Builder d'une ressource planifiee
+	public function getResourcePlanifiedQB()
+    {
+    $queryBuilder = $this->createQueryBuilder('pr');
+    $queryBuilder->where('pr.resource = r.id');
+    return $queryBuilder;
+    }
 }

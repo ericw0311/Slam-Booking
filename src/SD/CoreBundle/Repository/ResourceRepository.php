@@ -34,14 +34,17 @@ class ResourceRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 
-	public function getResourcesToPlanify($file, $type)
+	public function getResourcesToPlanify($file, $type, $resourcePlanifiedQB)
     {
-    $queryBuilder = $this->createQueryBuilder('r');
-    $queryBuilder->where('r.file = :file')->setParameter('file', $file);
-    $queryBuilder->andWhere('r.type = :type')->setParameter('type', $type);
-    $queryBuilder->orderBy('r.name', 'ASC');
+    $qb = $this->createQueryBuilder('r');
+    $qb->where('r.file = :file')->setParameter('file', $file);
+    $qb->andWhere('r.type = :type')->setParameter('type', $type);
+    
+	$qb->andWhere($qb->expr()->not($qb->expr()->exists($resourcePlanifiedQB->getDQL())));
+     
+    $qb->orderBy('r.name', 'ASC');
 
-    $query = $queryBuilder->getQuery();
+    $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
     }

@@ -122,7 +122,7 @@ class PlanificationPeriod
      */
     public function getEndDate()
     {
-		return $this->endDPlanificationPeriodate;
+		return $this->endDate;
     }
 
     /**

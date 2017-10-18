@@ -165,6 +165,8 @@ resourceType.singular.TOOL: Tool
 resourceType.singular.USER: User
 resourceType.singular.VEHICLE: Vehicle
 
+slam-booking.access: Access Slam-Booking
+
 timetable.ask.delete: Do you really want to delete timetable %name% ?
 timetable.back.to.list: Back to timetables list
 timetable.create: Create a timetable

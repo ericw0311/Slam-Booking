@@ -22,7 +22,6 @@ class PlanificationLineRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 
-
 	// Compte les periodes de planification d'une grille horaire
     public function getPlanificationPeriodsCount($timetable)
     {

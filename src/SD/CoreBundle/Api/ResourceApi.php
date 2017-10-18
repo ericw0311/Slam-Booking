@@ -58,7 +58,9 @@ class ResourceApi
     {
 	$resourceIDArray = explode('-', $resourceIDList);
     $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
-    $resourcesToPlanifyDB = $resourceRepository->getResourcesToPlanify($file, $type);
+    $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+
+    $resourcesToPlanifyDB = $resourceRepository->getResourcesToPlanify($file, $type, $planificationResourceRepository->getResourcePlanifiedQB());
                 
 	$resourcesToPlanify = array();
     foreach ($resourcesToPlanifyDB as $resourceDB) {

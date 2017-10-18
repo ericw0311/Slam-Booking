@@ -165,6 +165,8 @@ resourceType.singular.TOOL: Outil
 resourceType.singular.USER: Utilisateur
 resourceType.singular.VEHICLE: Véhicule
 
+slam-booking.access: Accéder à Slam-Booking
+
 timetable.ask.delete: Voulez-vous vraiment supprimer la grille horaire %name% ?
 timetable.back.to.list: Retour à la liste des grilles horaires
 timetable.create: Créer une grille horaire

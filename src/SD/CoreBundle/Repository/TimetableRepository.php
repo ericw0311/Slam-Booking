@@ -25,7 +25,8 @@ class TimetableRepository extends \Doctrine\ORM\EntityRepository
     {
     $queryBuilder = $this->createQueryBuilder('t');
     $queryBuilder->where('t.file = :file')->setParameter('file', $file);
-    $queryBuilder->orderBy('t.name', 'ASC');
+    $queryBuilder->orderBy('t.type', 'ASC');
+    $queryBuilder->addOrderBy('t.name', 'ASC');
     $queryBuilder->setFirstResult($firstRecordIndex);
     $queryBuilder->setMaxResults($maxRecord);
    

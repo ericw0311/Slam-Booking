@@ -4,13 +4,21 @@
 
 {% block title %}{{ parent() }} timetable{% endblock %}
 
+{% set internalTypes = ['D', 'HD'] %}
+
 {% block listRow %}
 <div class="row">
 
 {% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
     <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
 	{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
+
+	{% if listTimetables[i*listContext.numberLinesDisplayed+j].type in internalTypes %}
+	<a href="{{ path('sd_core_timetable_edit', { 'timetableID': listTimetables[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ listTimetables[i*listContext.numberLinesDisplayed+j].name }}</a>
+    {% else %}
 	<a href="{{ path('sd_core_timetable_edit', { 'timetableID': listTimetables[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ listTimetables[i*listContext.numberLinesDisplayed+j].name }}</a>
+    {% endif %}
+
 	{% endfor %}
     </div>
 {% endfor %}

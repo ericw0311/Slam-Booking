@@ -64,4 +64,12 @@
 
 {{ form_end(form) }}
 
+<script>
+(function($) {
+    $(function() {
+        $('input.timepicker').timepicker();
+    });
+})(jQuery);
+</script>
+
 {% endblock %}

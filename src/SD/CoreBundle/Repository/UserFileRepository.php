@@ -25,7 +25,8 @@ class UserFileRepository extends \Doctrine\ORM\EntityRepository
     {
     $queryBuilder = $this->createQueryBuilder('uf');
     $queryBuilder->where('uf.file = :file')->setParameter('file', $file);
-    $queryBuilder->orderBy('uf.email', 'ASC');
+    $queryBuilder->orderBy('uf.firstName', 'ASC');
+    $queryBuilder->addOrderBy('uf.lastName', 'ASC');
     $queryBuilder->setFirstResult($firstRecordIndex);
     $queryBuilder->setMaxResults($maxRecord);
    

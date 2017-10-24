@@ -61,7 +61,7 @@ class ResourceApi
     $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
 
     $resourcesToPlanifyDB = $resourceRepository->getResourcesToPlanify($file, $type, $planificationResourceRepository->getResourcePlanifiedQB());
-                
+
 	$resourcesToPlanify = array();
     foreach ($resourcesToPlanifyDB as $resourceDB) {
 		if (array_search($resourceDB->getId(), $resourceIDArray) === false) {

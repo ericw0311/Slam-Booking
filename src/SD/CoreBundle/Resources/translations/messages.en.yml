@@ -75,6 +75,7 @@ resource.created.ok: The resource has been created
 resource.delete.not.allowed: Resource is referenced. Delete not allowed
 resource.deleted.ok: The resource has been deleted
 resource.name: Resource name
+resource.planified: Planified resource
 resource.planning.background.color: Background color on planning
 resource.planning.foreground.color: Foreground color on planning
 resource.plural: Resources
@@ -170,7 +171,7 @@ slam-booking.access: Access Slam-Booking
 timetable.ask.delete: Do you really want to delete timetable %name% ?
 timetable.back.to.list: Back to timetables list
 timetable.create: Create a timetable
-timetable.created.ok: The timetable has been created
+timetable.created.ok: The timetable has been created. Please enter a first timeslot
 timetable.day: Day
 timetable.delete.not.allowed.1: The timetable Day cannot be deleted
 timetable.delete.not.allowed.2: The timetable Half day cannot be deleted

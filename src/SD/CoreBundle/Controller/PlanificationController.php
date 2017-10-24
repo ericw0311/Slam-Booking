@@ -50,7 +50,12 @@ class PlanificationController extends Controller
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    return $this->render('SDCoreBundle:Planification:type.html.twig', array('userContext' => $userContext));
+    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+    $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+
+    $resourceTypesToPlanify = $resourceRepository->getResourceTypesToPlanify($userContext->getCurrentFile(), $planificationResourceRepository->getResourcePlanifiedQB());
+
+    return $this->render('SDCoreBundle:Planification:type.html.twig', array('userContext' => $userContext, 'resourceTypes' => $resourceTypesToPlanify));
     }
 	
 

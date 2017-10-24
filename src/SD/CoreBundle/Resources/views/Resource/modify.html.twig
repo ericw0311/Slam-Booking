@@ -11,13 +11,16 @@
 
 <div class="panel panel-default">
 
+<div class="panel-heading">
+{% if resource.internal %}
+<img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;<strong>{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</strong>
+{% else %}
+<img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;<strong>{{ resource.classification.name }}</strong>
+{% endif %}
+</div>
+
 <div class="panel-body">
     {{ form_errors(form) }}
-{% if resource.internal %}
-<p><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;<strong>{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</strong></p>
-{% else %}
-<p><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;<strong>{{ resource.classification.name }}</strong></p>
-{% endif %}
     {{ form_row(form.name) }}
     {{ form_row(form.backgroundColor) }}
     {{ form_row(form.foregroundColor) }}

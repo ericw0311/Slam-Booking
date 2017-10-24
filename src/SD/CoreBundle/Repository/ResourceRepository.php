@@ -25,7 +25,10 @@ class ResourceRepository extends \Doctrine\ORM\EntityRepository
     {
     $queryBuilder = $this->createQueryBuilder('r');
     $queryBuilder->where('r.file = :file')->setParameter('file', $file);
-    $queryBuilder->orderBy('r.name', 'ASC');
+    $queryBuilder->orderBy('r.type', 'ASC');
+    $queryBuilder->addOrderBy('r.internal', 'DESC');
+    $queryBuilder->addOrderBy('r.code', 'ASC');
+    $queryBuilder->addOrderBy('r.name', 'ASC');
     $queryBuilder->setFirstResult($firstRecordIndex);
     $queryBuilder->setMaxResults($maxRecord);
    
@@ -49,11 +52,28 @@ class ResourceRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 
+	public function getResourceTypesToPlanify($file, $resourcePlanifiedQB)
+    {
+    $qb = $this->createQueryBuilder('r');
+    $qb->select('r.type');
+    $qb->addSelect($qb->expr()->count('r'));
+    $qb->where('r.file = :file')->setParameter('file', $file);
+    
+	$qb->andWhere($qb->expr()->not($qb->expr()->exists($resourcePlanifiedQB->getDQL())));
+     
+    $qb->groupBy('r.type');
+    $qb->orderBy('r.type', 'ASC');
+
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
     // Retourne le nombre de ressources d'une classification
     public function getResourcesCount_RC($resourceClassification)
     {
     $queryBuilder = $this->createQueryBuilder('r');
-    $queryBuilder->select($queryBuilder->expr()->count('r'));
+    $queryBuilder->select($queryBuilder->expr()->count('r'), count);
     $queryBuilder->where('r.classification = :classification')->setParameter('classification', $resourceClassification);
 
     $query = $queryBuilder->getQuery();

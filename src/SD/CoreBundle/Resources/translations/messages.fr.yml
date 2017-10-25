@@ -21,6 +21,7 @@ file.created.ok: Le dossier a bien été créé
 file.current: En cours
 file.current.updated.ok: Le dossier en cours a été modifié
 file.delete.not.allowed: Seul le créateur d'un dossier est autorisé à le supprimer
+file.delete.not.allowed.2: Le dossier est référencé. Suppression impossible
 file.deleted.ok: Le dossier a bien été supprimé
 file.name: Nom du dossier
 file.plural: Dossiers

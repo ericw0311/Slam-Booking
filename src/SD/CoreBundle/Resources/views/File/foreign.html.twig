@@ -1,0 +1,21 @@
+{# src/SD/CoreBundle/Resources/views/File/foreign.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+
+<div class="panel panel-danger">
+
+	<div class="panel-heading">{{ 'file.delete.not.allowed.2'|trans }}&nbsp;
+<a href="{{ path('sd_core_file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'back'|trans }}</a>
+	</div>
+
+	<div class="panel-body">
+{% for timetable in listUserTimetables %}
+	<a href="{{ path('sd_core_timetable_edit', { 'timetableID': timetable.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ timetable.name }}</a>
+{% endfor %}
+	</div>
+
+</div>
+
+{% endblock %}

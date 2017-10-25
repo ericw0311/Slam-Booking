@@ -6,6 +6,7 @@ namespace SD\CoreBundle\Controller;
 use SD\CoreBundle\Entity\File;
 use SD\CoreBundle\Entity\UserParameter;
 use SD\CoreBundle\Entity\UserContext;
+use SD\CoreBundle\Entity\FileEditContext;
 use SD\CoreBundle\Entity\ListContext;
 use SD\CoreBundle\Entity\Trace;
 use SD\CoreBundle\Form\FileType;
@@ -76,7 +77,9 @@ class FileController extends Controller {
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    return $this->render('SDCoreBundle:File:edit.html.twig', array('userContext' => $userContext, 'file' => $file));
+    $fileEditContext = new FileEditContext($em, $file); // contexte dossier
+
+    return $this->render('SDCoreBundle:File:edit.html.twig', array('userContext' => $userContext, 'file' => $file, 'fileEditContext' => $fileEditContext));
     }
 
 
@@ -131,6 +134,24 @@ class FileController extends Controller {
     return $this->render('SDCoreBundle:File:delete.html.twig', array('userContext' => $userContext, 'file' => $file, 'form' => $form->createView()));
     }
 
+    // Affichage des grilles horaires d'un dossier
+    /**
+    * @ParamConverter("file", options={"mapping": {"fileID": "id"}})
+    */
+    public function foreignAction(File $file, Request $request)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $timetableRepository = $em->getRepository('SDCoreBundle:Timetable');
+
+    $listUserTimetables = $timetableRepository->getUserTimetables($file);
+                
+    return $this->render('SDCoreBundle:File:foreign.html.twig', array(
+                'userContext' => $userContext, 'file' => $file,
+		'listUserTimetables' => $listUserTimetables));
+    }
 
     // Positionnement d'un dossier comme dossier en cours
     /**

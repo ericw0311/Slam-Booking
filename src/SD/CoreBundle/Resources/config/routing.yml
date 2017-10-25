@@ -33,6 +33,12 @@ sd_core_file_delete:
     requirements:
         fileID: \d+
 
+sd_core_file_foreign:
+    path:     /file/foreign/{fileID}
+    defaults: { _controller: SDCoreBundle:File:foreign }
+    requirements:
+        fileID: \d+
+
 sd_core_file_set_current:
     path:     /file/setcurrent/{fileID}
     defaults: { _controller: SDCoreBundle:File:set_current }

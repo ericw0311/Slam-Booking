@@ -4,11 +4,12 @@ namespace SD\CoreBundle\Entity;
 
 class FileContext
 {
-    protected $userFileCount;
-    protected $timetableCount;
-    protected $activityCount;
-    protected $resourceCount;
-    protected $planificationCount;
+    protected $userFileCount = 0;
+    protected $timetableCount = 0;
+    protected $labelCount = 0;
+    protected $activityCount = 0;
+    protected $resourceCount = 0;
+    protected $planificationCount = 0;
 
     public function setUserFileCount($userFileCount)
     {
@@ -30,6 +31,17 @@ class FileContext
     public function getTimetableCount()
     {
     return $this->timetableCount;
+    }
+
+    public function setLabelCount($labelCount)
+    {
+    $this->labelCount = $labelCount;
+    return $this;
+    }
+
+    public function getLabelCount()
+    {
+    return $this->labelCount;
     }
 
     public function setActivityCount($activityCount)
@@ -70,8 +82,8 @@ class FileContext
     $userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
     $this->setUserFileCount($userFileRepository->getUserFilesCount($file));
 
-    $activityRepository = $em->getRepository('SDCoreBundle:Activity');
-    $this->setActivityCount($activityRepository->getActivitiesCount($file));
+    $labelRepository = $em->getRepository('SDCoreBundle:Label');
+    $this->setLabelCount($labelRepository->getLabelsCount($file));
 
     $timetableRepository = $em->getRepository('SDCoreBundle:Timetable');
     $this->setTimetableCount($timetableRepository->getTimetablesCount($file));

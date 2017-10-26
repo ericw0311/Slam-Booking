@@ -1,7 +1,5 @@
 <?php
-
 namespace SD\CoreBundle\Repository;
-
 /**
  * LabelRepository
  *
@@ -10,4 +8,26 @@ namespace SD\CoreBundle\Repository;
  */
 class LabelRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getLabelsCount($file)
+    {
+    $queryBuilder = $this->createQueryBuilder('l');
+    $queryBuilder->select($queryBuilder->expr()->count('l'));
+    $queryBuilder->where('l.file = :file')->setParameter('file', $file);
+    $query = $queryBuilder->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+	
+    public function getDisplayedLabels($file, $firstRecordIndex, $maxRecord)
+    {
+    $queryBuilder = $this->createQueryBuilder('l');
+    $queryBuilder->where('l.file = :file')->setParameter('file', $file);
+    $queryBuilder->orderBy('l.name', 'ASC');
+    $queryBuilder->setFirstResult($firstRecordIndex);
+    $queryBuilder->setMaxResults($maxRecord);
+   
+    $query = $queryBuilder->getQuery();
+    $results = $query->getResult();
+    return $results;
+	}
 }

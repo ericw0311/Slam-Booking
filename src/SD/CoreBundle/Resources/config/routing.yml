@@ -77,6 +77,32 @@ sd_core_userFile_delete:
         userFileID: \d+
 
 
+sd_core_label_list:
+    path:     /label/list/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Label:index }
+
+sd_core_label_add:
+    path:     /label/add
+    defaults: { _controller: SDCoreBundle:Label:add }
+
+sd_core_label_edit:
+    path:     /label/edit/{labelID}
+    defaults: { _controller: SDCoreBundle:Label:edit }
+    requirements:
+        labelID: \d+
+
+sd_core_label_modify:
+    path:     /label/modify/{labelID}
+    defaults: { _controller: SDCoreBundle:Label:modify }
+    requirements:
+        labelID: \d+
+
+sd_core_label_delete:
+    path:     /label/delete/{labelID}
+    defaults: { _controller: SDCoreBundle:Label:delete }
+    requirements:
+        labelID: \d+
+
 sd_core_activity_list:
     path:     /activity/list/{pageNumber}
     defaults: { _controller: SDCoreBundle:Activity:index }

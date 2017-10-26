@@ -30,6 +30,16 @@ file.singular: Dossier
 file.update.not.allowed: Seul le créateur d'un dossier est autorisé à le modifier
 file.updated.ok: Le dossier a bien été modifié
 
+label.ask.delete: Voulez-vous vraiment supprimer l'étiquette %name% ?
+label.back.to.list: Retour à la liste des étiquettes
+label.create: Créer une étiquette
+label.created.ok: L'étiquette a bien été créée
+label.deleted.ok: L'étiquette a bien été supprimée
+label.name: Nom de l'étiquette
+label.plural: Etiquettes
+label.singular: Etiquette
+label.updated.ok: L'étiquette a bien été modifiée
+
 period.type: Période
 period.type.AFTER: Au dela d'une date
 period.type.AFTER.SYSDATE: Au dela de la date du jour

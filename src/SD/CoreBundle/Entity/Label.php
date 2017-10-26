@@ -1,14 +1,14 @@
 <?php
-
 namespace SD\CoreBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Label
  *
- * @ORM\Table(name="label")
+ * @ORM\Table(name="label", uniqueConstraints={@ORM\UniqueConstraint(name="uk_label",columns={"file_id", "name"})})
  * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\LabelRepository")
+ * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields={"file", "name"}, errorPath="name", message="label.already.exists")
  */
 class Label
 {
@@ -28,6 +28,27 @@ class Label
      */
     private $name;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+ 
+    /**
+    * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\File")
+    * @ORM\JoinColumn(nullable=false)
+    */
+    private $file;
+
+    /**
+    * @ORM\Column(name="created_at", type="datetime", nullable=false)
+    */
+    private $createdAt;
+
+    /**
+    * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+    */
+    private $updatedAt;
 
     /**
      * Get id
@@ -38,7 +59,6 @@ class Label
     {
         return $this->id;
     }
-
     /**
      * Set name
      *
@@ -49,10 +69,8 @@ class Label
     public function setName($name)
     {
         $this->name = $name;
-
         return $this;
     }
-
     /**
      * Get name
      *
@@ -62,5 +80,72 @@ class Label
     {
         return $this->name;
     }
-}
 
+    /**
+     * Set user
+     *
+     * @param \SD\UserBundle\Entity\User $user
+     *
+     * @return Label
+     */
+    public function setUser(\SD\UserBundle\Entity\User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \SD\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file)
+    {
+    $this->setUser($user);
+    $this->setFile($file);
+    }
+
+    /**
+    * @ORM\PrePersist
+    */
+    public function createDate()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+    * @ORM\PreUpdate
+    */
+    public function updateDate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * Set file
+     *
+     * @param \SD\CoreBundle\Entity\File $file
+     *
+     * @return Label
+     */
+    public function setFile(\SD\CoreBundle\Entity\File $file)
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * Get file
+     *
+     * @return \SD\CoreBundle\Entity\File
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+}

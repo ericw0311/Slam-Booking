@@ -18,6 +18,17 @@ class LabelRepository extends \Doctrine\ORM\EntityRepository
     return $singleScalar;
     }
 	
+    public function getLabels($file)
+    {
+    $queryBuilder = $this->createQueryBuilder('l');
+    $queryBuilder->where('l.file = :file')->setParameter('file', $file);
+    $queryBuilder->orderBy('l.name', 'ASC');
+   
+    $query = $queryBuilder->getQuery();
+    $results = $query->getResult();
+    return $results;
+	}
+
     public function getDisplayedLabels($file, $firstRecordIndex, $maxRecord)
     {
     $queryBuilder = $this->createQueryBuilder('l');

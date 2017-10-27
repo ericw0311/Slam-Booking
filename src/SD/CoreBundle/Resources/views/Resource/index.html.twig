@@ -1,13 +1,13 @@
 {# src/SD/CoreBundle/Resources/views/Resource/index.html.twig #}
 
+{% set resourceTypeIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
 {% extends "SDCoreBundle::list-layout.html.twig" %}
 
 {% block title %}{{ parent() }} resource{% endblock %}
 
 {% block listRow %}
-
-{% set resourceTypeIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
-{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
 <div class="row">
 

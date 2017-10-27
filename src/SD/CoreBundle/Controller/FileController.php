@@ -145,12 +145,19 @@ class FileController extends Controller {
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $timetableRepository = $em->getRepository('SDCoreBundle:Timetable');
-
     $listUserTimetables = $timetableRepository->getUserTimetables($file);
                 
+    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+    $listResources = $resourceRepository->getResources($file);
+
+    $labelRepository = $em->getRepository('SDCoreBundle:Label');
+    $listLabels = $labelRepository->getLabels($file);
+
     return $this->render('SDCoreBundle:File:foreign.html.twig', array(
-                'userContext' => $userContext, 'file' => $file,
-		'listUserTimetables' => $listUserTimetables));
+		'userContext' => $userContext, 'file' => $file,
+		'listUserTimetables' => $listUserTimetables,
+		'listResources' => $listResources,
+		'listLabels' => $listLabels));
     }
 
     // Positionnement d'un dossier comme dossier en cours

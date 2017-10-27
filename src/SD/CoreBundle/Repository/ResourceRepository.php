@@ -21,6 +21,20 @@ class ResourceRepository extends \Doctrine\ORM\EntityRepository
     return $singleScalar;
     }
 	
+	public function getResources($file)
+    {
+    $queryBuilder = $this->createQueryBuilder('r');
+    $queryBuilder->where('r.file = :file')->setParameter('file', $file);
+    $queryBuilder->orderBy('r.type', 'ASC');
+    $queryBuilder->addOrderBy('r.internal', 'DESC');
+    $queryBuilder->addOrderBy('r.code', 'ASC');
+    $queryBuilder->addOrderBy('r.name', 'ASC');
+   
+    $query = $queryBuilder->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
 	public function getDisplayedResources($file, $firstRecordIndex, $maxRecord)
     {
     $queryBuilder = $this->createQueryBuilder('r');

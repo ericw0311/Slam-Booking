@@ -243,17 +243,35 @@ class UserFileController extends Controller
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 	$resourceType = 'USER';
 
+	// Premiere classifications interne active
+    $resourceClassification = ResourceApi::getFirstActiveInternalResourceClassification($em, $userContext->getCurrentFile(), $resourceType);
+
+	return $this->redirectToRoute('sd_core_userFile_resource_internal', array('userFileID' => $userFile->getID(), 'resourceClassification' => $resourceClassification));
+    }
+
+
+    // Gestion des utilisateurs ressource
+    /**
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+    */
+    public function resource_internalAction(UserFile $userFile, $resourceClassification, Request $request)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	$resourceType = 'USER';
+
 	// Classifications internes actives
     $activeInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
 
     $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
 
 	// Classifications externes
-    $listExternalRC = $RCRepository->getExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
+    $listExternalRC = $RCRepository->getActiveExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
 
-	$request->getSession()->getFlashBag()->add('notice', 'userFile.update.not.allowed.3');
     return $this->render('SDCoreBundle:UserFile:resource.html.twig', 
 		array('userContext' => $userContext, 'userFile' => $userFile, 'resourceType' => $resourceType,
+			'internal' => 1, 'resourceClassification' => $resourceClassification, 
 			'activeInternalRC' => $activeInternalRC, 'listExternalRC' => $listExternalRC));
     }
 }

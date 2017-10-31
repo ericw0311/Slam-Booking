@@ -32,6 +32,30 @@ class ResourceApi
     }
 
 
+	// Retourne la premiere classification de ressources interne active (ou N si non trouvee)
+    static function getFirstActiveInternalResourceClassification($em, \SD\CoreBundle\Entity\File $file, $resourceType)
+    {
+    $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
+
+	$activeInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($file, $resourceType, 1); // Classifications internes actives (lues en BD)
+	$unactiveInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($file, $resourceType, 0); // Classifications internes inactives (lues en BD)
+
+    $defaultActiveRC = Constants::RESOURCE_CLASSIFICATION_ACTIVE[$resourceType]; // Classifications actives par défaut
+
+	// Les classifications actives sont celles qui sont actives par defaut ou actives en base et qui ne sont pas inactives en base
+    $activeInternalRC = array();
+
+    foreach (Constants::RESOURCE_CLASSIFICATION[$resourceType] as $resourceClassification) {
+		if ((in_array($resourceClassification, $defaultActiveRC) || in_array($resourceClassification, $activeInternalRC_DB))
+			&& !in_array($resourceClassification, $unactiveInternalRC_DB))
+		{
+			return $resourceClassification;
+		}
+	}
+	return 'N';
+    }
+
+
 	// Retourne un tableau des ressources sélectionnées
 	// resourceIDList: Liste des ID des ressources sélectionnées
 	static function getSelectedResources($em, $resourceIDList)

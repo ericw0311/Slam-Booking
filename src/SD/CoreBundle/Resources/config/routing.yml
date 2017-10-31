@@ -82,6 +82,18 @@ sd_core_userFile_resource:
     requirements:
         userFileID: \d+
 
+sd_core_userFile_resource_internal:
+    path:     /userfile/resourceint/{userFileID}/{resourceClassification}
+    defaults: { _controller: SDCoreBundle:UserFile:resource_internal }
+    requirements:
+        userFileID: \d+
+
+sd_core_userFile_resource_external:
+    path:     /userfile/resourceext/{userFileID}/{resourceClassificationID}
+    defaults: { _controller: SDCoreBundle:UserFile:resource_external }
+    requirements:
+        userFileID: \d+
+        resourceClassificationID: \d+
 
 sd_core_label_list:
     path:     /label/list/{pageNumber}

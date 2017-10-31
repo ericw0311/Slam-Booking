@@ -18,6 +18,7 @@ delete.not.allowed: Suppression interdite
 end.time: Heure de fin
 from: De
 modify: Modifier
+no: Non
 number.columns: Nombre de colonnes
 number.lines: Nombre de lignes
 number.lines.columns.updated.ok: Les nombres de lignes et de colonnes affichées ont été mis à jour
@@ -36,3 +37,4 @@ update.not.allowed: Modification interdite
 user.account: Compte utilisateur
 validate: Valider
 validate.not.allowed: Validation interdite
+yes: Oui

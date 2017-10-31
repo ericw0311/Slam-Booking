@@ -92,6 +92,7 @@ resource.planning.foreground.color: Couleur du texte sur le planning
 resource.plural: Ressources
 resource.singular: Ressource
 resource.updated.ok: La ressource a bien été modifiée
+resource.user.ask: L'utilisateur %name% est-il une ressource ?
 resource.validate.and.create: Valider et ajouter une ressource
 
 resourceClassification.activated.ok: La classification a bien été activée

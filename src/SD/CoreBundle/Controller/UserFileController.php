@@ -23,6 +23,7 @@ use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\ListContext;
 
 use SD\CoreBundle\Api\AdministrationApi;
+use SD\CoreBundle\Api\ResourceApi;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -228,5 +229,31 @@ class UserFileController extends Controller
         return $this->redirectToRoute('sd_core_userFile_list', array('pageNumber' => 1));
     }
     return $this->render('SDCoreBundle:UserFile:delete.html.twig', array('userContext' => $userContext, 'userFile' => $userFile, 'form' => $form->createView()));
+    }
+
+
+    // Gestion des utilisateurs ressource
+    /**
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+    */
+    public function resourceAction(UserFile $userFile, Request $request)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	$resourceType = 'USER';
+
+	// Classifications internes actives
+    $activeInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
+
+    $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
+
+	// Classifications externes
+    $listExternalRC = $RCRepository->getExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
+
+	$request->getSession()->getFlashBag()->add('notice', 'userFile.update.not.allowed.3');
+    return $this->render('SDCoreBundle:UserFile:resource.html.twig', 
+		array('userContext' => $userContext, 'userFile' => $userFile, 'resourceType' => $resourceType,
+			'activeInternalRC' => $activeInternalRC, 'listExternalRC' => $listExternalRC));
     }
 }

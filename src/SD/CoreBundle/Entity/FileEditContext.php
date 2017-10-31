@@ -43,8 +43,8 @@ class FileEditContext
 
     function __construct($em, \SD\CoreBundle\Entity\File $file)
     {
-    $activityRepository = $em->getRepository('SDCoreBundle:Activity');
-    $this->setLabelsCount($activityRepository->getActivitiesCount($file));
+    $labelRepository = $em->getRepository('SDCoreBundle:Label');
+    $this->setLabelsCount($labelRepository->getLabelsCount($file));
 
     $timetableRepository = $em->getRepository('SDCoreBundle:Timetable');
     $this->setUserTimetablesCount($timetableRepository->getUserTimetablesCount($file));

@@ -16,6 +16,7 @@ use SD\CoreBundle\Entity\Trace;
 use SD\CoreBundle\Entity\Constants;
 use SD\CoreBundle\Entity\ResourceClassification;
 use SD\CoreBundle\Form\ResourceClassificationType;
+use SD\CoreBundle\Api\ResourceApi;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -28,25 +29,13 @@ class ResourceClassificationController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $defaultActiveRC = Constants::RESOURCE_CLASSIFICATION_ACTIVE[$resourceType]; // Classifications actives par défaut
+	// Classifications internes actives
+    $activeInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
 
     $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
 
-    $activeInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($userContext->getCurrentFile(), $resourceType, 1); // Classifications internes actives (lues en BD)
-    $unactiveInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($userContext->getCurrentFile(), $resourceType, 0); // Classifications internes inactives (lues en BD)
-
+	// Classifications externes
     $listExternalRC = $RCRepository->getExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
-                
-	// Les classifications actives sont celles qui sont actives par defaut ou actives en base et qui ne sont pas inactives en base
-    $activeInternalRC = array();
-
-    foreach (Constants::RESOURCE_CLASSIFICATION[$resourceType] as $resourceClassification) {
-		if ((in_array($resourceClassification, $defaultActiveRC) || in_array($resourceClassification, $activeInternalRC_DB))
-			&& !in_array($resourceClassification, $unactiveInternalRC_DB))
-		{
-			array_push($activeInternalRC, $resourceClassification);
-		}
-	}
 
     return $this->render('SDCoreBundle:ResourceClassification:index.html.twig',
 		array('userContext' => $userContext,
@@ -54,6 +43,7 @@ class ResourceClassificationController extends Controller
 			'activeInternalRC' => $activeInternalRC,
 			'listExternalRC' => $listExternalRC));
     }
+
 
 	// Activation d'une classification interne
 	public function activate_internalAction($resourceType, $classificationCode, Request $request)

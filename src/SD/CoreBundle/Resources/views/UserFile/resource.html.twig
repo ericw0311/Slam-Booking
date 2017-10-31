@@ -1,0 +1,67 @@
+{# src/SD/CoreBundle/Resources/views/UserFile/resource.html.twig #}
+
+{% set resourceTypes = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE') %}
+{% set resourceTypeIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set internalResourceClassifications = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION') %}
+{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+
+<div class="panel panel-default">
+
+<div class="panel-heading"><table><tbody><tr>
+
+<td>
+{% if userFile.administrator %}
+<img src="{{ asset('bundles/sdcore/images/administrator-32.png') }}">&nbsp;<strong>{{ userFile.firstName }}&nbsp;{{ userFile.lastName }}</strong>
+{% else %}
+<img src="{{ asset('bundles/sdcore/images/user-32.png') }}">&nbsp;<strong>{{ userFile.firstName }}&nbsp;{{ userFile.lastName }}</strong>
+{% endif %}
+
+</td><td>&nbsp;&nbsp;&nbsp;</td><td>
+
+<div class="btn-group">
+	<a href="{{ path('sd_core_userFile_edit', { 'userFileID': userFile.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+    <button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+</td>
+
+</tr></tbody></table></div>
+
+<div class="panel-body">
+
+<div class="col-sm-4">
+Allez les bleus
+</div>
+
+<div class="col-sm-8">
+
+{% for classificationCode in internalResourceClassifications[resourceType] %}
+{% if classificationCode in activeInternalRC %}
+<a href="{{ path('sd_core_userFile_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[classificationCode] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ classificationCode)|trans }}</a>
+{% endif %}
+{% endfor %}
+
+</div>
+
+</div>
+
+<div class="panel-footer">
+<div class="btn-group">
+<a href="{{ path('sd_core_userFile_edit', { 'userFileID': userFile.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+</div>
+</div>
+
+</div>
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-warning">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}

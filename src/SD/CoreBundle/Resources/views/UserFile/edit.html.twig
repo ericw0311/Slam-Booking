@@ -21,9 +21,8 @@
 <p><span class="glyphicon glyphicon-envelope icon-size32"></span>&nbsp;{{ userFile.email }}</strong></p>
     </div>
 
-  <div class="panel-footer">
-
-  <div class="btn-group">
+    <div class="panel-footer">
+    <div class="btn-group">
 <a href="{{ path('sd_core_userFile_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'userFile.back.to.list'|trans }}</a>
 {% if selectedUserIsFileCreator %}
     <button type="button" class="btn btn-info btn-primary" data-toggle="modal" data-target="#updateModal1"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
@@ -37,10 +36,10 @@
 {% else %}
     <a href="{{ path('sd_core_userFile_delete', { 'userFileID': userFile.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
 {% endif %}
-
-</div>
-
-  </div>
+<a href="{{ path('sd_core_userFile_resource', { 'userFileID': userFile.ID }) }}" class="btn btn-default"><img src="{{ asset('bundles/sdcore/images/resource-16.png') }}"> {{ 'resource.singular'|trans }}</a>
+    </div>
+    
+    </div>
 </div>
 
 {% for flash_message in app.session.flashBag.get('notice') %}

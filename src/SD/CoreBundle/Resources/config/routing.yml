@@ -76,6 +76,12 @@ sd_core_userFile_delete:
     requirements:
         userFileID: \d+
 
+sd_core_userFile_resource:
+    path:     /userfile/resource/{userFileID}
+    defaults: { _controller: SDCoreBundle:UserFile:resource }
+    requirements:
+        userFileID: \d+
+
 
 sd_core_label_list:
     path:     /label/list/{pageNumber}

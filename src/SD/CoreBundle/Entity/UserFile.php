@@ -98,7 +98,19 @@ class UserFile
     * @ORM\JoinColumn(nullable=false)
     */
     private $file;
-    
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="resource_user", type="boolean")
+     */
+    private $resourceUser;
+
+	/**
+	 * @ORM\OneToOne(targetEntity="SD\CoreBundle\Entity\Resource", cascade={"persist"})
+	 */
+	private $resource;
+
     /**
     * @ORM\Column(name="created_at", type="datetime", nullable=false)
     */

@@ -322,6 +322,29 @@ class UserFile
     }
 
     /**
+     * Set resourceUser
+     *
+     * @param boolean $resourceUser
+     *
+     * @return UserFile
+     */
+    public function setResourceUser($resourceUser)
+    {
+        $this->resourceUser = $resourceUser;
+        return $this;
+    }
+
+    /**
+     * Get resourceUser
+     *
+     * @return bool
+     */
+    public function getResourceUser()
+    {
+        return $this->resourceUser;
+    }
+
+    /**
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user

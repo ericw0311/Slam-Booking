@@ -220,6 +220,7 @@ userFile.back.to.list: Retour à la liste des utilisateurs
 userFile.created.ok: L'utilisateur a bien été ajouté au dossier.
 userFile.delete.not.allowed: Le créateur d'un dossier ne peut pas être supprimé du dossier
 userFile.deleted.ok: L'utilisateur a bien été retiré du dossier
+userFile.resource.updated.ok: Les informations "ressource utilisateur" ont bien été modifiées
 userFile.update.not.allowed.1: Le créateur d'un dossier ne peut pas être modifié
 userFile.update.not.allowed.2: Seul le créateur du dossier peut modifier un utilisateur inscrit
 userFile.update.not.allowed.3: Les informations relatives a l'utilisateur peuvent être modifiées depuis son profile uniquement

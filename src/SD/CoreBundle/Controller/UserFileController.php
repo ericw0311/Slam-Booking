@@ -17,6 +17,7 @@ use Doctrine\ORM\Events;
 use Doctrine\Common\EventManager;
 
 use SD\CoreBundle\Entity\UserFile;
+use SD\CoreBundle\Entity\ResourceClassification;
 use SD\UserBundle\Entity\User;
 use SD\CoreBundle\Entity\UserParameter;
 use SD\CoreBundle\Entity\UserContext;
@@ -243,35 +244,122 @@ class UserFileController extends Controller
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 	$resourceType = 'USER';
 
-	// Premiere classifications interne active
-    $resourceClassification = ResourceApi::getFirstActiveInternalResourceClassification($em, $userContext->getCurrentFile(), $resourceType);
+	// Premiere classification interne active (N si non trouvée)
+    $firstInternalResourceClassificationCode = ResourceApi::getFirstActiveInternalResourceClassification($em, $userContext->getCurrentFile(), $resourceType);
 
-	return $this->redirectToRoute('sd_core_userFile_resource_internal', array('userFileID' => $userFile->getID(), 'resourceClassification' => $resourceClassification));
+	// Il existe au moins une classification interne active
+    if ($firstInternalResourceClassificationCode != "N") {
+		return $this->redirectToRoute('sd_core_userFile_resource_internal', array('userFileID' => $userFile->getID(), 'resourceClassificationCode' => $firstInternalResourceClassificationCode, 'yes' => 0));
+	}
+
+    $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
+
+	// Premiere classification externe active
+    $firstExternalResourceClassification = $RCRepository->getFirsrActiveExternalResourceClassification($userContext->getCurrentFile(), $resourceType);
+
+	// Il existe au moins une classification externe active
+	if ($firstExternalResourceClassification !== null) {
+		return $this->redirectToRoute('sd_core_userFile_resource_external', array('userFileID' => $userFile->getID(), 'resourceClassificationID' => $firstExternalResourceClassification->getID(), 'yes' => 0));
+    }
+
+	// Cas ou aucune classification active. Normalement ce cas ne se produit pas (car dans ce cas on ne donne pas accès à la fonctionnalité utilisateur ressource)
+	return $this->redirectToRoute('sd_core_userFile_resource_internal', array('userFileID' => $userFile->getID(), 'resourceClassificationCode' => $firstInternalResourceClassificationCode, 'yes' => 0));
     }
 
 
-    // Gestion des utilisateurs ressource
+    // Gestion des utilisateurs ressource: sélection d'une classification interne
     /**
     * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
     */
-    public function resource_internalAction(UserFile $userFile, $resourceClassification, Request $request)
+    public function resource_internalAction(UserFile $userFile, $resourceClassificationCode, $yes, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 	$resourceType = 'USER';
+	$resourceClassificationID = 0;
 
 	// Classifications internes actives
-    $activeInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
+    $listActiveInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
+
+    $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
+
+	// Classifications externes actives
+    $listExternalRC = $RCRepository->getActiveExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
+
+	$yesOrNo = ($yes > 0) ? 'yes' :'no';
+
+    return $this->render('SDCoreBundle:UserFile:resource.'.$yesOrNo.'.html.twig',
+		array('userContext' => $userContext, 'userFile' => $userFile, 'resourceType' => $resourceType, 'yes' => $yes, 'internal' => 1,
+			'resourceClassificationCode' => $resourceClassificationCode, 'listActiveInternalRC' => $listActiveInternalRC,
+			'resourceClassificationID' => $resourceClassificationID, 'listExternalRC' => $listExternalRC));
+    }
+
+
+    // Gestion des utilisateurs ressource: sélection d'une classification externe
+    /**
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+    * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
+    */
+    public function resource_externalAction(UserFile $userFile, ResourceClassification $resourceClassification, $yes, Request $request)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	$resourceType = 'USER';
+	$resourceClassificationCode = 'N';
+
+	// Classifications internes actives
+    $listActiveInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
 
     $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
 
 	// Classifications externes
     $listExternalRC = $RCRepository->getActiveExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
 
-    return $this->render('SDCoreBundle:UserFile:resource.html.twig', 
-		array('userContext' => $userContext, 'userFile' => $userFile, 'resourceType' => $resourceType,
-			'internal' => 1, 'resourceClassification' => $resourceClassification, 
-			'activeInternalRC' => $activeInternalRC, 'listExternalRC' => $listExternalRC));
+	$yesOrNo = ($yes > 0) ? 'yes' :'no';
+
+    return $this->render('SDCoreBundle:UserFile:resource.'.$yesOrNo.'.html.twig',
+		array('userContext' => $userContext, 'userFile' => $userFile, 'resourceType' => $resourceType, 'yes' => $yes, 'internal' => 0,
+			'resourceClassificationCode' => $resourceClassificationCode, 'listActiveInternalRC' => $listActiveInternalRC,
+			'resourceClassificationID' => $resourceClassification->getID(), 'listExternalRC' => $listExternalRC));
+    }
+
+    // Gestion des utilisateurs ressource: validation d'une classification interne
+    /**
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+    */
+    public function resource_validate_internalAction(UserFile $userFile, $resourceClassificationCode, $yes, Request $request)
+    {
+    $em = $this->getDoctrine()->getManager();
+	if ($yes > 0) {
+		$userFile->setResourceUser(1);
+	} else {
+		$userFile->setResourceUser(0);
+	}
+	$em->persist($userFile);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'userFile.resource.updated.ok');
+	return $this->redirectToRoute('sd_core_userFile_edit', array('userFileID' => $userFile->getID()));
+    }
+
+
+    // Gestion des utilisateurs ressource: validation d'une classification externe
+    /**
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+    * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
+    */
+    public function resource_validate_externalAction(UserFile $userFile, ResourceClassification $resourceClassification, $yes, Request $request)
+    {
+    $em = $this->getDoctrine()->getManager();
+	if ($yes > 0) {
+		$userFile->setResourceUser(1);
+	} else {
+		$userFile->setResourceUser(0);
+	}
+	$em->persist($userFile);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'userFile.resource.updated.ok');
+	return $this->redirectToRoute('sd_core_userFile_edit', array('userFileID' => $userFile->getID()));
     }
 }

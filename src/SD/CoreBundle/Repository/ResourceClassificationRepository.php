@@ -57,4 +57,19 @@ class ResourceClassificationRepository extends \Doctrine\ORM\EntityRepository
     $results = $query->getResult();
     return $results;
     }
+
+	// Retourne la première classification de ressource externe active
+	public function getFirsrActiveExternalResourceClassification($file, $resourceType)
+    {
+    $queryBuilder = $this->createQueryBuilder('rc');
+    $queryBuilder->where('rc.file = :file')->setParameter('file', $file);
+    $queryBuilder->andWhere('rc.type = :type')->setParameter('type', $resourceType);
+    $queryBuilder->andWhere('rc.internal = :internal')->setParameter('internal', 0);
+    $queryBuilder->andWhere('rc.active = :active')->setParameter('active', 1);
+    $queryBuilder->orderBy('rc.name', 'ASC');
+	$queryBuilder->setMaxResults(1);
+    $query = $queryBuilder->getQuery();
+	$results = $query->getOneOrNullResult();
+    return $results;
+    }
 }

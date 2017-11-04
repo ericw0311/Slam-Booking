@@ -83,17 +83,34 @@ sd_core_userFile_resource:
         userFileID: \d+
 
 sd_core_userFile_resource_internal:
-    path:     /userfile/resourceint/{userFileID}/{resourceClassification}
+    path:     /userfile/resourceint/{userFileID}/{resourceClassificationCode}/{yes}
     defaults: { _controller: SDCoreBundle:UserFile:resource_internal }
     requirements:
         userFileID: \d+
+        yes: \d
 
 sd_core_userFile_resource_external:
-    path:     /userfile/resourceext/{userFileID}/{resourceClassificationID}
+    path:     /userfile/resourceext/{userFileID}/{resourceClassificationID}/{yes}
     defaults: { _controller: SDCoreBundle:UserFile:resource_external }
     requirements:
         userFileID: \d+
         resourceClassificationID: \d+
+        yes: \d
+
+sd_core_userFile_resource_validate_internal:
+    path:     /userfile/resourcevalint/{userFileID}/{resourceClassificationCode}/{yes}
+    defaults: { _controller: SDCoreBundle:UserFile:resource_validate_internal }
+    requirements:
+        userFileID: \d+
+        yes: \d
+
+sd_core_userFile_resource_validate_external:
+    path:     /userfile/resourcevalext/{userFileID}/{resourceClassificationID}/{yes}
+    defaults: { _controller: SDCoreBundle:UserFile:resource_validate_external }
+    requirements:
+        userFileID: \d+
+        resourceClassificationID: \d+
+        yes: \d
 
 sd_core_label_list:
     path:     /label/list/{pageNumber}

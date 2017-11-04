@@ -220,6 +220,7 @@ userFile.create: Add a user to file
 userFile.created.ok: The user has been added to file
 userFile.delete.not.allowed: The file creator cannot be removed from file
 userFile.deleted.ok: The user has been removed from file
+userFile.resource.updated.ok: Informations "user resource" have been updated
 userFile.update.not.allowed.1: The file creator cannot be modified
 userFile.update.not.allowed.2: Only the file creator can modify a registered user
 userFile.update.not.allowed.3: Informations related to user can be modified from his profile only

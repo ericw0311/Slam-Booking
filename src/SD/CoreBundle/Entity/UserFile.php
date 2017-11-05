@@ -345,6 +345,29 @@ class UserFile
     }
 
     /**
+     * Set resource
+     *
+     * @param \SD\CoreBundle\Entity\Resource $resource
+     *
+     * @return UserFile
+     */
+    public function setResource(\SD\CoreBundle\Entity\Resource $resource)
+    {
+        $this->resource = $resource;
+        return $this;
+    }
+
+    /**
+     * Get resource
+     *
+     * @return \SD\UserBundle\Entity\Resource
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user

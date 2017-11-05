@@ -18,6 +18,7 @@ use Doctrine\Common\EventManager;
 
 use SD\CoreBundle\Entity\UserFile;
 use SD\CoreBundle\Entity\ResourceClassification;
+use SD\CoreBundle\Entity\Resource;
 use SD\UserBundle\Entity\User;
 use SD\CoreBundle\Entity\UserParameter;
 use SD\CoreBundle\Entity\UserContext;
@@ -331,12 +332,46 @@ class UserFileController extends Controller
     */
     public function resource_validate_internalAction(UserFile $userFile, $resourceClassificationCode, $yes, Request $request)
     {
+	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	$resourceType = 'USER';
+
 	if ($yes > 0) {
 		$userFile->setResourceUser(1);
 	} else {
 		$userFile->setResourceUser(0);
 	}
+	
+	if ($userFile->getResourceUser() > 0) { // Création ou mise à jour de la ressource rattachée à l'utilisateur
+
+		$resourceUpdated = false;
+
+		if ($userFile->getResource() !== null) {
+			$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+			$resource = $resourceRepository->findOneBy(array('id' => $userFile->getResource()));
+			if ($resource !== null) {
+				$resource->setInternal(1);
+				$resource->setCode($resourceClassificationCode);
+				// $resource->setClassification(null);
+				$resourceUpdated = true;
+			}
+		}
+
+		if (!$resourceUpdated) {
+			$resource = new Resource($connectedUser, $userContext->getCurrentFile());
+			$resource->setInternal(1);
+			$resource->setType($resourceType);
+			$resource->setCode($resourceClassificationCode);
+			$resource->setBackgroundColor("#0000ff");
+			$resource->setForegroundColor("#ffffff");
+			$resource->setName($userFile->getFirstAndLastName());
+			$em->persist($resource);
+
+			$userFile->setResource($resource);
+		}
+	}
+
 	$em->persist($userFile);
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'userFile.resource.updated.ok');
@@ -351,12 +386,45 @@ class UserFileController extends Controller
     */
     public function resource_validate_externalAction(UserFile $userFile, ResourceClassification $resourceClassification, $yes, Request $request)
     {
+	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	$resourceType = 'USER';
+
 	if ($yes > 0) {
 		$userFile->setResourceUser(1);
 	} else {
 		$userFile->setResourceUser(0);
 	}
+	
+	if ($userFile->getResourceUser() > 0) { // Création ou mise à jour de la ressource rattachée à l'utilisateur
+
+		$resourceUpdated = false;
+
+		if ($userFile->getResource() !== null) {
+			$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+			$resource = $resourceRepository->findOneBy(array('id' => $userFile->getResource()));
+			if ($resource !== null) {
+				$resource->setInternal(0);
+				$resource->setClassification($resourceClassification);
+				$resourceUpdated = true;
+			}
+		}
+
+		if (!$resourceUpdated) {
+			$resource = new Resource($connectedUser, $userContext->getCurrentFile());
+			$resource->setInternal(0);
+			$resource->setType($resourceType);
+			$resource->setClassification($resourceClassification);
+			$resource->setBackgroundColor("#0000ff");
+			$resource->setForegroundColor("#ffffff");
+			$resource->setName($userFile->getFirstAndLastName());
+			$em->persist($resource);
+
+			$userFile->setResource($resource);
+		}
+	}
+
 	$em->persist($userFile);
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'userFile.resource.updated.ok');

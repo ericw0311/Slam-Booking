@@ -1,5 +1,8 @@
 {# src/SD/CoreBundle/Resources/views/UserFile/edit.html.twig #}
 
+{% set resourceTypeIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
 {% extends "SDCoreBundle::layout.html.twig" %}
 
 {% block body %}
@@ -19,6 +22,13 @@
 <p><span class="glyphicon glyphicon-user icon-size32"></span>&nbsp;{{ userFile.username }}</strong></p>
 {% endif %}
 <p><span class="glyphicon glyphicon-envelope icon-size32"></span>&nbsp;{{ userFile.email }}</strong></p>
+{% if userFile.resourceUser %}
+{% if userFile.resource.internal %}
+<p><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[userFile.resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ userFile.resource.code)|trans }}</p>
+{% else %}
+<p><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons['USER'] ~ '-32.png') }}">&nbsp;{{ userFile.resource.classification.name }}</p>
+{% endif %}
+{% endif %}
     </div>
 
     <div class="panel-footer">
@@ -36,7 +46,18 @@
 {% else %}
     <a href="{{ path('sd_core_userFile_delete', { 'userFileID': userFile.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
 {% endif %}
+
+{% if atLeastOneUserClassification %}
+{% if userFile.resourceUser %}
+{% if userFile.resource.internal %}
+<a href="{{ path('sd_core_userFile_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': userFile.resource.code, 'yes': 1 }) }}" class="btn btn-default"><img src="{{ asset('bundles/sdcore/images/resource-16.png') }}"> {{ 'resource.singular'|trans }}</a>
+{% else %}
+<a href="{{ path('sd_core_userFile_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': userFile.resource.classification.id, 'yes': 1 }) }}" class="btn btn-default"><img src="{{ asset('bundles/sdcore/images/resource-16.png') }}"> {{ 'resource.singular'|trans }}</a>
+{% endif %}
+{% else %}
 <a href="{{ path('sd_core_userFile_resource', { 'userFileID': userFile.ID }) }}" class="btn btn-default"><img src="{{ asset('bundles/sdcore/images/resource-16.png') }}"> {{ 'resource.singular'|trans }}</a>
+{% endif %}
+{% endif %}
     </div>
     
     </div>

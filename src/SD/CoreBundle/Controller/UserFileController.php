@@ -140,10 +140,32 @@ class UserFileController extends Controller
 
     // L'utilisateur selectionne est-il le createur du dossier ?
     $selectedUserIsFileCreator = ($userFile->getUserCreated() and $userFile->getAccount() === $userContext->getCurrentFile()->getUser());
-    
+
+	$atLeastOneUserClassification = false;
+	$resourceType = 'USER';
+
+	// Premiere classification interne active (N si non trouvée)
+    $firstInternalResourceClassificationCode = ResourceApi::getFirstActiveInternalResourceClassification($em, $userContext->getCurrentFile(), $resourceType);
+
+	// Il existe au moins une classification interne active
+    if ($firstInternalResourceClassificationCode != "N") {
+		$atLeastOneUserClassification = true;
+	}
+
+    if (!$atLeastOneUserClassification) {
+		$RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
+		// Premiere classification externe active
+		$firstExternalResourceClassification = $RCRepository->getFirsrActiveExternalResourceClassification($userContext->getCurrentFile(), $resourceType);
+		// Il existe au moins une classification externe active
+		if ($firstExternalResourceClassification !== null) {
+			$atLeastOneUserClassification = true;
+		}
+	}
+
     return $this->render('SDCoreBundle:UserFile:edit.html.twig', array('userContext' => $userContext, 'userFile' => $userFile,
         'connectedUserIsFileCreator' => $connectedUserIsFileCreator,
-        'selectedUserIsFileCreator' => $selectedUserIsFileCreator));
+        'selectedUserIsFileCreator' => $selectedUserIsFileCreator,
+        'atLeastOneUserClassification' => $atLeastOneUserClassification));
     }
 
 
@@ -353,7 +375,7 @@ class UserFileController extends Controller
 			if ($resource !== null) {
 				$resource->setInternal(1);
 				$resource->setCode($resourceClassificationCode);
-				// $resource->setClassification(null);
+				$resource->setClassification(null);
 				$resourceUpdated = true;
 			}
 		}
@@ -407,6 +429,7 @@ class UserFileController extends Controller
 			if ($resource !== null) {
 				$resource->setInternal(0);
 				$resource->setClassification($resourceClassification);
+				$resource->setCode(null);
 				$resourceUpdated = true;
 			}
 		}

@@ -181,7 +181,7 @@ class Resource
      *
      * @return Resource
      */
-    public function setClassification(\SD\CoreBundle\Entity\ResourceClassification $classification)
+    public function setClassification($classification)
     {
         $this->classification = $classification;
         return $this;

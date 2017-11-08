@@ -107,6 +107,7 @@ resourceClassification.name: Resource classification name
 resourceClassification.plural: Resource classifications
 resourceClassification.singular: Resource classification
 resourceClassification.select: Select a resource classification
+resourceClassification.unactivate.not.allowed: Classification is referenced. Unactivate not allowed
 resourceClassification.unactivated.ok: The classification has been unactivated
 resourceClassification.updated.ok: The classification has been updated
 

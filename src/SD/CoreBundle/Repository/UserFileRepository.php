@@ -34,4 +34,20 @@ class UserFileRepository extends \Doctrine\ORM\EntityRepository
     $results = $query->getResult();
     return $results;
     }
+
+	public function getUserFilesFromInternalResourceClassification($file, $classificationCode)
+    {
+    $qb = $this->createQueryBuilder('uf');
+    $qb->where('uf.file = :file')->setParameter('file', $file);
+    $qb->andWhere('uf.resourceUser = :resourceUser')->setParameter('resourceUser', 1);
+	$qb->innerJoin('uf.resource', 'r', Expr\Join::WITH, $qb->expr()->andX($qb->expr()->eq('r.internal', '?1'), $qb->expr()->eq('r.code', '?2')));
+    $qb->orderBy('uf.firstName', 'ASC');
+    $qb->addOrderBy('uf.lastName', 'ASC');
+    $qb->setParameter(1, 1); 
+    $qb->setParameter(2, $classificationCode); 
+
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
 }

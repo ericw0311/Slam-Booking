@@ -83,26 +83,62 @@ class ResourceRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 
-    // Retourne le nombre de ressources d'une classification
-    public function getResourcesCount_RC($resourceClassification)
+    // Retourne le nombre de ressources d'une classification interne
+    public function getResourcesCount_IRC($file, $resourceType, $resourceClassificationCode)
     {
-    $queryBuilder = $this->createQueryBuilder('r');
-    $queryBuilder->select($queryBuilder->expr()->count('r'), count);
-    $queryBuilder->where('r.classification = :classification')->setParameter('classification', $resourceClassification);
+    $qb = $this->createQueryBuilder('r');
+    $qb->select($qb->expr()->count('r'));
+    $qb->where('r.file = :file')->setParameter('file', $file);
+    $qb->andWhere('r.type = :type')->setParameter('type', $resourceType);
+    $qb->andWhere('r.internal = :internal')->setParameter('internal', 1);
+    $qb->andWhere('r.code = :code')->setParameter('code', $resourceClassificationCode);
 
-    $query = $queryBuilder->getQuery();
+    $query = $qb->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+
+    // Retourne les ressources d'une classification interne
+    public function getResources_IRC($file, $resourceType, $resourceClassificationCode)
+    {
+	$qb = $this->createQueryBuilder('r');
+    $qb->where('r.file = :file')->setParameter('file', $file);
+    $qb->andWhere('r.type = :type')->setParameter('type', $resourceType);
+    $qb->andWhere('r.internal = :internal')->setParameter('internal', 1);
+    $qb->andWhere('r.code = :code')->setParameter('code', $resourceClassificationCode);
+	$qb->orderBy('r.name', 'ASC');
+
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
+    }
+
+    // Retourne le nombre de ressources d'une classification externe
+    public function getResourcesCount_ERC($file, $resourceType, $resourceClassification)
+    {
+    $qb = $this->createQueryBuilder('r');
+    $qb->select($qb->expr()->count('r'));
+    $qb->where('r.file = :file')->setParameter('file', $file);
+    $qb->andWhere('r.type = :type')->setParameter('type', $resourceType);
+    $qb->andWhere('r.internal = :internal')->setParameter('internal', 0);
+    $qb->andWhere('r.classification = :classification')->setParameter('classification', $resourceClassification);
+
+    $query = $qb->getQuery();
     $singleScalar = $query->getSingleScalarResult();
     return $singleScalar;
     }
 
     // Retourne les ressources d'une classification
-    public function getResources_RC($resourceClassification)
+    public function getResources_ERC($file, $resourceType, $resourceClassification)
     {
-	$queryBuilder = $this->createQueryBuilder('r');
-    $queryBuilder->where('r.classification = :classification')->setParameter('classification', $resourceClassification);
-	$queryBuilder->orderBy('r.name', 'ASC');
+	$qb = $this->createQueryBuilder('r');
+    $qb->where('r.file = :file')->setParameter('file', $file);
+    $qb->andWhere('r.type = :type')->setParameter('type', $resourceType);
+    $qb->andWhere('r.internal = :internal')->setParameter('internal', 0);
+    $qb->andWhere('r.classification = :classification')->setParameter('classification', $resourceClassification);
+	$qb->orderBy('r.name', 'ASC');
 
-	$query = $queryBuilder->getQuery();
+	$query = $qb->getQuery();
 	$results = $query->getResult();
 	return $results;
     }

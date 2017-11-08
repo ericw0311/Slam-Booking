@@ -1,0 +1,23 @@
+{# src/SD/CoreBundle/Resources/views/ResourceClassification/foreign.internal.html.twig #}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+
+{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+<div class="panel panel-danger">
+
+	<div class="panel-heading">{{ 'resourceClassification.delete.not.allowed'|trans }}&nbsp;
+<a href="{{ path('sd_core_resourceclassification_display', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'back'|trans }}</a>
+	</div>
+
+	<div class="panel-body">
+{% for resource in listResources %}
+	<a href="{{ path('sd_core_resource_edit', { 'resourceID': resource.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</a>
+{% endfor %}
+	</div>
+
+</div>
+
+{% endblock %}

@@ -33,19 +33,23 @@
 	<tbody>
 {% for classificationCode in internalResourceClassifications[resourceType] %}
 	<tr>
-	<td><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[classificationCode] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.plural.' ~ classificationCode)|trans }}</td>
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[classificationCode] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.plural.' ~ classificationCode)|trans }}&nbsp;({{ numberResourcesInternalRC[classificationCode] }})</td>
 {% if classificationCode in activeInternalRC %}
 	<td><img src="{{ asset('bundles/sdcore/images/green-check-32.png') }}"></td>
 
 {% if listExternalRC|length > 0 %}<td colspan=3>{% else %}<td>{% endif %}
-	<a href="{{ path('sd_core_resourceclassification_unactivateinternal', { 'resourceType': resourceType, 'classificationCode': classificationCode }) }}" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i> {{ 'unactivate'|trans }}</a>
+{% if numberResourcesInternalRC[classificationCode] <= 0 %}
+	<a href="{{ path('sd_core_resourceclassification_unactivate_internal', { 'resourceType': resourceType, 'resourceClassificationCode': classificationCode }) }}" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i>&nbsp;{{ 'unactivate'|trans }}</a>
+{% else %}
+	<a href="{{ path('sd_core_resourceclassification_foreign_internal', { 'resourceType': resourceType, 'resourceClassificationCode': classificationCode }) }}" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i>&nbsp;<del>{{ 'unactivate'|trans }}</del></a>
+{% endif %}
 	</td>
 
 {% else %}
 	<td><img src="{{ asset('bundles/sdcore/images/red-cross-32.png') }}"></td>
 
 {% if listExternalRC|length > 0 %}<td colspan=3>{% else %}<td>{% endif %}
-	<a href="{{ path('sd_core_resourceclassification_activateinternal', { 'resourceType': resourceType, 'classificationCode': classificationCode }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'activate'|trans }}</a>
+	<a href="{{ path('sd_core_resourceclassification_activate_internal', { 'resourceType': resourceType, 'resourceClassificationCode': classificationCode }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'activate'|trans }}</a>
 	</td>
 
 {% endif %}
@@ -54,16 +58,28 @@
 
 {% for externalRC in listExternalRC %}
 	<tr>
-	<td><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[resourceType] ~ '-32.png') }}">&nbsp;{{ externalRC.name }}</td>
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[resourceType] ~ '-32.png') }}">&nbsp;{{ externalRC.name }}&nbsp;({{ numberResourcesExternalRC[externalRC.ID] }})</td>
 {% if externalRC.active %}
 	<td><img src="{{ asset('bundles/sdcore/images/green-check-32.png') }}"></td>
-	<td><a href="{{ path('sd_core_resourceclassification_unactivateexternal', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id }) }}" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i> {{ 'unactivate'|trans }}</a></td>
+	<td>
+{% if numberResourcesExternalRC[externalRC.ID] <= 0 %}
+	<a href="{{ path('sd_core_resourceclassification_unactivate_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id }) }}" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i>&nbsp;{{ 'unactivate'|trans }}</a>
+{% else %}
+	<a href="{{ path('sd_core_resourceclassification_foreign_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id, 'action': 'unactivate' }) }}" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i>&nbsp;<del>{{ 'unactivate'|trans }}</del></a>
+{% endif %}
+	</td>
 {% else %}
 	<td><img src="{{ asset('bundles/sdcore/images/red-cross-32.png') }}"></td>
-	<td><a href="{{ path('sd_core_resourceclassification_activateexternal', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'activate'|trans }}</a></td>
+	<td><a href="{{ path('sd_core_resourceclassification_activate_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'activate'|trans }}</a></td>
 {% endif %}
 	<td><a href="{{ path('sd_core_resourceclassification_modify', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}"><i class="glyphicon glyphicon-pencil"></i></a></td>
-	<td><a href="{{ path('sd_core_resourceclassification_delete', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}"><i class="glyphicon glyphicon-trash"></i></a></td>
+	<td>
+{% if numberResourcesExternalRC[externalRC.ID] <= 0 %}
+	<a href="{{ path('sd_core_resourceclassification_delete', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}"><i class="glyphicon glyphicon-trash"></i></a>
+{% else %}
+	<a href="{{ path('sd_core_resourceclassification_foreign_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id, 'action': 'delete' }) }}"><i class="glyphicon glyphicon-trash"></i></a>
+{% endif %}
+	</td>
 	</tr>
 {% endfor %}
 

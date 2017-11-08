@@ -136,7 +136,11 @@ class UserFile
      *
      * @param string $email
      *
-     * @return UserFile
+     * @return UserFile$queryBuilder
+    ->select('u.id', 'u.name', 'p.number')
+    ->from('users', 'u')
+    ->innerJoin('u', 'phonenumbers', 'p', 'u.id = p.user_id')
+
      */
     public function setEmail($email)
     {

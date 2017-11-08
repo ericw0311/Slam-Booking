@@ -35,9 +35,11 @@ class FileEvent
     $userFile->setLastName($user->getLastName());
     $userFile->setFirstName($user->getFirstName());
     $userFile->setUniqueName($user->getUniqueName());
-    $userFile->setAdministrator(true); // Le createur du dossier est administrateur.
-    $userFile->setUserCreated(true);
+    $userFile->setAdministrator(1); // Le createur du dossier est administrateur.
+    $userFile->setUserCreated(1);
     $userFile->setUsername($user->getUsername());
+    $userFile->setResourceUser(0);
+    
     $em->persist($userFile);
     $em->flush();
     }

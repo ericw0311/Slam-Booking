@@ -228,19 +228,19 @@ sd_core_resourceclassification_display:
     path:     /resourceclassification/display/{resourceType}
     defaults: { _controller: SDCoreBundle:ResourceClassification:index }
 
-sd_core_resourceclassification_activateinternal:
-    path:     /resourceclassification/activateinternal/{resourceType}/{classificationCode}
+sd_core_resourceclassification_activate_internal:
+    path:     /resourceclassification/activateinternal/{resourceType}/{resourceClassificationCode}
     defaults: { _controller: SDCoreBundle:ResourceClassification:activate_internal }
 
-sd_core_resourceclassification_unactivateinternal:
-    path:     /resourceclassification/unactivateinternal/{resourceType}/{classificationCode}
+sd_core_resourceclassification_unactivate_internal:
+    path:     /resourceclassification/unactivateinternal/{resourceType}/{resourceClassificationCode}
     defaults: { _controller: SDCoreBundle:ResourceClassification:unactivate_internal }
 
-sd_core_resourceclassification_activateexternal:
+sd_core_resourceclassification_activate_external:
     path:     /resourceclassification/activateexternal/{resourceType}/{resourceClassificationID}
     defaults: { _controller: SDCoreBundle:ResourceClassification:activate_external }
 
-sd_core_resourceclassification_unactivateexternal:
+sd_core_resourceclassification_unactivate_external:
     path:     /resourceclassification/unactivateexternal/{resourceType}/{resourceClassificationID}
     defaults: { _controller: SDCoreBundle:ResourceClassification:unactivate_external }
 
@@ -260,9 +260,13 @@ sd_core_resourceclassification_delete:
     requirements:
         resourceClassificationID: \d+
 
-sd_core_resourceclassification_foreign:
-    path:     /resourceclassification/foreign/{resourceType}/{resourceClassificationID}
-    defaults: { _controller: SDCoreBundle:ResourceClassification:foreign }
+sd_core_resourceclassification_foreign_internal:
+    path:     /resourceclassification/foreignint/{resourceType}/{resourceClassificationCode}
+    defaults: { _controller: SDCoreBundle:ResourceClassification:foreign_internal }
+
+sd_core_resourceclassification_foreign_external:
+    path:     /resourceclassification/foreignext/{resourceType}/{resourceClassificationID}/{action}
+    defaults: { _controller: SDCoreBundle:ResourceClassification:foreign_external }
     requirements:
         resourceClassificationID: \d+
 

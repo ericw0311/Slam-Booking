@@ -32,16 +32,24 @@ class ResourceClassificationController extends Controller
 	// Classifications internes actives
     $activeInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
 
+	// Nombre de ressources par classification interne
+	$numberResourcesInternalRC =  ResourceApi::getInternalClassificationNumberResources($em, $userContext->getCurrentFile(), $resourceType);
+
     $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
 
 	// Classifications externes
     $listExternalRC = $RCRepository->getExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
 
+	// Nombre de ressources par classification externe
+	$numberResourcesExternalRC =  ResourceApi::getExternalClassificationNumberResources($em, $userContext->getCurrentFile(), $resourceType, $listExternalRC);
+
     return $this->render('SDCoreBundle:ResourceClassification:index.html.twig',
 		array('userContext' => $userContext,
 			'resourceType' => $resourceType,
 			'activeInternalRC' => $activeInternalRC,
-			'listExternalRC' => $listExternalRC));
+			'numberResourcesInternalRC' => $numberResourcesInternalRC,
+			'listExternalRC' => $listExternalRC,
+			'numberResourcesExternalRC' => $numberResourcesExternalRC));
     }
 
 
@@ -214,23 +222,13 @@ class ResourceClassificationController extends Controller
 		return $this->redirectToRoute('sd_core_resourceclassification_display', array('resourceType' => $resourceType));
     }
 
-    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
-
-    if ($resourceRepository->getResourcesCount_RC($resourceClassification) > 0) {
-		return $this->redirectToRoute('sd_core_resourceclassification_foreign',
-			array('resourceType' => $resourceType, 'resourceClassificationID' => $resourceClassification->getId()));
-	}
-
     return $this->render('SDCoreBundle:ResourceClassification:delete.html.twig',
 		array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification, 'form' => $form->createView()));
     }
 
 
-    // Affichage des ressources d'une classification
-    /**
-    * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
-    */
-    public function foreignAction($resourceType, ResourceClassification $resourceClassification)
+    // Affichage des ressources d'une classification interne
+    public function foreign_internalAction($resourceType, $resourceClassificationCode)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -238,10 +236,29 @@ class ResourceClassificationController extends Controller
 
     $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
 
-    $listResources = $resourceRepository->getResources_RC($resourceClassification);
+    $listResources = $resourceRepository->getResources_IRC($userContext->getCurrentFile(), $resourceType, $resourceClassificationCode);
+                
+    return $this->render('SDCoreBundle:ResourceClassification:foreign.internal.html.twig',
+		array('userContext' => $userContext, 'resourceType' => $resourceType, 'listResources' => $listResources));
+    }
+
+
+    // Affichage des ressources d'une classification externe
+    /**
+    * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
+    */
+    public function foreign_externalAction($resourceType, ResourceClassification $resourceClassification, $action)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+
+    $listResources = $resourceRepository->getResources_ERC($userContext->getCurrentFile(), $resourceType, $resourceClassification);
                 
     return $this->render('SDCoreBundle:ResourceClassification:foreign.html.twig', array(
-                'userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification,
+		'userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification, 'action' => $action,
 		'listResources' => $listResources));
     }
 }

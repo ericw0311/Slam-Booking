@@ -8,6 +8,34 @@ use SD\CoreBundle\Entity\Constants;
 
 class ResourceApi
 {
+	// Retourne un tableau du nombre de ressources par classification interne
+    static function getInternalClassificationNumberResources($em, \SD\CoreBundle\Entity\File $file, $resourceType)
+    {
+	$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+
+    $numberResources = array();
+
+    foreach (Constants::RESOURCE_CLASSIFICATION[$resourceType] as $rcCode) {
+		$numberResources[$rcCode] = $resourceRepository->getResourcesCount_IRC($file, $resourceType, $rcCode);
+	}
+
+	return $numberResources;
+    }
+
+	// Retourne un tableau du nombre de ressources par classification externe
+    static function getExternalClassificationNumberResources($em, \SD\CoreBundle\Entity\File $file, $resourceType, $listExternalRC)
+    {
+	$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+
+    $numberResources = array();
+
+    foreach ($listExternalRC as $i_ERC) {
+		$numberResources[$i_ERC->getID()] = $resourceRepository->getResourcesCount_ERC($file, $resourceType, $i_ERC);
+	}
+
+	return $numberResources;
+    }
+
 	// Retourne un tableau des classifications de ressources internes actives
     static function getActiveInternalResourceClassifications($em, \SD\CoreBundle\Entity\File $file, $resourceType)
     {

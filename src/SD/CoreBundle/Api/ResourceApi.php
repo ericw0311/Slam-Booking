@@ -12,11 +12,16 @@ class ResourceApi
     static function getInternalClassificationNumberResources($em, \SD\CoreBundle\Entity\File $file, $resourceType)
     {
 	$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
 
     $numberResources = array();
 
     foreach (Constants::RESOURCE_CLASSIFICATION[$resourceType] as $rcCode) {
-		$numberResources[$rcCode] = $resourceRepository->getResourcesCount_IRC($file, $resourceType, $rcCode);
+		if ($resourceType == 'USER') {
+			$numberResources[$rcCode] = $userFileRepository->getUserFilesCountFrom_IRC($file, $rcCode);
+		} else {
+			$numberResources[$rcCode] = $resourceRepository->getResourcesCount_IRC($file, $resourceType, $rcCode);
+		}
 	}
 
 	return $numberResources;
@@ -26,11 +31,16 @@ class ResourceApi
     static function getExternalClassificationNumberResources($em, \SD\CoreBundle\Entity\File $file, $resourceType, $listExternalRC)
     {
 	$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
 
     $numberResources = array();
 
     foreach ($listExternalRC as $i_ERC) {
-		$numberResources[$i_ERC->getID()] = $resourceRepository->getResourcesCount_ERC($file, $resourceType, $i_ERC);
+		if ($resourceType == 'USER') {
+			$numberResources[$i_ERC->getID()] = $userFileRepository->getUserFilesCountFrom_ERC($file, $i_ERC);
+		} else {
+			$numberResources[$i_ERC->getID()] = $resourceRepository->getResourcesCount_ERC($file, $resourceType, $i_ERC);
+		}
 	}
 
 	return $numberResources;

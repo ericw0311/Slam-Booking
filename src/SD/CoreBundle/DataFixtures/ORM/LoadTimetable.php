@@ -100,6 +100,6 @@ $timetable = new Timetable($this->getReference('user-1'), $this->getReference('f
 
     public function getOrder()
     {
-    return 6;
+    return 5;
     }
 }

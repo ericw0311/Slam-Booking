@@ -43,6 +43,6 @@ $label = new Label($this->getReference('user-1'), $this->getReference('file-757'
     }
     public function getOrder()
     {
-    return 5;
+    return 4;
     }
 }

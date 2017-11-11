@@ -70,6 +70,13 @@ class UserFile
     /**
      * @var bool
      *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active = true;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="user_created", type="boolean")
      */
     private $userCreated;
@@ -104,10 +111,10 @@ class UserFile
      *
      * @ORM\Column(name="resource_user", type="boolean")
      */
-    private $resourceUser;
+    private $resourceUser = false;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="SD\CoreBundle\Entity\Resource", cascade={"persist"})
+	 * @ORM\OneToOne(targetEntity="SD\CoreBundle\Entity\Resource", cascade={"persist", "remove"})
 	 */
 	private $resource;
 
@@ -279,6 +286,29 @@ class UserFile
     }
 
     /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return UserFile
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
      * Set userCreated
      *
      * @param boolean $userCreated
@@ -355,7 +385,7 @@ class UserFile
      *
      * @return UserFile
      */
-    public function setResource(\SD\CoreBundle\Entity\Resource $resource)
+    public function setResource(\SD\CoreBundle\Entity\Resource $resource = null)
     {
         $this->resource = $resource;
         return $this;

@@ -348,11 +348,12 @@ class UserFileController extends Controller
 			'resourceClassificationID' => $resourceClassification->getID(), 'listExternalRC' => $listExternalRC));
     }
 
+
     // Gestion des utilisateurs ressource: validation d'une classification interne
     /**
     * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
     */
-    public function resource_validate_internalAction(UserFile $userFile, $resourceClassificationCode, $yes, Request $request)
+    public function resource_validate_internalAction_sav(UserFile $userFile, $resourceClassificationCode, $yes, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -401,6 +402,65 @@ class UserFileController extends Controller
     }
 
 
+    // Gestion des utilisateurs ressource: validation d'une classification interne
+    /**
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+    */
+    public function resource_validate_internalAction(UserFile $userFile, $resourceClassificationCode, $yes, Request $request)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	$resourceType = 'USER';
+
+	$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+	$resourceFound = false;
+
+	if ($userFile->getResource() !== null) {
+		$resource = $resourceRepository->findOneBy(array('id' => $userFile->getResource()));
+		if ($resource !== null) {
+			$resourceFound = true;
+		}
+	}
+
+	if ($yes > 0) {
+		$userFile->setResourceUser(1);
+	} else {
+		$userFile->setResourceUser(0);
+		$userFile->setResource(null);
+	}
+	
+	if ($userFile->getResourceUser() > 0) { // Création ou mise à jour de la ressource rattachée à l'utilisateur
+
+		if ($resourceFound) {
+			$resource->setInternal(1);
+			$resource->setCode($resourceClassificationCode);
+			$resource->setClassification(null);
+
+		} else {
+			$resource = new Resource($connectedUser, $userContext->getCurrentFile());
+			$resource->setInternal(1);
+			$resource->setType($resourceType);
+			$resource->setCode($resourceClassificationCode);
+			$resource->setBackgroundColor("#0000ff");
+			$resource->setForegroundColor("#ffffff");
+			$resource->setName($userFile->getFirstAndLastName());
+			$em->persist($resource);
+			$userFile->setResource($resource);
+		}
+	} else {
+		if ($resourceFound) {
+			$em->remove($resource);
+		}
+	}
+
+	$em->persist($userFile);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'userFile.resource.updated.ok');
+	return $this->redirectToRoute('sd_core_userFile_edit', array('userFileID' => $userFile->getID()));
+    }
+
+
     // Gestion des utilisateurs ressource: validation d'une classification externe
     /**
     * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
@@ -413,28 +473,31 @@ class UserFileController extends Controller
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 	$resourceType = 'USER';
 
+	$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+	$resourceFound = false;
+
+	if ($userFile->getResource() !== null) {
+		$resource = $resourceRepository->findOneBy(array('id' => $userFile->getResource()));
+		if ($resource !== null) {
+			$resourceFound = true;
+		}
+	}
+
 	if ($yes > 0) {
 		$userFile->setResourceUser(1);
 	} else {
 		$userFile->setResourceUser(0);
+		$userFile->setResource(null);
 	}
 	
 	if ($userFile->getResourceUser() > 0) { // Création ou mise à jour de la ressource rattachée à l'utilisateur
 
-		$resourceUpdated = false;
+		if ($resourceFound) {
+			$resource->setInternal(0);
+			$resource->setClassification($resourceClassification);
+			$resource->setCode(null);
 
-		if ($userFile->getResource() !== null) {
-			$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
-			$resource = $resourceRepository->findOneBy(array('id' => $userFile->getResource()));
-			if ($resource !== null) {
-				$resource->setInternal(0);
-				$resource->setClassification($resourceClassification);
-				$resource->setCode(null);
-				$resourceUpdated = true;
-			}
-		}
-
-		if (!$resourceUpdated) {
+		} else {
 			$resource = new Resource($connectedUser, $userContext->getCurrentFile());
 			$resource->setInternal(0);
 			$resource->setType($resourceType);
@@ -443,8 +506,11 @@ class UserFileController extends Controller
 			$resource->setForegroundColor("#ffffff");
 			$resource->setName($userFile->getFirstAndLastName());
 			$em->persist($resource);
-
 			$userFile->setResource($resource);
+		}
+	} else { // Suppression de la ressource rattachée à l'utilisateur
+		if ($resourceFound) {
+			$em->remove($resource);
 		}
 	}
 

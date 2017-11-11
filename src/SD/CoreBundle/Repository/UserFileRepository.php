@@ -2,6 +2,8 @@
 
 namespace SD\CoreBundle\Repository;
 
+use Doctrine\ORM\Query\Expr;
+
 /**
  * UserFileRepository
  *
@@ -35,17 +37,77 @@ class UserFileRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 
-	public function getUserFilesFromInternalResourceClassification($file, $classificationCode)
+	// Retourne le nombre d'utilisateurs ressources d'une classification interne
+	public function getUserFilesCountFrom_IRC($file, $resourceClassificationCode)
     {
+    $resourceType = 'USER';
+
     $qb = $this->createQueryBuilder('uf');
+    $qb->select($qb->expr()->count('uf'));
     $qb->where('uf.file = :file')->setParameter('file', $file);
     $qb->andWhere('uf.resourceUser = :resourceUser')->setParameter('resourceUser', 1);
-	$qb->innerJoin('uf.resource', 'r', Expr\Join::WITH, $qb->expr()->andX($qb->expr()->eq('r.internal', '?1'), $qb->expr()->eq('r.code', '?2')));
+	$qb->innerJoin('uf.resource', 'r', Expr\Join::WITH, $qb->expr()->andX($qb->expr()->eq('r.internal', '?1'), $qb->expr()->eq('r.type', '?2'), $qb->expr()->eq('r.code', '?3')));
+    $qb->setParameter(1, 1);
+    $qb->setParameter(2, $resourceType);
+    $qb->setParameter(3, $resourceClassificationCode);
+
+    $query = $qb->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+
+	// Retourne les utilisateurs ressources d'une classification interne
+	public function getUserFilesFrom_IRC($file, $resourceClassificationCode)
+    {
+    $resourceType = 'USER';
+
+	$qb = $this->createQueryBuilder('uf');
+    $qb->where('uf.file = :file')->setParameter('file', $file);
+    $qb->andWhere('uf.resourceUser = :resourceUser')->setParameter('resourceUser', 1);
+	$qb->innerJoin('uf.resource', 'r', Expr\Join::WITH, $qb->expr()->andX($qb->expr()->eq('r.internal', '?1'), $qb->expr()->eq('r.type', '?2'), $qb->expr()->eq('r.code', '?3')));
     $qb->orderBy('uf.firstName', 'ASC');
     $qb->addOrderBy('uf.lastName', 'ASC');
-    $qb->setParameter(1, 1); 
-    $qb->setParameter(2, $classificationCode); 
+    $qb->setParameter(1, 1);
+    $qb->setParameter(2, $resourceType);
+    $qb->setParameter(3, $resourceClassificationCode);
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
 
+	// Retourne le nombre d'utilisateurs ressources d'une classification externe
+	public function getUserFilesCountFrom_ERC($file, $resourceClassification)
+    {
+    $resourceType = 'USER';
+
+    $qb = $this->createQueryBuilder('uf');
+    $qb->select($qb->expr()->count('uf'));
+	$qb->where('uf.file = :file')->setParameter('file', $file);
+    $qb->andWhere('uf.resourceUser = :resourceUser')->setParameter('resourceUser', 1);
+	$qb->innerJoin('uf.resource', 'r', Expr\Join::WITH, $qb->expr()->andX($qb->expr()->eq('r.internal', '?1'), $qb->expr()->eq('r.type', '?2'), $qb->expr()->eq('r.classification', '?3')));
+    $qb->setParameter(1, 0);
+    $qb->setParameter(2, $resourceType);
+    $qb->setParameter(3, $resourceClassification);
+
+    $query = $qb->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+
+    // Retourne les utilisateurs ressources d'une classification externe
+    public function getUserFilesFrom_ERC($file, $resourceClassification)
+    {
+    $resourceType = 'USER';
+
+	$qb = $this->createQueryBuilder('uf');
+	$qb->where('uf.file = :file')->setParameter('file', $file);
+    $qb->andWhere('uf.resourceUser = :resourceUser')->setParameter('resourceUser', 1);
+	$qb->innerJoin('uf.resource', 'r', Expr\Join::WITH, $qb->expr()->andX($qb->expr()->eq('r.internal', '?1'), $qb->expr()->eq('r.type', '?2'), $qb->expr()->eq('r.classification', '?3')));
+    $qb->orderBy('uf.firstName', 'ASC');
+    $qb->addOrderBy('uf.lastName', 'ASC');
+    $qb->setParameter(1, 0);
+    $qb->setParameter(2, $resourceType);
+    $qb->setParameter(3, $resourceClassification);
     $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;

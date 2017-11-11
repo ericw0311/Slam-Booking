@@ -181,6 +181,6 @@ $resource = new Resource($this->getReference('user-1'), $this->getReference('fil
 
     public function getOrder()
     {
-    return 9;
+    return 8;
     }
 }

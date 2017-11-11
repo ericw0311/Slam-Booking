@@ -613,6 +613,6 @@ $timetableLine = new TimetableLine($this->getReference('user-1'), $this->getRefe
 
     public function getOrder()
     {
-    return 7;
+    return 6;
     }
 }

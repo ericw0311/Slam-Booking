@@ -671,7 +671,7 @@ $this->loadCurrentFile($manager, $this->getReference('user-1897'), $this->getRef
 
     public function getOrder()
     {
-    return 4;
+    return 3;
     }
 
     protected function loadCurrentFile(ObjectManager $manager, \SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file)

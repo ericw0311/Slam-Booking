@@ -46,6 +46,6 @@ $resourceClassification = new ResourceClassification($this->getReference('user-1
 
     public function getOrder()
     {
-    return 8;
+    return 7;
     }
 }

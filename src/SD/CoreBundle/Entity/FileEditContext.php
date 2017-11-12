@@ -4,9 +4,21 @@ namespace SD\CoreBundle\Entity;
 
 class FileEditContext
 {
+    protected $userFilesCount;
     protected $userTimetablesCount; // Nombre de grilles horaires saisies par l'utilisateur (type = T)
     protected $labelsCount;
     protected $resourcesCount;
+
+    public function setUserFilesCount($userFilesCount)
+    {
+    $this->userFilesCount = $userFilesCount;
+    return $this;
+    }
+
+    public function getUserFilesCount()
+    {
+    return $this->userFilesCount;
+    }
 
     public function setUserTimetablesCount($timetablesCount)
     {
@@ -43,6 +55,9 @@ class FileEditContext
 
     function __construct($em, \SD\CoreBundle\Entity\File $file)
     {
+    $userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+    $this->setUserFilesCount($userFileRepository->getUserFilesExceptFileCreatorCount($file));
+
     $labelRepository = $em->getRepository('SDCoreBundle:Label');
     $this->setLabelsCount($labelRepository->getLabelsCount($file));
 

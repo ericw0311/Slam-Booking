@@ -12,41 +12,47 @@ class ResourceRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getResourcesCount($file)
     {
-    $queryBuilder = $this->createQueryBuilder('r');
-    $queryBuilder->select($queryBuilder->expr()->count('r'));
-    $queryBuilder->where('r.file = :file')->setParameter('file', $file);
+    $qb = $this->createQueryBuilder('r');
+    $qb->select($qb->expr()->count('r'));
+    $qb->where('r.file = :file')->setParameter('file', $file);
+	$qb->andWhere($qb->expr()->not($qb->expr()->eq('r.type', '?1')));
+	$qb->setParameter(1, 'USER'); 
 
-    $query = $queryBuilder->getQuery();
+    $query = $qb->getQuery();
     $singleScalar = $query->getSingleScalarResult();
     return $singleScalar;
     }
-	
+
 	public function getResources($file)
     {
-    $queryBuilder = $this->createQueryBuilder('r');
-    $queryBuilder->where('r.file = :file')->setParameter('file', $file);
-    $queryBuilder->orderBy('r.type', 'ASC');
-    $queryBuilder->addOrderBy('r.internal', 'DESC');
-    $queryBuilder->addOrderBy('r.code', 'ASC');
-    $queryBuilder->addOrderBy('r.name', 'ASC');
+    $qb = $this->createQueryBuilder('r');
+    $qb->where('r.file = :file')->setParameter('file', $file);
+	$qb->andWhere($qb->expr()->not($qb->expr()->eq('r.type', '?1')));
+    $qb->orderBy('r.type', 'ASC');
+    $qb->addOrderBy('r.internal', 'DESC');
+    $qb->addOrderBy('r.code', 'ASC');
+    $qb->addOrderBy('r.name', 'ASC');
+	$qb->setParameter(1, 'USER'); 
    
-    $query = $queryBuilder->getQuery();
+    $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
     }
 
 	public function getDisplayedResources($file, $firstRecordIndex, $maxRecord)
     {
-    $queryBuilder = $this->createQueryBuilder('r');
-    $queryBuilder->where('r.file = :file')->setParameter('file', $file);
-    $queryBuilder->orderBy('r.type', 'ASC');
-    $queryBuilder->addOrderBy('r.internal', 'DESC');
-    $queryBuilder->addOrderBy('r.code', 'ASC');
-    $queryBuilder->addOrderBy('r.name', 'ASC');
-    $queryBuilder->setFirstResult($firstRecordIndex);
-    $queryBuilder->setMaxResults($maxRecord);
-   
-    $query = $queryBuilder->getQuery();
+    $qb = $this->createQueryBuilder('r');
+    $qb->where('r.file = :file')->setParameter('file', $file);
+	$qb->andWhere($qb->expr()->not($qb->expr()->eq('r.type', '?1')));
+    $qb->orderBy('r.type', 'ASC');
+    $qb->addOrderBy('r.internal', 'DESC');
+    $qb->addOrderBy('r.code', 'ASC');
+    $qb->addOrderBy('r.name', 'ASC');
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+	$qb->setParameter(1, 'USER'); 
+ 
+    $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
     }

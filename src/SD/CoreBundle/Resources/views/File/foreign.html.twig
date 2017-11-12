@@ -14,6 +14,15 @@
 	</div>
 
 	<div class="panel-body">
+{% for userFile in listUserFiles %}
+{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+{% if userFile.userCreated %}
+	<a href="{{ path('sd_core_userFile_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span>&nbsp;{{ userFile.username }}</a>
+{% else %}
+	<a href="{{ path('sd_core_userFile_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</a>
+{% endif %}
+{% endfor %}
+
 {% for timetable in listUserTimetables %}
 	<a href="{{ path('sd_core_timetable_edit', { 'timetableID': timetable.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ timetable.name }}</a>
 {% endfor %}

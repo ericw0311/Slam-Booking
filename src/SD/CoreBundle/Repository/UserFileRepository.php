@@ -23,6 +23,34 @@ class UserFileRepository extends \Doctrine\ORM\EntityRepository
     return $singleScalar;
     }
 
+
+    public function getUserFilesExceptFileCreatorCount($file)
+    {
+    $qb = $this->createQueryBuilder('uf');
+    $qb->select($qb->expr()->count('uf'));
+    $qb->where('uf.file = :file')->setParameter('file', $file);
+	$qb->andWhere($qb->expr()->not($qb->expr()->eq('uf.account', '?1')));
+	$qb->setParameter(1, $file->getUser()); 
+
+    $query = $qb->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+
+    public function getUserFilesExceptFileCreator($file)
+    {
+    $qb = $this->createQueryBuilder('uf');
+    $qb->where('uf.file = :file')->setParameter('file', $file);
+	$qb->andWhere($qb->expr()->not($qb->expr()->eq('uf.account', '?1')));
+	$qb->setParameter(1, $file->getUser()); 
+    $qb->orderBy('uf.firstName', 'ASC');
+    $qb->addOrderBy('uf.lastName', 'ASC');
+   
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
     public function getDisplayedUserFiles($file, $firstRecordIndex, $maxRecord)
     {
     $queryBuilder = $this->createQueryBuilder('uf');

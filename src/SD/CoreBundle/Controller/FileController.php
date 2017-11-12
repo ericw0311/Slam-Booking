@@ -144,6 +144,9 @@ class FileController extends Controller {
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
+	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+	$listUserFiles = $userFileRepository->getUserFilesExceptFileCreator($file);
+
     $timetableRepository = $em->getRepository('SDCoreBundle:Timetable');
     $listUserTimetables = $timetableRepository->getUserTimetables($file);
                 
@@ -155,6 +158,7 @@ class FileController extends Controller {
 
     return $this->render('SDCoreBundle:File:foreign.html.twig', array(
 		'userContext' => $userContext, 'file' => $file,
+		'listUserFiles' => $listUserFiles,
 		'listUserTimetables' => $listUserTimetables,
 		'listResources' => $listResources,
 		'listLabels' => $listLabels));

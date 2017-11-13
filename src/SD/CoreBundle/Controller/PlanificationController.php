@@ -89,8 +89,12 @@ class PlanificationController extends Controller
 
 	$planification = new Planification($connectedUser, $userContext->getCurrentFile());
 	$planification->setType($type);
+	$planification->setInternal(0);
 
 	$planificationPeriod = new PlanificationPeriod($connectedUser, $planification);
+
+	$internal = 0;
+	$classificationCode = null;
 
     foreach ($resourceIDArray as $resourceID) {
 		$resourceDB = $resourceRepository->find($resourceID);
@@ -98,11 +102,23 @@ class PlanificationController extends Controller
 			$planification->setName($resourceDB->getName());
 			$em->persist($planification);
 			$em->persist($planificationPeriod);
+
+			if ($resourceDB->getInternal()) { // L'indicateur interne est à 1 si toutes les ressources de la période de planifications sont de classification internes et du même code
+				$internal = 1;
+				$classificationCode = $resourceDB->getCode();
+			}
+		} else if ($internal > 0 && ($resourceDB->getInternal() <= 0 || $resourceDB->getCode() !=  $classificationCode)) {
+				$internal = 0;
+				$classificationCode = null;
 		}
 		$planificationResource = new PlanificationResource($connectedUser, $planificationPeriod, $resourceDB);
 		$planificationResource->setOrder($i);
 		$em->persist($planificationResource);
 	}
+
+	$planification->setInternal($internal);
+	$planification->setCode($classificationCode);
+	$em->persist($planification);
 
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
@@ -123,7 +139,7 @@ class PlanificationController extends Controller
 
 	$selectedResources = ResourceApi::getSelectedResources($em, $resourceIDList);
 
-	$resourcesToPlanify = ResourceApi::getResourcesToPlanify($em, $userContext->getCurrentFile(), $planification->getType(), $resourceIDList);
+	$resourcesToPlanify = ResourceApi::getResourcesToPlanify($em, $userContext->getCurrentFile(), $planification->getType(), $planificationPeriod, $resourceIDList);
 
     return $this->render('SDCoreBundle:Planification:resource.update.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
@@ -155,6 +171,9 @@ class PlanificationController extends Controller
 
     $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
 	$i = 0;
+	$internal = 0;
+	$classificationCode = null;
+
     foreach ($resourceIDArray as $resourceID) { // Parcours des ressources sélectionnées
 		$resource = $resourceRepository->find($resourceID);
 		if ($resource !== null) {
@@ -167,8 +186,22 @@ $planificationResource = $planificationResourceRepository->findOneBy(array('plan
 				$planificationResource->setOrder($i);
 			}
 			$em->persist($planificationResource);
+			
+			if ($i <= 1) {
+				if ($resource->getInternal()) { // L'indicateur interne est à 1 si toutes les ressources de la période de planifications sont de classification internes et du même code
+					$internal = 1;
+					$classificationCode = $resource->getCode();
+				}
+			} else if ($internal > 0 && ($resource->getInternal() <= 0 || $resource->getCode() !=  $classificationCode)) {
+				$internal = 0;
+				$classificationCode = null;
+			}
 		}
 	}
+
+	$planification->setInternal($internal);
+	$planification->setCode($classificationCode);
+	$em->persist($planification);
 
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'planification.resource.updated.ok');

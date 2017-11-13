@@ -141,7 +141,7 @@ class ResourceApi
 
 
     // Retourne un tableau des ressources à planifier
-    static function getResourcesToPlanify($em, \SD\CoreBundle\Entity\File $file, $type, $resourceIDList)
+    static function getResourcesToPlanify($em, \SD\CoreBundle\Entity\File $file, $type, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod, $resourceIDList)
     {
 	$resourceIDArray = explode('-', $resourceIDList);
     $resourceRepository = $em->getRepository('SDCoreBundle:Resource');

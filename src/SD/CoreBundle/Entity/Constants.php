@@ -26,6 +26,8 @@ class Constants
 
 	const RESOURCE_TYPE = array('PLACE', 'VEHICLE', 'TOOL', 'SPORT', 'USER');
 	
+	const DISPLAYED_RESOURCE_TYPE = array('PLACE', 'VEHICLE', 'TOOL', 'SPORT');
+	
 	const RESOURCE_TYPE_ICON = array(
 			'PLACE' => 'place',
 			'VEHICLE' => 'vehicle',

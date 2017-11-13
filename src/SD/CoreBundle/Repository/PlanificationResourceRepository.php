@@ -37,8 +37,8 @@ class PlanificationResourceRepository extends \Doctrine\ORM\EntityRepository
 	// Construit le Query Builder d'une ressource planifiee
 	public function getResourcePlanifiedQB()
     {
-    $queryBuilder = $this->createQueryBuilder('pr');
-    $queryBuilder->where('pr.resource = r.id');
-    return $queryBuilder;
+    $qb = $this->createQueryBuilder('pr');
+    $qb->where('pr.resource = r.id');
+    return $qb;
     }
 }

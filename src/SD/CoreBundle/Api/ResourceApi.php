@@ -139,30 +139,46 @@ class ResourceApi
 	return $selectedResources;
     }
 
-
     // Retourne un tableau des ressources à planifier
-    static function getResourcesToPlanify($em, \SD\CoreBundle\Entity\File $file, $type, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod, $resourceIDList)
+    static function getResourcesToPlanify($resourcesToPlanifyDB, $selectedResourcesID)
     {
-	$resourceIDArray = explode('-', $resourceIDList);
-    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
-    $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
-
-    $resourcesToPlanifyDB = $resourceRepository->getResourcesToPlanify($file, $type, $planificationResourceRepository->getResourcePlanifiedQB());
+	$selectedResourcesIDArray = explode('-', $selectedResourcesID);
 
 	$resourcesToPlanify = array();
     foreach ($resourcesToPlanifyDB as $resourceDB) {
-		if (array_search($resourceDB->getId(), $resourceIDArray) === false) {
+		if (array_search($resourceDB->getId(), $selectedResourcesIDArray) === false) {
 			$resource = new ResourceNDBPlanificationAdd(); // classe ressource incluant les infos spécifiques aux ressources pouvant être ajoutées à la sélection
 			$resource->setId($resourceDB->getId());
 			$resource->setName($resourceDB->getName());
 			$resource->setInternal($resourceDB->getInternal());
 			$resource->setType($resourceDB->getType());
 			$resource->setCode($resourceDB->getCode());
-			$resource->setResourceIDList_select(($resourceIDList == '') ? $resourceDB->getId() : ($resourceIDList.'-'.$resourceDB->getId())); // Liste des ressources sélectionnées si l'utilisateur sélectionne la ressource
+			$resource->setResourceIDList_select(($selectedResourcesID == '') ? $resourceDB->getId() : ($selectedResourcesID.'-'.$resourceDB->getId())); // Liste des ressources sélectionnées si l'utilisateur sélectionne la ressource
 			array_push($resourcesToPlanify, $resource);
 		}
 	}
-
 	return $resourcesToPlanify;
+    }
+
+    // Retourne un tableau des ressources à planifier (initialisation de planification)
+    static function initResourcesToPlanify($em, \SD\CoreBundle\Entity\File $file, $type, $selectedResourcesID)
+    {
+    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+    $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+
+    $resourcesToPlanifyDB = $resourceRepository->getResourcesToPlanify($file, $type, $planificationResourceRepository->getResourcePlanifiedQB());
+
+	return ResourceApi::getResourcesToPlanify($resourcesToPlanifyDB, $selectedResourcesID);
+    }
+
+    // Retourne un tableau des ressources à planifier (mise à jour de planification)
+    static function updateResourcesToPlanify($em, \SD\CoreBundle\Entity\File $file, $type, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod, $selectedResourcesID)
+    {
+	$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+	$planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+
+    $resourcesToPlanifyDB = $resourceRepository->getResourcesToPlanify($file, $type, $planificationResourceRepository->getResourcePlanifiedExcludePeriodQB($planificationPeriod));
+
+	return ResourceApi::getResourcesToPlanify($resourcesToPlanifyDB, $selectedResourcesID);
     }
 }

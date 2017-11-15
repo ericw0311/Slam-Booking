@@ -23,8 +23,14 @@ services:
         tags:
             - { name: kernel.event_listener, event: calendar.load_events, method: loadEvents }
 
-    sd_core.validator.timetableLineOrder:
-        class: SD\CoreBundle\Validator\TimetableLineOrderValidator
+    sd_core.validator.timetableLineBeginningTime:
+        class: SD\CoreBundle\Validator\TimetableLineBeginningTimeValidator
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
-            - { name: validator.constraint_validator, alias: sd_core_timetableLineOrder }
+            - { name: validator.constraint_validator, alias: sd_core_timetableLineBeginningTime }
+
+    sd_core.validator.timetableLineEndTime:
+        class: SD\CoreBundle\Validator\TimetableLineEndTimeValidator
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: validator.constraint_validator, alias: sd_core_timetableLineEndTime }

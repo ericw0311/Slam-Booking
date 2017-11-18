@@ -31,6 +31,7 @@ period.previous: Previous period
 period.until: Until %endDate%
 sort.after: Sort after
 sort.before: Sort before
+summary: Summary
 to: To
 unactivate: Unactivate
 update.not.allowed: Update not allowed

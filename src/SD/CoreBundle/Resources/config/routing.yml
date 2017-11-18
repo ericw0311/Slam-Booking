@@ -2,10 +2,9 @@ sd_core_homepage:
     path:     /
     defaults: { _controller: SDCoreBundle:Default:index }
 
-sd_core_administration:
-    path:     /administration
-    defaults: { _controller: SDCoreBundle:Default:administration }
-
+sd_core_summary:
+    path:     /summary
+    defaults: { _controller: SDCoreBundle:Default:summary }
 
 sd_core_file_list:
     path:     /file/list/{pageNumber}

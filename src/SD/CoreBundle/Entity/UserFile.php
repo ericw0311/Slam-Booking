@@ -70,6 +70,13 @@ class UserFile
     /**
      * @var bool
      *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active = true;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="user_created", type="boolean")
      */
     private $userCreated;
@@ -98,7 +105,19 @@ class UserFile
     * @ORM\JoinColumn(nullable=false)
     */
     private $file;
-    
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="resource_user", type="boolean")
+     */
+    private $resourceUser = false;
+
+	/**
+	 * @ORM\OneToOne(targetEntity="SD\CoreBundle\Entity\Resource", cascade={"persist", "remove"})
+	 */
+	private $resource;
+
     /**
     * @ORM\Column(name="created_at", type="datetime", nullable=false)
     */
@@ -124,7 +143,11 @@ class UserFile
      *
      * @param string $email
      *
-     * @return UserFile
+     * @return UserFile$queryBuilder
+    ->select('u.id', 'u.name', 'p.number')
+    ->from('users', 'u')
+    ->innerJoin('u', 'phonenumbers', 'p', 'u.id = p.user_id')
+
      */
     public function setEmail($email)
     {
@@ -263,6 +286,29 @@ class UserFile
     }
 
     /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return UserFile
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
      * Set userCreated
      *
      * @param boolean $userCreated
@@ -307,6 +353,52 @@ class UserFile
     public function getUserName()
     {
         return $this->userName;
+    }
+
+    /**
+     * Set resourceUser
+     *
+     * @param boolean $resourceUser
+     *
+     * @return UserFile
+     */
+    public function setResourceUser($resourceUser)
+    {
+        $this->resourceUser = $resourceUser;
+        return $this;
+    }
+
+    /**
+     * Get resourceUser
+     *
+     * @return bool
+     */
+    public function getResourceUser()
+    {
+        return $this->resourceUser;
+    }
+
+    /**
+     * Set resource
+     *
+     * @param \SD\CoreBundle\Entity\Resource $resource
+     *
+     * @return UserFile
+     */
+    public function setResource(\SD\CoreBundle\Entity\Resource $resource = null)
+    {
+        $this->resource = $resource;
+        return $this;
+    }
+
+    /**
+     * Get resource
+     *
+     * @return \SD\UserBundle\Entity\Resource
+     */
+    public function getResource()
+    {
+        return $this->resource;
     }
 
     /**

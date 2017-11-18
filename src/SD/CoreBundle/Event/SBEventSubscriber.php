@@ -9,6 +9,7 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\Trace;
 use SD\CoreBundle\Entity\File;
+use SD\CoreBundle\Entity\Activity;
 use SD\CoreBundle\Entity\PlanificationPeriod;
 
 class SBEventSubscriber implements EventSubscriber
@@ -39,7 +40,7 @@ class SBEventSubscriber implements EventSubscriber
 
     public function getSubscribedEvents()
     {
-    return array('postPersist' /* , 'postUpdate', 'postRemove' */ );
+    return array('preRemove', 'postPersist', 'postUpdate', 'postRemove' );
     }
 
     public function postPersist(LifecycleEventArgs $args)
@@ -77,7 +78,7 @@ class SBEventSubscriber implements EventSubscriber
     $entity = $args->getObject();
     $entityManager = $args->getObjectManager();
 
-    if ($entity instanceof File) {
+    if ($entity instanceof Activity) {
         $trace = new Trace();
         $trace->setMessage('FileEventsSubscriber.postRemove 1 _'.$this->getUser()->getUsername().'_');
         $entityManager->persist($trace);
@@ -87,5 +88,15 @@ class SBEventSubscriber implements EventSubscriber
         $entityManager->persist($trace);
         $entityManager->flush();
     }
+    }
+
+    public function preRemove(LifecycleEventArgs $args)
+    {
+		$entity = $args->getObject();
+		$entityManager = $args->getObjectManager();
+
+		if ($entity instanceof File) {
+			FileEvent::preRemove($entityManager, $entity);
+		}
     }
 }

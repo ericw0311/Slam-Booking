@@ -1,5 +1,5 @@
 <?php
-// src/SD/CoreBundle/Validator/TimetableLineOrder.php
+// src/SD/CoreBundle/Validator/TimetableLineEndTimeValidator.php
 
 namespace SD\CoreBundle\Validator;
 
@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class TimetableLineOrderValidator extends ConstraintValidator
+class TimetableLineEndTimeValidator extends ConstraintValidator
 {
     private $em;
 
@@ -24,28 +24,21 @@ class TimetableLineOrderValidator extends ConstraintValidator
     public function validate($timetableLine, Constraint $constraint)
     {
     $entityManager = $this->getEntityManager();
-
     $timetableRepository = $entityManager->getRepository('SDCoreBundle:Timetable');
     $timetable = $timetableRepository->find($timetableLine->getTimetable()->getID());
-
 	$timetableLineRepository = $entityManager->getRepository('SDCoreBundle:TimetableLine');
-	$previousTimetableLine = null;
-	$nextTimetableLine = null;
 
 	if ($timetableLine->getId() > 0) { // On est en mise a jour de créneau horaire
-		$previousTimetableLine = $timetableLineRepository->getPreviousTimetableLine($timetable, $timetableLine->getId());
-	} else { // On est en création de créneau horaire
-		$previousTimetableLine = $timetableLineRepository->getLastTimetableLine($timetable);
-	}
+		$nextTimetableLine = $timetableLineRepository->getNextTimetableLine($timetable, $timetableLine->getId());
 
-	if ($previousTimetableLine != null) { // Il existe un créneau précédent
-		$interval = date_diff($previousTimetableLine->getEndTime(), $timetableLine->getBeginningTime());
-
-		if ($interval->format("%R") == "-") { // L'heure de début est inférieure à l'heure de fin du créneau précédent
+		if ($nextTimetableLine != null) { // Il existe un créneau suivant
+			$interval = date_diff($timetableLine->getEndTime(), $nextTimetableLine->getBeginningTime());
+			if ($interval->format("%R") == "-") { // L'heure de fin est supérieure à l'heure de début du créneau suivant
 			$this->context->buildViolation($constraint->message)
-				->setParameter('%endTime%', date_format($previousTimetableLine->getEndTime(), "H:i"))
+				->setParameter('%beginningTime%', date_format($nextTimetableLine->getBeginningTime(), "H:i"))
 				->addViolation();
+			}
 		}
-	}
+	}	
     }
 }

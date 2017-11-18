@@ -58,7 +58,7 @@ class ResourceController extends Controller
 	$RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
 	$activeRC = array();
 
-    foreach (Constants::RESOURCE_TYPE as $resourceType) {
+    foreach (Constants::DISPLAYED_RESOURCE_TYPE as $resourceType) {
 
 		$defaultActiveRC = Constants::RESOURCE_CLASSIFICATION_ACTIVE[$resourceType]; // Classifications actives par défaut
 

@@ -15,13 +15,11 @@
 <a href="{{ path('sd_core_planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationContext.previousPlanificationPeriod.ID }) }}" class="glyphicon glyphicon-backward" title="{{ 'period.previous'|trans }}"></a>
 {% endif %}
 
-{% if planificationPeriod.beginningDate == '' and planificationPeriod.endDate == '' %}
-Pas de période
-{% elseif planificationPeriod.beginningDate == '' %}
+{% if planificationPeriod.beginningDate == '' and planificationPeriod.endDate != '' %}
 {{ 'period.until'|trans({'%endDate%': planificationPeriod.endDate|date('d/m/Y')}) }}
-{% elseif planificationPeriod.endDate == '' %}
+{% elseif planificationPeriod.beginningDate != '' and planificationPeriod.endDate == '' %}
 {{ 'period.from'|trans({'%beginningDate%': planificationPeriod.beginningDate|date('d/m/Y')}) }}
-{% else %}
+{% elseif planificationPeriod.beginningDate != '' and planificationPeriod.endDate != '' %}
 {{ 'period.from.to'|trans({'%beginningDate%': planificationPeriod.beginningDate|date('d/m/Y'), '%endDate%': planificationPeriod.endDate|date('d/m/Y')}) }}
 {% endif %}
 

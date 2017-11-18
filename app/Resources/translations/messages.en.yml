@@ -18,6 +18,7 @@ delete.not.allowed: Delete not allowed
 end.time: End time
 from: From
 modify: Modify
+no: No
 number.columns: Number of columns
 number.lines: Number of lines
 number.lines.columns.updated.ok: Number of lines and columns displayed have been updated
@@ -30,9 +31,11 @@ period.previous: Previous period
 period.until: Until %endDate%
 sort.after: Sort after
 sort.before: Sort before
+summary: Summary
 to: To
 unactivate: Unactivate
 update.not.allowed: Update not allowed
 user.account: User account
 validate: Validate
 validate.not.allowed: Validate not allowed
+yes: Yes

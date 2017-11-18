@@ -12,10 +12,18 @@
 
 	<div class="panel-body">
 {% for planificationPeriod in listPlanificationPeriod %}
-	<a href="{{ path('sd_core_planification_edit', { 'planificationID': planificationPeriod.planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/planification-32.png') }}">&nbsp;{{ planificationPeriod.planification.name }}</a>
+	<a href="{{ path('sd_core_planification_edit', { 'planificationID': planificationPeriod.planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/planification-32.png') }}">&nbsp;{{ planificationPeriod.planification.name }}
+{% if planificationPeriod.beginningDate == '' and planificationPeriod.endDate != '' %}
+&nbsp;({{ 'period.until'|trans({'%endDate%': planificationPeriod.endDate|date('d/m/Y')}) }})
+{% elseif planificationPeriod.beginningDate != '' and planificationPeriod.endDate == '' %}
+&nbsp;({{ 'period.from'|trans({'%beginningDate%': planificationPeriod.beginningDate|date('d/m/Y')}) }})
+{% elseif planificationPeriod.beginningDate != '' and planificationPeriod.endDate != '' %}
+&nbsp;({{ 'period.from.to'|trans({'%beginningDate%': planificationPeriod.beginningDate|date('d/m/Y'), '%endDate%': planificationPeriod.endDate|date('d/m/Y')}) }})
+{% endif %}
+	</a>
 {% endfor %}
-	</div>
 
+	</div>
 </div>
 
 {% endblock %}

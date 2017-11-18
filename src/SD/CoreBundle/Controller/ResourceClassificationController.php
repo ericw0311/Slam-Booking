@@ -16,6 +16,7 @@ use SD\CoreBundle\Entity\Trace;
 use SD\CoreBundle\Entity\Constants;
 use SD\CoreBundle\Entity\ResourceClassification;
 use SD\CoreBundle\Form\ResourceClassificationType;
+use SD\CoreBundle\Api\ResourceApi;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -28,49 +29,46 @@ class ResourceClassificationController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $defaultActiveRC = Constants::RESOURCE_CLASSIFICATION_ACTIVE[$resourceType]; // Classifications actives par défaut
+	// Classifications internes actives
+    $activeInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
+
+	// Nombre de ressources par classification interne
+	$numberResourcesInternalRC =  ResourceApi::getInternalClassificationNumberResources($em, $userContext->getCurrentFile(), $resourceType);
 
     $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
 
-    $activeInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($userContext->getCurrentFile(), $resourceType, 1); // Classifications internes actives (lues en BD)
-    $unactiveInternalRC_DB = $RCRepository->getInternalResourceClassificationCodes($userContext->getCurrentFile(), $resourceType, 0); // Classifications internes inactives (lues en BD)
-
+	// Classifications externes
     $listExternalRC = $RCRepository->getExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
-                
-	// Les classifications actives sont celles qui sont actives par defaut ou actives en base et qui ne sont pas inactives en base
-    $activeInternalRC = array();
 
-    foreach (Constants::RESOURCE_CLASSIFICATION[$resourceType] as $resourceClassification) {
-		if ((in_array($resourceClassification, $defaultActiveRC) || in_array($resourceClassification, $activeInternalRC_DB))
-			&& !in_array($resourceClassification, $unactiveInternalRC_DB))
-		{
-			array_push($activeInternalRC, $resourceClassification);
-		}
-	}
+	// Nombre de ressources par classification externe
+	$numberResourcesExternalRC =  ResourceApi::getExternalClassificationNumberResources($em, $userContext->getCurrentFile(), $resourceType, $listExternalRC);
 
     return $this->render('SDCoreBundle:ResourceClassification:index.html.twig',
 		array('userContext' => $userContext,
 			'resourceType' => $resourceType,
 			'activeInternalRC' => $activeInternalRC,
-			'listExternalRC' => $listExternalRC));
+			'numberResourcesInternalRC' => $numberResourcesInternalRC,
+			'listExternalRC' => $listExternalRC,
+			'numberResourcesExternalRC' => $numberResourcesExternalRC));
     }
 
+
 	// Activation d'une classification interne
-	public function activate_internalAction($resourceType, $classificationCode, Request $request)
+	public function activate_internalAction($resourceType, $resourceClassificationCode, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $RCRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
-    $resourceClassification = $RCRepository->findOneBy(array('file' => $userContext->getCurrentFile(), 'internal' => 1, 'type' => $resourceType, 'code' => $classificationCode));
+    $resourceClassification = $RCRepository->findOneBy(array('file' => $userContext->getCurrentFile(), 'internal' => 1, 'type' => $resourceType, 'code' => $resourceClassificationCode));
 
     if ($resourceClassification === null) {
         $resourceClassification = new ResourceClassification($connectedUser, $userContext->getCurrentFile());
         $resourceClassification->setInternal(1);
         $resourceClassification->setType($resourceType);
-        $resourceClassification->setCode($classificationCode);
-        $resourceClassification->setName($classificationCode);
+        $resourceClassification->setCode($resourceClassificationCode);
+        $resourceClassification->setName($resourceClassificationCode);
         $em->persist($resourceClassification);
         $resourceClassification->setActive(1);
 	} else {
@@ -83,21 +81,21 @@ class ResourceClassificationController extends Controller
     }
 
 	// Désactivation d'une classification interne
-	public function unactivate_internalAction($resourceType, $classificationCode, Request $request)
+	public function unactivate_internalAction($resourceType, $resourceClassificationCode, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $resourceClassificationRepository = $em->getRepository('SDCoreBundle:ResourceClassification');
-    $resourceClassification = $resourceClassificationRepository->findOneBy(array('file' => $userContext->getCurrentFile(), 'internal' => 1, 'type' => $resourceType, 'code' => $classificationCode));
+    $resourceClassification = $resourceClassificationRepository->findOneBy(array('file' => $userContext->getCurrentFile(), 'internal' => 1, 'type' => $resourceType, 'code' => $resourceClassificationCode));
 
     if ($resourceClassification === null) {
         $resourceClassification = new ResourceClassification($connectedUser, $userContext->getCurrentFile());
         $resourceClassification->setInternal(1);
         $resourceClassification->setType($resourceType);
-        $resourceClassification->setCode($classificationCode);
-        $resourceClassification->setName($classificationCode);
+        $resourceClassification->setCode($resourceClassificationCode);
+        $resourceClassification->setName($resourceClassificationCode);
         $em->persist($resourceClassification);
         $resourceClassification->setActive(0);
 	} else {
@@ -224,34 +222,56 @@ class ResourceClassificationController extends Controller
 		return $this->redirectToRoute('sd_core_resourceclassification_display', array('resourceType' => $resourceType));
     }
 
-    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
-
-    if ($resourceRepository->getResourcesCount_RC($resourceClassification) > 0) {
-		return $this->redirectToRoute('sd_core_resourceclassification_foreign',
-			array('resourceType' => $resourceType, 'resourceClassificationID' => $resourceClassification->getId()));
-	}
-
     return $this->render('SDCoreBundle:ResourceClassification:delete.html.twig',
 		array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification, 'form' => $form->createView()));
     }
 
 
-    // Affichage des ressources d'une classification
-    /**
-    * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
-    */
-    public function foreignAction($resourceType, ResourceClassification $resourceClassification)
+    // Affichage des ressources d'une classification interne
+    public function foreign_internalAction($resourceType, $resourceClassificationCode)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+	if ($resourceType == 'USER') {
+		$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+		$listUserFiles = $userFileRepository->getUserFilesFrom_IRC($userContext->getCurrentFile(), $resourceClassificationCode);
 
-    $listResources = $resourceRepository->getResources_RC($resourceClassification);
+		return $this->render('SDCoreBundle:ResourceClassification:foreign.user.html.twig',
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'action' => 'unactivate', 'listUserFiles' => $listUserFiles));
+	} else {
+		$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+		$listResources = $resourceRepository->getResources_IRC($userContext->getCurrentFile(), $resourceType, $resourceClassificationCode);
                 
-    return $this->render('SDCoreBundle:ResourceClassification:foreign.html.twig', array(
-                'userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification,
-		'listResources' => $listResources));
+		return $this->render('SDCoreBundle:ResourceClassification:foreign.internal.html.twig',
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'listResources' => $listResources));
+	}
+    }
+
+
+    // Affichage des ressources d'une classification externe
+    /**
+    * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
+    */
+    public function foreign_externalAction($resourceType, ResourceClassification $resourceClassification, $action)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	if ($resourceType == 'USER') {
+		$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+		$listUserFiles = $userFileRepository->getUserFilesFrom_ERC($userContext->getCurrentFile(), $resourceClassification);
+
+		return $this->render('SDCoreBundle:ResourceClassification:foreign.user.html.twig',
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'action' => $action, 'listUserFiles' => $listUserFiles));
+	} else {
+		$resourceRepository = $em->getRepository('SDCoreBundle:Resource');
+		$listResources = $resourceRepository->getResources_ERC($userContext->getCurrentFile(), $resourceType, $resourceClassification);
+                
+		return $this->render('SDCoreBundle:ResourceClassification:foreign.external.html.twig',
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification, 'action' => $action, 'listResources' => $listResources));
+	}
     }
 }

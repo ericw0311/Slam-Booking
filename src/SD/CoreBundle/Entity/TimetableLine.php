@@ -3,7 +3,8 @@
 namespace SD\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use SD\CoreBundle\Validator\TimetableLineOrder;
+use SD\CoreBundle\Validator\TimetableLineBeginningTime;
+use SD\CoreBundle\Validator\TimetableLineEndTime;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,7 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="timetable_line")
  * @ORM\Entity(repositoryClass="SD\CoreBundle\Repository\TimetableLineRepository")
  * @ORM\HasLifecycleCallbacks()
- * @TimetableLineOrder()
+ * @TimetableLineBeginningTime()
+ * @TimetableLineEndTime()
  */
 class TimetableLine
 {

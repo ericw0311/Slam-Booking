@@ -21,6 +21,7 @@ file.created.ok: The file has been created
 file.current: Current file
 file.current.updated.ok: Current file has been updated
 file.delete.not.allowed: Only the creator of the file ia allowed to delete it
+file.delete.not.allowed.2: File is referenced. Delete not allowed
 file.deleted.ok: The file has been deleted
 file.name: File name
 file.plural: Files
@@ -28,6 +29,16 @@ file.set.as.current: Set as current file
 file.singular: File
 file.update.not.allowed: Only the creator of the file ia allowed to update it
 file.updated.ok: The file has been updated
+
+label.ask.delete: Do you really want to delete label %name% ?
+label.back.to.list: Back to labels list
+label.create: Create an label
+label.created.ok: The label has been created
+label.deleted.ok: The label has been deleted
+label.name: Label name
+label.plural: Activities
+label.singular: Label
+label.updated.ok: The label has been updated
 
 period.type: Period
 period.type.AFTER: After a day
@@ -75,11 +86,13 @@ resource.created.ok: The resource has been created
 resource.delete.not.allowed: Resource is referenced. Delete not allowed
 resource.deleted.ok: The resource has been deleted
 resource.name: Resource name
+resource.planified: Planified resource
 resource.planning.background.color: Background color on planning
 resource.planning.foreground.color: Foreground color on planning
 resource.plural: Resources
 resource.singular: Resource
 resource.updated.ok: The resource has been updated
+resource.user.ask: Is user %name% a resource ?
 resource.validate.and.create: Validate and add a resource
 
 resourceClassification.activated.ok: The classification has been activated
@@ -94,6 +107,7 @@ resourceClassification.name: Resource classification name
 resourceClassification.plural: Resource classifications
 resourceClassification.singular: Resource classification
 resourceClassification.select: Select a resource classification
+resourceClassification.unactivate.not.allowed: Classification is referenced. Unactivate not allowed
 resourceClassification.unactivated.ok: The classification has been unactivated
 resourceClassification.updated.ok: The classification has been updated
 
@@ -170,7 +184,7 @@ slam-booking.access: Access Slam-Booking
 timetable.ask.delete: Do you really want to delete timetable %name% ?
 timetable.back.to.list: Back to timetables list
 timetable.create: Create a timetable
-timetable.created.ok: The timetable has been created
+timetable.created.ok: The timetable has been created. Please enter a first timeslot
 timetable.day: Day
 timetable.delete.not.allowed.1: The timetable Day cannot be deleted
 timetable.delete.not.allowed.2: The timetable Half day cannot be deleted
@@ -207,6 +221,7 @@ userFile.create: Add a user to file
 userFile.created.ok: The user has been added to file
 userFile.delete.not.allowed: The file creator cannot be removed from file
 userFile.deleted.ok: The user has been removed from file
+userFile.resource.updated.ok: Informations "user resource" have been updated
 userFile.update.not.allowed.1: The file creator cannot be modified
 userFile.update.not.allowed.2: Only the file creator can modify a registered user
 userFile.update.not.allowed.3: Informations related to user can be modified from his profile only

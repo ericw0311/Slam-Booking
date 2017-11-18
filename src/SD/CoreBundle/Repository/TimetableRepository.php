@@ -25,7 +25,8 @@ class TimetableRepository extends \Doctrine\ORM\EntityRepository
     {
     $queryBuilder = $this->createQueryBuilder('t');
     $queryBuilder->where('t.file = :file')->setParameter('file', $file);
-    $queryBuilder->orderBy('t.name', 'ASC');
+    $queryBuilder->orderBy('t.type', 'ASC');
+    $queryBuilder->addOrderBy('t.name', 'ASC');
     $queryBuilder->setFirstResult($firstRecordIndex);
     $queryBuilder->setMaxResults($maxRecord);
    
@@ -33,7 +34,7 @@ class TimetableRepository extends \Doctrine\ORM\EntityRepository
     $results = $query->getResult();
     return $results;
     }
-	
+
 	// Les grilles horaires du dossier. Query builder uniquement: utilisé pour le formulaire des lignes de planification.
     public function getTimetablesQB($file)
     {
@@ -56,4 +57,44 @@ class TimetableRepository extends \Doctrine\ORM\EntityRepository
 	$results = $query->getOneOrNullResult();
 	return $results;
 	}
+
+
+	// Suprime les grilles horaires d'un dossier (ACTUELLEMENT PAS UTILISE)
+    public function deleteTimetables($file)
+    {
+    $queryBuilder = $this->createQueryBuilder('t');
+    $queryBuilder->delete();
+    $queryBuilder->where('t.file = :file')->setParameter('file', $file);
+   
+    $query = $queryBuilder->getQuery();
+    $results = $query->getResult();
+    }
+
+
+	// Nombre de grilles horaires saisies par l'utilisateur (type = T)
+    public function getUserTimetablesCount($file)
+    {
+    $queryBuilder = $this->createQueryBuilder('t');
+    $queryBuilder->select($queryBuilder->expr()->count('t'));
+    $queryBuilder->where('t.file = :file')->setParameter('file', $file);
+    $queryBuilder->andWhere('t.type = :type')->setParameter('type', 'T');
+
+    $query = $queryBuilder->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+
+	// Liste des grilles horaires saisies par l'utilisateur (type = T)
+    public function getUserTimetables($file)
+    {
+    $queryBuilder = $this->createQueryBuilder('t');
+    $queryBuilder->where('t.file = :file')->setParameter('file', $file);
+    $queryBuilder->andWhere('t.type = :type')->setParameter('type', 'T');
+    $queryBuilder->orderBy('t.type', 'ASC');
+    $queryBuilder->addOrderBy('t.name', 'ASC');
+   
+    $query = $queryBuilder->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
 }

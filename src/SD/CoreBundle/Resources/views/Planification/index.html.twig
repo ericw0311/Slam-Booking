@@ -1,5 +1,8 @@
 {# src/SD/CoreBundle/Resources/views/Planification/index.html.twig #}
 
+{% set resourceTypeIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
 {% extends "SDCoreBundle::list-layout.html.twig" %}
 
 {% block title %}{{ parent() }} planification{% endblock %}
@@ -10,8 +13,12 @@
 {% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
     <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
 	{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
-	<a href="{{ path('sd_core_planification_edit_lp', { 'planificationID': listPlanifications[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/planification-32.png') }}">&nbsp;{{ listPlanifications[i*listContext.numberLinesDisplayed+j].name }}</a>
-        {% endfor %}
+{% if listPlanifications[i*listContext.numberLinesDisplayed+j].internal %}
+	<a href="{{ path('sd_core_planification_edit_lp', { 'planificationID': listPlanifications[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[listPlanifications[i*listContext.numberLinesDisplayed+j].code] ~ '-32.png') }}">&nbsp;{{ listPlanifications[i*listContext.numberLinesDisplayed+j].name }}</a>
+{% else %}
+	<a href="{{ path('sd_core_planification_edit_lp', { 'planificationID': listPlanifications[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[listPlanifications[i*listContext.numberLinesDisplayed+j].type] ~ '-32.png') }}">&nbsp;{{ listPlanifications[i*listContext.numberLinesDisplayed+j].name }}</a>
+{% endif %}
+	{% endfor %}
     </div>
 {% endfor %}
 

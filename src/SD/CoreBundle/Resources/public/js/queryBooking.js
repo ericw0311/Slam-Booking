@@ -4,8 +4,6 @@ var endDate = document.getElementById('sd_corebundle_queryBooking_endDate');
 
 periodType.addEventListener('change', function() {
 	var periodTypeValue = periodType.options[periodType.selectedIndex].value;
-	// alert(beginningDate.value);
-	// alert(periodTypeValue);
 	if (periodTypeValue == "BETWEEN" || periodTypeValue == "AFTER") {
 		beginningDate.disabled = false;
 	} else {

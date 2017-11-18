@@ -1,4 +1,4 @@
-{# src/SD/CoreBundle/Resources/views/ResourceClassification/foreign.html.twig #}
+{# src/SD/CoreBundle/Resources/views/ResourceClassification/foreign.external.html.twig #}
 
 {% extends "SDCoreBundle::layout.html.twig" %}
 
@@ -8,7 +8,7 @@
 
 <div class="panel panel-danger">
 
-	<div class="panel-heading">{{ 'resourceClassification.delete.not.allowed'|trans }}&nbsp;
+	<div class="panel-heading">{{ ('resourceClassification.' ~ action ~ '.not.allowed')|trans }}&nbsp;
 <a href="{{ path('sd_core_resourceclassification_display', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'back'|trans }}</a>
 	</div>
 

@@ -38,12 +38,25 @@ class Planification
      */
     private $name;
 
+	/**
+     * @var bool
+     *
+     * @ORM\Column(name="internal", type="boolean")
+     */
+    private $internal;
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=255, nullable=true)
+     */
+    private $code;
+
     /**
      * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
- 
 
     /**
     * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\File")
@@ -138,6 +151,51 @@ class Planification
         return $this->name;
     }
 
+	/**
+     * Set internal
+     *
+     * @param boolean $internal
+     *
+     * @return Planification
+     */
+
+    public function setInternal($internal)
+    {
+        $this->internal = $internal;
+        return $this;
+    }
+
+    /**
+     * Get internal
+     *
+     * @return bool
+     */
+    public function getInternal()
+    {
+        return $this->internal;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return Planification
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return $this;
+    }
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 
     public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file)
     {

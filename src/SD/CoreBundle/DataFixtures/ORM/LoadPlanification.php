@@ -91,8 +91,6 @@ $planification = new Planification($this->getReference('user-1'), $this->getRefe
 $planification = new Planification($this->getReference('user-1'), $this->getReference('file-614')); $planification->setType('PLACE'); $planification->setName('Larzac'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-492', $planification);
 $planification = new Planification($this->getReference('user-1'), $this->getReference('file-614')); $planification->setType('TOOL'); $planification->setName('Rétro projecteur'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-493', $planification);
 $planification = new Planification($this->getReference('user-1'), $this->getReference('file-440')); $planification->setType('TOOL'); $planification->setName('Compex SP 4.0 N°1 ...'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-508', $planification);
-$planification = new Planification($this->getReference('user-1'), $this->getReference('file-646')); $planification->setType('PLACE'); $planification->setName('SALLE POLYVALENTE'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-513', $planification);
-$planification = new Planification($this->getReference('user-1'), $this->getReference('file-646')); $planification->setType('PLACE'); $planification->setName('SALLE DU FOYER'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-514', $planification);
 $planification = new Planification($this->getReference('user-1'), $this->getReference('file-648')); $planification->setType('PLACE'); $planification->setName('LOCATIONS'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-516', $planification);
 $planification = new Planification($this->getReference('user-1'), $this->getReference('file-440')); $planification->setType('TOOL'); $planification->setName('Compex SP6.0 N°1 ...'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-525', $planification);
 $planification = new Planification($this->getReference('user-1'), $this->getReference('file-440')); $planification->setType('TOOL'); $planification->setName('Tablette HP windows 8 N°1 ...'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-532', $planification);
@@ -102,8 +100,7 @@ $planification = new Planification($this->getReference('user-1'), $this->getRefe
 $planification = new Planification($this->getReference('user-1'), $this->getReference('file-707')); $planification->setType('SPORT'); $planification->setName('Court Exterieur'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-551', $planification);
 $planification = new Planification($this->getReference('user-1'), $this->getReference('file-440')); $planification->setType('TOOL'); $planification->setName('Optojump N°1 9m de kit supplémentaire'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-561', $planification);
 $planification = new Planification($this->getReference('user-1'), $this->getReference('file-523')); $planification->setType('PLACE'); $planification->setName('C12- Chariot 16 ordinateurs portables'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-569', $planification);
-
-
+$planification = new Planification($this->getReference('user-1'), $this->getReference('file-757')); $planification->setType('PLACE'); $planification->setName('Salles de travaux pratiques'); $manager->persist($planification); $manager->flush(); $this->addReference('planification-576', $planification);
     }
 
 

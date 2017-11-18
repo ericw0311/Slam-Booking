@@ -18,6 +18,7 @@ delete.not.allowed: Suppression interdite
 end.time: Heure de fin
 from: De
 modify: Modifier
+no: Non
 number.columns: Nombre de colonnes
 number.lines: Nombre de lignes
 number.lines.columns.updated.ok: Les nombres de lignes et de colonnes affichées ont été mis à jour
@@ -30,9 +31,11 @@ period.previous: Période précédente
 period.until: Jusqu'au %endDate%
 sort.after: Trier après
 sort.before: Trier avant
+summary: Synthèse
 to: A
 unactivate: Désactiver
 update.not.allowed: Modification interdite
 user.account: Compte utilisateur
 validate: Valider
 validate.not.allowed: Validation interdite
+yes: Oui

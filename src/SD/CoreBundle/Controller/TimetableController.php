@@ -67,7 +67,6 @@ class TimetableController extends Controller
 		$request->getSession()->getFlashBag()->add('notice', 'timetable.created.ok');
 
 		return $this->redirectToRoute('sd_core_timetable_addline', array('timetableID' => $timetable->getID()));
-		// return $this->redirectToRoute('sd_core_timetable_list', array('pageNumber' => 1));
     }
     
 	return $this->render('SDCoreBundle:Timetable:add.html.twig', array('userContext' => $userContext, 'form' => $form->createView()));
@@ -205,7 +204,7 @@ public function add_lineAction(Timetable $timetable, Request $request)
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
         $em->persist($timetableLine);
         $em->flush();
-        $request->getSession()->getFlashBag()->add('08notice', 'timetableLine.created.ok');
+        $request->getSession()->getFlashBag()->add('notice', 'timetableLine.created.ok');
 		
 		if ($form->get('validateAndCreate')->isClicked()) {
 			return $this->redirectToRoute('sd_core_timetable_addline', array('timetableID' => $timetable->getID()));

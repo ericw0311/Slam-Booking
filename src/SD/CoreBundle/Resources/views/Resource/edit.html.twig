@@ -9,6 +9,20 @@
 
 <div class="panel panel-default">
 
+	<div class="panel-heading">
+<img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ ('resourceType.singular.' ~ resource.type)|trans }}
+
+{% if resource.internal %}
+&nbsp;<img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}
+{% else %}
+&nbsp;<img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}
+{% endif %}
+
+{% if resourceContext.planificationPeriodsCount > 0 %}
+&nbsp;<img src="{{ asset('bundles/sdcore/images/planification-16.png') }}">&nbsp;{{ 'resource.planified'|trans }}
+{% endif %}
+	</div>
+
 	<div class="panel-body">
 {% if resource.internal %}
 <p><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;<strong>{{ resource.name }}</strong></p>

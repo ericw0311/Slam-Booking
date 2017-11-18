@@ -181,7 +181,7 @@ class Resource
      *
      * @return Resource
      */
-    public function setClassification(\SD\CoreBundle\Entity\ResourceClassification $classification)
+    public function setClassification($classification)
     {
         $this->classification = $classification;
         return $this;
@@ -332,15 +332,5 @@ class Resource
     public function updateDate()
     {
         $this->updatedAt = new \DateTime();
-    }
-
-    public function get_tprr_createdAt()
-    {
-        return $this->createdAt;
-    }
-
-    public function get_tprr_updatedAt()
-    {
-        return $this->updatedAt;
     }
 }

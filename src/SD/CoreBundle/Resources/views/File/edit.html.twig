@@ -16,8 +16,11 @@
   <div class="btn-group">
 <a href="{{ path('sd_core_file_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back.to.list'|trans }}</a>
 {% if file.user.id != userContext.user.id %}
-    <button type="button" class="btn btn-info btn-primary" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
-    <button type="button" class="btn btn-info btn-danger" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+{% elseif (fileEditContext.userFilesCount + fileEditContext.userTimetablesCount + fileEditContext.resourcesCount + fileEditContext.labelsCount) > 0 %}
+    <a href="{{ path('sd_core_file_modify', { 'fileID': file.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+	<a href="{{ path('sd_core_file_foreign', { 'fileID': file.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> <del>{{ 'delete'|trans }}</del></a>
 {% else %}
     <a href="{{ path('sd_core_file_modify', { 'fileID': file.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
     <a href="{{ path('sd_core_file_delete', { 'fileID': file.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>

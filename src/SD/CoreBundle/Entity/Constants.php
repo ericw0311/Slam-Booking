@@ -8,6 +8,8 @@ class Constants
 	const ACTIVITY_NUMBER_LINES = 20;
 	const FILE_NUMBER_COLUMNS = 2;
 	const FILE_NUMBER_LINES = 20;
+	const LABEL_NUMBER_COLUMNS = 2;
+	const LABEL_NUMBER_LINES = 20;
 	const PLANIFICATION_NUMBER_COLUMNS = 2;
 	const PLANIFICATION_NUMBER_LINES = 20;
 	const QUERYBOOKING_NUMBER_COLUMNS = 2;
@@ -23,6 +25,8 @@ class Constants
 	const NUMBER_LINES_MINI_DUAL_BUTTON_LIST = 8; // Nombre de lignes minimum a partir duquel on affiche la serie de bouttons actions avant et après la liste en question
 
 	const RESOURCE_TYPE = array('PLACE', 'VEHICLE', 'TOOL', 'SPORT', 'USER');
+	
+	const DISPLAYED_RESOURCE_TYPE = array('PLACE', 'VEHICLE', 'TOOL', 'SPORT');
 	
 	const RESOURCE_TYPE_ICON = array(
 			'PLACE' => 'place',

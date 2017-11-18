@@ -21,12 +21,11 @@ class DefaultController extends Controller
     if ($userContext->getCurrentFileID() <= 0) {
         return $this->render('SDCoreBundle:Default:index.html.twig', array('userContext' => $userContext));
     } else {
-        $fileContext = new FileContext($em, $userContext->getCurrentFile()); // contexte dossier
-        return $this->render('SDCoreBundle:Default:administration.html.twig', array('userContext' => $userContext, 'fileContext' => $fileContext));
+		return $this->redirectToRoute('sd_core_summary');
     }
     }
-    
-    public function administrationAction()
+
+    public function summaryAction()
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -34,6 +33,6 @@ class DefaultController extends Controller
 
     $fileContext = new FileContext($em, $userContext->getCurrentFile()); // contexte dossier
 
-    return $this->render('SDCoreBundle:Default:administration.html.twig', array('userContext' => $userContext, 'fileContext' => $fileContext));
+    return $this->render('SDCoreBundle:Default:summary.html.twig', array('userContext' => $userContext, 'fileContext' => $fileContext));
     }
 }

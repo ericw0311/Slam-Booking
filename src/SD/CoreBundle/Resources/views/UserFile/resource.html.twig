@@ -1,0 +1,57 @@
+{# src/SD/CoreBundle/Resources/views/UserFile/resource.html.twig #}
+
+{% set resourceTypes = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE') %}
+{% set resourceTypeIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set internalResourceClassifications = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION') %}
+{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block body %}
+
+<div class="panel panel-default">
+
+<div class="panel-heading">
+{% if userFile.administrator %}
+<img src="{{ asset('bundles/sdcore/images/administrator-32.png') }}">&nbsp;{{ 'resource.user.ask'|trans({'%name%': userFile.firstName}) }}
+{% else %}
+<img src="{{ asset('bundles/sdcore/images/user-32.png') }}">&nbsp;<strong>{{ 'resource.user.ask'|trans({'%name%': (userFile.firstName ~ ' ' ~ userFile.lastName)}) }}</strong>
+{% endif %}
+</div>
+
+<div class="panel-body">
+
+<div class="col-sm-4 list-group">
+{% block link_yes_no %}{% endblock %}
+</div>
+
+<div class="col-sm-8 list-group">
+
+{% for i_RCCode in internalResourceClassifications[resourceType] %}
+{% if i_RCCode in listActiveInternalRC %}
+{% block link_internal %}{% endblock %}
+{% endif %}
+{% endfor %}
+
+{% for i_RC in listExternalRC %}
+{% block link_external %}{% endblock %}
+{% endfor %}
+
+</div>
+
+</div>
+
+<div class="panel-footer">
+<div class="btn-group">
+<a href="{{ path('sd_core_userFile_edit', { 'userFileID': userFile.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+{% if internal > 0 %}
+<a href="{{ path('sd_core_userFile_resource_validate_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': resourceClassificationCode, 'yes': yes }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</a>
+{% else %}
+<a href="{{ path('sd_core_userFile_resource_validate_external', { 'userFileID': userFile.ID, 'resourceClassificationID': resourceClassificationID, 'yes': yes }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</a>
+{% endif %}
+</div>
+</div>
+
+</div>
+
+{% endblock %}

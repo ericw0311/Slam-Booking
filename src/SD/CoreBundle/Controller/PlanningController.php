@@ -20,28 +20,11 @@ class PlanningController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('SDCoreBundle:Planning:index.html.twig', array('userContext' => $userContext));
+    $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
+
+    $listPlanifications = $planificationRepository->getPlanifications($userContext->getCurrentFile());
+
+    return $this->render('SDCoreBundle:Planning:index.html.twig',
+		array('userContext' => $userContext, 'listPlanifications' => $listPlanifications));
     }
-
-	/**
-	 * @Route("/planning/foo/{id}/bar", options={"expose"=true}, name="my_route_to_expose")
-	*/
-	public function fooAction() {
-    $connectedUser = $this->getUser();
-    $em = $this->getDoctrine()->getManager();
-    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-
-	return $this->render('SDCoreBundle:Planning:FOSJsRouting1.html.twig', array('userContext' => $userContext));
-	}
-
-	/**
-	 * @Route("/blog/{page}",
-	 *     defaults = { "page" = 1 },
-	 *     options = { "expose" = true },
-	 *     name = "my_route_to_expose_with_defaults",
-	 * )
-	*/
-	public function blogAction($page) {
-	return $this->render('SDCoreBundle:Planning:FOSJsRouting2.html.twig');
-	}
 }

@@ -1,11 +1,39 @@
 {# src/SD/CoreBundle/Resources/views/Planning/index.html.twig #}
 
+{% set resourceTypeIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
 {% extends "SDCoreBundle::layout.html.twig" %}
 
 {% block title %}{{ parent() }} Planning{% endblock %}
 
 {% block body %}
 
+<div class="col-sm-3">
+
+{% block listRow %}
+{% for planification in listPlanifications %}
+<div class="row">
+{% if planification.internal %}
+	<a href="{{ path('sd_core_planification_edit_lp', { 'planificationID': planification.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[planification.code] ~ '-32.png') }}">&nbsp;{{ planification.name }}</a>
+{% else %}
+	<a href="{{ path('sd_core_planification_edit_lp', { 'planificationID': planification.ID }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[planification.type] ~ '-32.png') }}">&nbsp;{{ planification.name }}</a>
+{% endif %}
+</div>
+{% endfor %}
+{% endblock %}
+
+</div>
+
+<div class="col-sm-9">
+
+<div class="well">
+<a href="{{ path('sd_core_planning_display') }}" class="glyphicon glyphicon-th" title="{{ 'period.previous'|trans }}"></a>
+<a href="{{ path('sd_core_planning_display') }}" class="glyphicon glyphicon-calendar" title="{{ 'period.previous'|trans }}"></a>
+</div>
+
 {% include 'ADesignsCalendarBundle::calendar.html.twig' %}
+
+</div>
 
 {% endblock %}

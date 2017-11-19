@@ -23,13 +23,30 @@ class PlanificationRepository extends \Doctrine\ORM\EntityRepository
 	
     public function getDisplayedPlanifications($file, $firstRecordIndex, $maxRecord)
     {
-    $queryBuilder = $this->createQueryBuilder('p');
-    $queryBuilder->where('p.file = :file')->setParameter('file', $file);
-    $queryBuilder->orderBy('p.name', 'ASC');
-    $queryBuilder->setFirstResult($firstRecordIndex);
-    $queryBuilder->setMaxResults($maxRecord);
+    $qb = $this->createQueryBuilder('p');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
    
-    $query = $queryBuilder->getQuery();
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
+    public function getPlanifications($file)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
+   
+    $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
     }

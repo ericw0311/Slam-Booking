@@ -50,4 +50,19 @@ class PlanificationRepository extends \Doctrine\ORM\EntityRepository
     $results = $query->getResult();
     return $results;
     }
+
+	// Retourne la première planification
+	public function getFirstPlanification($file)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
+	$qb->setMaxResults(1);
+    $query = $qb->getQuery();
+	$results = $query->getOneOrNullResult();
+    return $results;
+    }
 }

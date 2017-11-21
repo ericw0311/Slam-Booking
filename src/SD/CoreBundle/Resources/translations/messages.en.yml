@@ -68,6 +68,9 @@ planification.updated.ok: The planification has been updated
 planification.validate.not.allowed: You must select at least one resource
 
 planning: Planning
+planning.calendar: Calendar
+planning.timetable: Timetable
+
 
 queryBooking.ask.delete: Do you really want to delete query %name% ?
 queryBooking.back.to.list: Back to queries list

@@ -1,0 +1,57 @@
+{# src/SD/CoreBundle/Resources/views/Planning/timetable.html.twig #}
+
+{% set resourceTypeIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block title %}{{ parent() }} Planning{% endblock %}
+
+{% block body %}
+
+<div class="col-sm-3">
+
+{% block listRow %}
+{% for i_p in listPlanifications %}
+<div class="row">
+
+{% if i_p.internal %}
+
+{% if i_p.ID == planificationID %}
+	<a href="{{ path('sd_core_planning_calendar', { 'planificationID': i_p.ID, 'date': date|date('Y-m-d') }) }}" class="list-group-item active"><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[i_p.code] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
+{% else %}
+	<a href="{{ path('sd_core_planning_calendar', { 'planificationID': i_p.ID, 'date': date|date('Y-m-d') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceClassificationIcons[i_p.code] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
+{% endif %}
+
+{% else %}
+
+{% if i_p.ID == planificationID %}
+	<a href="{{ path('sd_core_planning_calendar', { 'planificationID': i_p.ID, 'date': date|date('Y-m-d') }) }}" class="list-group-item active"><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
+{% else %}
+	<a href="{{ path('sd_core_planning_calendar', { 'planificationID': i_p.ID, 'date': date|date('Y-m-d') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
+{% endif %}
+
+{% endif %}
+</div>
+
+{% endfor %}
+{% endblock %}
+
+</div>
+
+<div class="col-sm-9">
+
+<nav class="navbar navbar-default"><div class="container-fluid">
+	<ul class="nav navbar-nav navbar-right">
+		<li><a href="{{ path('sd_core_planning_timetable', { 'planificationID': planificationID, 'date': date|date('Y-m-d') }) }}"><span class="glyphicon glyphicon-th"></span>&nbsp;{{ 'planning.timetable'|trans }}</a></li>
+		<li><a href="{{ path('sd_core_planning_calendar', { 'planificationID': planificationID, 'date': date|date('Y-m-d') }) }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ 'planning.calendar'|trans }}</a></li>
+	</ul>
+</div></nav>
+111
+{{ "now"|date("m/d/Y") }}
+222
+{{ date|date("m/d/Y") }}
+333
+</div>
+
+{% endblock %}

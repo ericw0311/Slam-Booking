@@ -2,6 +2,8 @@
 
 namespace SD\CoreBundle\Repository;
 
+use Doctrine\ORM\Query\Expr;
+
 /**
  * PlanificationRepository
  *
@@ -37,7 +39,7 @@ class PlanificationRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 
-    public function getPlanifications($file)
+    public function getPlanningPlanifications($file)
     {
     $qb = $this->createQueryBuilder('p');
     $qb->where('p.file = :file')->setParameter('file', $file);
@@ -51,18 +53,27 @@ class PlanificationRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 
-	// Retourne la première planification
-	public function getFirstPlanification($file)
+	// Retourne la première planification affichée dans le planning
+	public function getFirstPlanningPlanification($file, \Datetime $date)
     {
     $qb = $this->createQueryBuilder('p');
+    $qb->select('p.id planificationID');
+    $qb->addSelect('pp.id planificationPeriodID');
     $qb->where('p.file = :file')->setParameter('file', $file);
+	$qb->innerJoin('p.planificationPeriods', 'pp', Expr\Join::WITH,
+		$qb->expr()->andX(
+			$qb->expr()->orX($qb->expr()->isNull('pp.beginningDate'), $qb->expr()->gte('pp.beginningDate', '?1')),
+			$qb->expr()->orX($qb->expr()->isNull('pp.endDate'), $qb->expr()->lte('pp.endDate', '?2'))));
     $qb->orderBy('p.type', 'ASC');
     $qb->addOrderBy('p.internal', 'DESC');
     $qb->addOrderBy('p.code', 'ASC');
     $qb->addOrderBy('p.name', 'ASC');
+	$qb->setParameter(1, $date);
+	$qb->setParameter(2, $date);
+
 	$qb->setMaxResults(1);
     $query = $qb->getQuery();
-	$results = $query->getOneOrNullResult();
+	$results = $query->getSingleResult();
     return $results;
     }
 }

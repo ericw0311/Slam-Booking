@@ -24,9 +24,10 @@ class PlanningController extends Controller
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
+	$currentDate = date("Ymd");
 
 	// Premiere planification
-    $firstPlanification = $planificationRepository->getFirstPlanification($userContext->getCurrentFile());
+    $firstPlanification = $planificationRepository->getFirstPlanningPlanification($userContext->getCurrentFile(), new \DateTime());
 
 	// Aucune planification
 	if ($firstPlanification === null) {
@@ -34,7 +35,7 @@ class PlanningController extends Controller
     }
 
 	// Acces au planning d'une planification
-	return $this->redirectToRoute('sd_core_planning_calendar', array('planificationID' => $firstPlanification->getID(), 'date' => date("Ymd")));
+	return $this->redirectToRoute('sd_core_planning_calendar', array('planificationID' => $firstPlanification['planificationID'], 'date' => $currentDate));
 	}
 
 
@@ -61,7 +62,7 @@ class PlanningController extends Controller
 
     $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
 
-    $listPlanifications = $planificationRepository->getPlanifications($userContext->getCurrentFile());
+    $listPlanifications = $planificationRepository->getPlanningPlanifications($userContext->getCurrentFile());
 
     return $this->render('SDCoreBundle:Planning:calendar.html.twig',
 		array('userContext' => $userContext, 'listPlanifications' => $listPlanifications, 'planificationID' => $planification->getID(), 'date' => $date));
@@ -81,7 +82,7 @@ class PlanningController extends Controller
 
     $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
 
-    $listPlanifications = $planificationRepository->getPlanifications($userContext->getCurrentFile());
+    $listPlanifications = $planificationRepository->getPlanningPlanifications($userContext->getCurrentFile());
 
 	$previousDate = clone $date;
 	$previousDate->sub(new \DateInterval('P1D'));

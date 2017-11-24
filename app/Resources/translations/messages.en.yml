@@ -18,6 +18,18 @@ delete.not.allowed: Delete not allowed
 end.time: End time
 from: From
 modify: Modify
+month.JAN: January
+month.FEB: February
+month.MAR: Mars
+month.APR: April
+month.MAY: Mai
+month.JUN: June
+month.JUL: July
+month.AUG: August
+month.SEP: September
+month.OCT: October
+month.NOV: November
+month.DEC: December
 no: No
 number.columns: Number of columns
 number.lines: Number of lines

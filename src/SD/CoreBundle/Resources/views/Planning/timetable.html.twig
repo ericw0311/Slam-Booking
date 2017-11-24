@@ -20,7 +20,7 @@
 
 {% block planning_navbar %}
 	<li><a href="{{ path('sd_core_planning_timetable', { 'planificationID': planificationID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-backward" title="{{ 'period.previous'|trans }}"></a></li>
-	<li>{{ date|date("m/d/Y") }}</li>
+	<li><a class="navbar-brand" href="#">{{ ('day.' ~ (date|date("D")|upper))|trans }}&nbsp;{{ date|date("j") }}&nbsp;{{ (('month.' ~ (date|date("M")|upper))|trans)|lower }}&nbsp;{{ date|date("Y") }}</a></li>
 	<li><a href="{{ path('sd_core_planning_timetable', { 'planificationID': planificationID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-forward" title="{{ 'period.next'|trans }}"></a></li>
 {% endblock %}
 

@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\FileContext;
 use SD\CoreBundle\Entity\Planification;
+use SD\CoreBundle\Entity\PlanificationPeriod;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -35,7 +36,7 @@ class PlanningController extends Controller
     }
 
 	// Acces au planning d'une planification
-	return $this->redirectToRoute('sd_core_planning_calendar', array('planificationID' => $firstPlanification['planificationID'], 'date' => $currentDate));
+	return $this->redirectToRoute('sd_core_planning_calendar', array('planificationID' => $firstPlanification['planificationID'], 'planificationPeriodID' => $firstPlanification['planificationPeriodID'], 'date' => $currentDate));
 	}
 
 
@@ -52,9 +53,10 @@ class PlanningController extends Controller
     // Affichage du calendrier d'une planification
     /**
     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
     */
-    public function calendarAction(Planification $planification, \Datetime $date)
+    public function calendarAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -62,19 +64,20 @@ class PlanningController extends Controller
 
     $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
 
-    $listPlanifications = $planificationRepository->getPlanningPlanifications($userContext->getCurrentFile());
+    $planifications = $planificationRepository->getPlanningPlanifications($userContext->getCurrentFile(), $date);
 
     return $this->render('SDCoreBundle:Planning:calendar.html.twig',
-		array('userContext' => $userContext, 'listPlanifications' => $listPlanifications, 'planificationID' => $planification->getID(), 'date' => $date));
+		array('userContext' => $userContext, 'planifications' => $planifications, 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $date));
     }
 
 
     // Affichage de la grille horaire journaliere d'une planification
     /**
 	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function timetableAction(Planification $planification, \Datetime $date)
+    public function timetableAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -82,14 +85,21 @@ class PlanningController extends Controller
 
     $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
 
-    $listPlanifications = $planificationRepository->getPlanningPlanifications($userContext->getCurrentFile());
+    $planifications = $planificationRepository->getPlanningPlanifications($userContext->getCurrentFile(), $date);
 
 	$previousDate = clone $date;
 	$previousDate->sub(new \DateInterval('P1D'));
 	$nextDate = clone $date;
 	$nextDate->add(new \DateInterval('P1D'));
 
+    $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+    $planificationResources = $planificationResourceRepository->getResources($planificationPeriod);
+
+    $planificationLineRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
+	$planificationLine = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D'))));
+
     return $this->render('SDCoreBundle:Planning:timetable.html.twig',
-		array('userContext' => $userContext, 'listPlanifications' => $listPlanifications, 'planificationID' => $planification->getID(), 'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate));
+		array('userContext' => $userContext, 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
+			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate));
     }
 }

@@ -98,8 +98,18 @@ class PlanningController extends Controller
     $planificationLineRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
 	$planificationLine = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D'))));
 
+	if ($planificationLine === null || $planificationLine->getActive() < 1) {
+		return $this->render('SDCoreBundle:Planning:closed.html.twig',
+	array('userContext' => $userContext, 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
+			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate));
+	}
+
+    $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+    $timetableLines = $timetableLineRepository->getTimetableLines($planificationLine->getTimetable());
+
     return $this->render('SDCoreBundle:Planning:timetable.html.twig',
 		array('userContext' => $userContext, 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
-			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate));
+			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'timetableLines' => $timetableLines,
+			'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate));
     }
 }

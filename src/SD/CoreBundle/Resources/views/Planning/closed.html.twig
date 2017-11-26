@@ -29,31 +29,20 @@
 
 {% block planning %}
 
-<table class="table table-bordered table-striped">
-	<thead>
-	<tr>
-	<th></th>
+<table class="table table-striped">
+    <tbody>
 {% for planificationResource in planificationResources %}
-	<th>
-{% if planificationResource.resource.internal %}
-	<img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[planificationResource.resource.code] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
-{% else %}
-	<img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[planificationResource.resource.type] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
-{% endif %}
-	</th>
-{% endfor %}
-	</tr>
-	</thead>
-	<tbody>
-{% for timetableLine in timetableLines %}
 <tr>
-	<td>{{ timetableLine.beginningTime|date("H:i") }}&nbsp;-&nbsp;{{ timetableLine.endTime|date("H:i") }}</td>
-{% for planificationResource in planificationResources %}
-	<td></td>
-{% endfor %}
+{% if planificationResource.resource.internal %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[planificationResource.resource.code] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}</td>
+{% else %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[planificationResource.resource.type] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}</td>
+{% endif %}
 </tr>
 {% endfor %}
-	</tbody>
+    </tbody>
 </table>
+
+Closed
 
 {% endblock %}

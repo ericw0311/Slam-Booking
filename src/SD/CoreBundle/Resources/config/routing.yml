@@ -406,9 +406,29 @@ sd_core_queryBooking_delete:
     requirements:
         queryBookingID: \d+
 
-sd_core_planning_display:
-    path:     /planning/display
-    defaults: { _controller: SDCoreBundle:Planning:index }
+
+sd_core_planning_acces:
+    path:     /planning/acces
+    defaults: { _controller: SDCoreBundle:Planning:acces }
+
+sd_core_planning_noplanification:
+    path:     /planning/noplanification
+    defaults: { _controller: SDCoreBundle:Planning:noplanification }
+
+sd_core_planning_calendar:
+    path:     /planning/calendar/{planificationID}/{planificationPeriodID}/{date}
+    defaults: { _controller: SDCoreBundle:Planning:calendar }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+
+sd_core_planning_timetable:
+    path:     /planning/timetable/{planificationID}/{planificationPeriodID}/{date}
+    defaults: { _controller: SDCoreBundle:Planning:timetable }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+
 
 sd_core_parameter_numberLinesColumns:
     path:     /setNumberLinesColumns/{bundleCode}/{entityCode}

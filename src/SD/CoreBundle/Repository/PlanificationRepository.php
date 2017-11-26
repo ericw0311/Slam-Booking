@@ -2,6 +2,8 @@
 
 namespace SD\CoreBundle\Repository;
 
+use Doctrine\ORM\Query\Expr;
+
 /**
  * PlanificationRepository
  *
@@ -23,14 +25,116 @@ class PlanificationRepository extends \Doctrine\ORM\EntityRepository
 	
     public function getDisplayedPlanifications($file, $firstRecordIndex, $maxRecord)
     {
-    $queryBuilder = $this->createQueryBuilder('p');
-    $queryBuilder->where('p.file = :file')->setParameter('file', $file);
-    $queryBuilder->orderBy('p.name', 'ASC');
-    $queryBuilder->setFirstResult($firstRecordIndex);
-    $queryBuilder->setMaxResults($maxRecord);
+    $qb = $this->createQueryBuilder('p');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
    
-    $query = $queryBuilder->getQuery();
+    $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
+    }
+
+    public function getPlanningPlanifications_sav($file)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
+   
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
+	// Retourne la première planification affichée dans le planning
+	public function getFirstPlanningPlanification_sav($file, \Datetime $date)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->select('p.id planificationID');
+    $qb->addSelect('pp.id planificationPeriodID');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+	$qb->innerJoin('p.planificationPeriods', 'pp', Expr\Join::WITH,
+		$qb->expr()->andX(
+			$qb->expr()->orX($qb->expr()->isNull('pp.beginningDate'), $qb->expr()->gte('pp.beginningDate', '?1')),
+			$qb->expr()->orX($qb->expr()->isNull('pp.endDate'), $qb->expr()->lte('pp.endDate', '?2'))));
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
+	$qb->setParameter(1, $date);
+	$qb->setParameter(2, $date);
+
+	$qb->setMaxResults(1);
+    $query = $qb->getQuery();
+	$results = $query->getSingleResult();
+    return $results;
+    }
+
+	// Retourne la première planification affichée dans le planning
+	public function getFirstPlanningPlanification($file, \Datetime $date)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->select('p.id planificationID');
+    $qb->addSelect('pp.id planificationPeriodID');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+	$this->getPlanningPlanificationsPeriod($qb);
+	$this->getPlanningPlanificationsSort($qb);
+	$this->getPlanningPlanificationsPeriodParameters($qb, $date);
+
+	$qb->setMaxResults(1);
+    $query = $qb->getQuery();
+	$results = $query->getSingleResult();
+    return $results;
+    }
+
+    public function getPlanningPlanifications($file, \Datetime $date)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->select('p.id ID');
+    $qb->addSelect('p.type');
+    $qb->addSelect('p.name');
+    $qb->addSelect('p.internal');
+    $qb->addSelect('p.code');
+    $qb->addSelect('pp.id planificationPeriodID');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+	$this->getPlanningPlanificationsPeriod($qb);
+	$this->getPlanningPlanificationsSort($qb);
+	$this->getPlanningPlanificationsPeriodParameters($qb, $date);
+
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
+	// Planifications affichées dans le planning: période
+	public function getPlanningPlanificationsPeriod($qb)
+    {
+	$qb->innerJoin('p.planificationPeriods', 'pp', Expr\Join::WITH,
+		$qb->expr()->andX(
+			$qb->expr()->orX($qb->expr()->isNull('pp.beginningDate'), $qb->expr()->gte('pp.beginningDate', ':beginningDate')),
+			$qb->expr()->orX($qb->expr()->isNull('pp.endDate'), $qb->expr()->lte('pp.endDate', ':endDate'))));
+    }
+
+	// Planifications affichées dans le planning: paramètres de la période
+	public function getPlanningPlanificationsPeriodParameters($qb, \Datetime $date)
+    {
+	$qb->setParameter('beginningDate', $date);
+	$qb->setParameter('endDate', $date);
+    }
+
+	// Planifications affichées dans le planning: tri
+	public function getPlanningPlanificationsSort($qb)
+    {
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
     }
 }

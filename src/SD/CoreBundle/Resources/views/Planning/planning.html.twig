@@ -1,0 +1,54 @@
+{# src/SD/CoreBundle/Resources/views/Planning/planning.html.twig #}
+
+{% set resourceTypeIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends "SDCoreBundle::layout.html.twig" %}
+
+{% block title %}{{ parent() }} Planning{% endblock %}
+
+{% block body %}
+
+<div class="col-sm-3">
+
+{% block listRow %}
+{% for i_p in planifications %}
+<div class="row">
+{% if i_p.internal %}
+
+{% if i_p.ID == planificationID %}
+{% block planification_internal_active %}{% endblock %}
+{% else %}
+{% block planification_internal %}{% endblock %}
+{% endif %}
+
+{% else %}
+
+{% if i_p.ID == planificationID %}
+{% block planification_external_active %}{% endblock %}
+{% else %}
+{% block planification_external %}{% endblock %}
+{% endif %}
+
+{% endif %}
+</div>
+{% endfor %}
+{% endblock %}
+
+</div>
+
+<div class="col-sm-9">
+
+<nav class="navbar navbar-default"><div class="container-fluid">
+	<ul class="nav navbar-nav navbar-right">
+		{% block planning_navbar %}{% endblock %}
+		<li><a href="{{ path('sd_core_planning_timetable', { 'planificationID': planificationID, 'planificationPeriodID': planificationPeriodID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-th"></span>&nbsp;{{ 'planning.timetable'|trans }}</a></li>
+		<li><a href="{{ path('sd_core_planning_calendar', { 'planificationID': planificationID, 'planificationPeriodID': planificationPeriodID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ 'planning.calendar'|trans }}</a></li>
+	</ul>
+</div></nav>
+
+{% block planning %}{% endblock %}
+
+</div>
+
+{% endblock %}

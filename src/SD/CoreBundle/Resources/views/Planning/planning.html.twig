@@ -16,7 +16,7 @@
 <div class="row">
 {% if i_p.internal %}
 
-{% if i_p.ID == planificationID %}
+{% if i_p.ID == planification.ID %}
 {% block planification_internal_active %}{% endblock %}
 {% else %}
 {% block planification_internal %}{% endblock %}
@@ -24,7 +24,7 @@
 
 {% else %}
 
-{% if i_p.ID == planificationID %}
+{% if i_p.ID == planification.ID %}
 {% block planification_external_active %}{% endblock %}
 {% else %}
 {% block planification_external %}{% endblock %}
@@ -39,13 +39,17 @@
 
 <div class="col-sm-9">
 
-<nav class="navbar navbar-default"><div class="container-fluid">
-	<ul class="nav navbar-nav navbar-right">
-		{% block planning_navbar %}{% endblock %}
-		<li><a href="{{ path('sd_core_planning_timetable', { 'planificationID': planificationID, 'planificationPeriodID': planificationPeriodID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-th"></span>&nbsp;{{ 'planning.timetable'|trans }}</a></li>
-		<li><a href="{{ path('sd_core_planning_calendar', { 'planificationID': planificationID, 'planificationPeriodID': planificationPeriodID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ 'planning.calendar'|trans }}</a></li>
-	</ul>
-</div></nav>
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">{{ planification.name }}</a>
+		</div>
+		<ul class="nav navbar-nav navbar-right">
+	<li><a href="{{ path('sd_core_planning_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-th"></span>&nbsp;{{ 'planning.timetable'|trans }}</a></li>
+	<li><a href="{{ path('sd_core_planning_calendar', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ 'planning.calendar'|trans }}</a></li>
+		</ul>
+	</div>
+</nav>
 
 {% block planning %}{% endblock %}
 

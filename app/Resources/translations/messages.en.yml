@@ -6,6 +6,8 @@ back: Retour
 beginning.time: Beginning time
 cancel: Cancel
 close: Close
+day.next: Next day
+day.previous: Previous day
 day.MON: Monday
 day.TUE: Tuesday
 day.WED: Wednesday

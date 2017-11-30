@@ -21,39 +21,19 @@
 	<a href="{{ path('sd_core_planning_timetable', { 'planificationID': i_p.ID, 'planificationPeriodID': i_p.planificationPeriodID, 'date': date|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
 {% endblock %}
 
-{% block planning_navbar %}
-	<li><a href="{{ path('sd_core_planning_timetable', { 'planificationID': planificationID, 'planificationPeriodID': planificationPeriodID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-backward" title="{{ 'period.previous'|trans }}"></a></li>
-	<li><a class="navbar-brand" href="#">{{ ('day.' ~ (date|date("D")|upper))|trans }}&nbsp;{{ date|date("j") }}&nbsp;{{ (('month.' ~ (date|date("M")|upper))|trans)|lower }}&nbsp;{{ date|date("Y") }}</a></li>
-	<li><a href="{{ path('sd_core_planning_timetable', { 'planificationID': planificationID, 'planificationPeriodID': planificationPeriodID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-forward" title="{{ 'period.next'|trans }}"></a></li>
-{% endblock %}
-
 {% block planning %}
 
-<table class="table table-bordered table-striped">
-	<thead>
-	<tr>
-	<th></th>
-{% for planificationResource in planificationResources %}
-	<th>
-{% if planificationResource.resource.internal %}
-	<img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[planificationResource.resource.code] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
-{% else %}
-	<img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[planificationResource.resource.type] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
-{% endif %}
-	</th>
-{% endfor %}
-	</tr>
-	</thead>
-	<tbody>
-{% for timetableLine in timetableLines %}
-<tr>
-	<td>{{ timetableLine.beginningTime|date("H:i") }}&nbsp;-&nbsp;{{ timetableLine.endTime|date("H:i") }}</td>
-{% for planificationResource in planificationResources %}
-	<td></td>
-{% endfor %}
-</tr>
-{% endfor %}
-	</tbody>
-</table>
+<div style="color:blue; text-align: center">
+<a href="{{ path('sd_core_planning_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousMonth|date('Ymd') }) }}" class="glyphicon glyphicon-fast-backward" title="{{ 'month.previous'|trans }}"></a>&nbsp;
+<a href="{{ path('sd_core_planning_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousWeek|date('Ymd') }) }}" class="glyphicon glyphicon-backward" title="{{ 'week.previous'|trans }}"></a>&nbsp;
+<a href="{{ path('sd_core_planning_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>&nbsp;
+{{ ('day.' ~ (date|date("D")|upper))|trans }}&nbsp;{{ date|date("j") }}&nbsp;{{ (('month.' ~ (date|date("M")|upper))|trans)|lower }}&nbsp;{{ date|date("Y") }}&nbsp;
+<a href="{{ path('sd_core_planning_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
+<a href="{{ path('sd_core_planning_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextWeek|date('Ymd') }) }}" class="glyphicon glyphicon-forward" title="{{ 'week.next'|trans }}"></a>
+<a href="{{ path('sd_core_planning_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextMonth|date('Ymd') }) }}" class="glyphicon glyphicon-fast-forward" title="{{ 'month.next'|trans }}"></a>
+</div>
+
+{% block planning_timetable %}
+{% endblock %}
 
 {% endblock %}

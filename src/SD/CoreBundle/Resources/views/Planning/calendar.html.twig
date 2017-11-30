@@ -18,9 +18,6 @@
 	<a href="{{ path('sd_core_planning_calendar', { 'planificationID': i_p.ID, 'planificationPeriodID': i_p.planificationPeriodID, 'date': date|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
 {% endblock %}
 
-{% block planning_navbar %}
-{% endblock %}
-
 {% block planning %}
 {% include 'ADesignsCalendarBundle::calendar.html.twig' %}
 {% endblock %}

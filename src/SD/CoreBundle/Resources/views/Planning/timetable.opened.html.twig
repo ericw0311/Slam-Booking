@@ -1,0 +1,34 @@
+{# src/SD/CoreBundle/Resources/views/Planning/timetable.opened.html.twig #}
+
+{% extends "SDCoreBundle:Planning:timetable.html.twig" %}
+
+{% block planning_timetable %}
+
+<table class="table table-bordered table-striped">
+	<thead>
+	<tr>
+	<th></th>
+{% for planificationResource in planificationResources %}
+	<th>
+{% if planificationResource.resource.internal %}
+	<img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[planificationResource.resource.code] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% else %}
+	<img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[planificationResource.resource.type] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% endif %}
+	</th>
+{% endfor %}
+	</tr>
+	</thead>
+	<tbody>
+{% for timetableLine in timetableLines %}
+<tr>
+	<td>{{ timetableLine.beginningTime|date("H:i") }}&nbsp;-&nbsp;{{ timetableLine.endTime|date("H:i") }}</td>
+{% for planificationResource in planificationResources %}
+	<td></td>
+{% endfor %}
+</tr>
+{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

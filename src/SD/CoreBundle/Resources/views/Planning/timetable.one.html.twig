@@ -1,0 +1,23 @@
+{# src/SD/CoreBundle/Resources/views/Planning/timetable.one.html.twig #}
+
+{% set rtIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends "SDCoreBundle:Planning:planning.one.html.twig" %}
+
+{% block planning %}
+
+<div style="color:blue; text-align: center">
+<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousMonth|date('Ymd') }) }}" class="glyphicon glyphicon-fast-backward" title="{{ 'month.previous'|trans }}"></a>&nbsp;
+<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousWeek|date('Ymd') }) }}" class="glyphicon glyphicon-backward" title="{{ 'week.previous'|trans }}"></a>&nbsp;
+<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>&nbsp;
+{{ ('day.' ~ (date|date("D")|upper))|trans }}&nbsp;{{ date|date("j") }}&nbsp;{{ (('month.' ~ (date|date("M")|upper))|trans)|lower }}&nbsp;{{ date|date("Y") }}&nbsp;
+<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
+<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextWeek|date('Ymd') }) }}" class="glyphicon glyphicon-forward" title="{{ 'week.next'|trans }}"></a>
+<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextMonth|date('Ymd') }) }}" class="glyphicon glyphicon-fast-forward" title="{{ 'month.next'|trans }}"></a>
+</div>
+
+{% block planning_timetable %}
+{% endblock %}
+
+{% endblock %}

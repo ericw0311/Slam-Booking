@@ -415,16 +415,30 @@ sd_core_planning_noplanification:
     path:     /planning/noplanification
     defaults: { _controller: SDCoreBundle:Planning:noplanification }
 
-sd_core_planning_calendar:
-    path:     /planning/calendar/{planificationID}/{planificationPeriodID}/{date}
-    defaults: { _controller: SDCoreBundle:Planning:calendar }
+sd_core_planning_one_calendar:
+    path:     /planningone/calendar/{planificationID}/{planificationPeriodID}/{date}
+    defaults: { _controller: SDCoreBundle:Planning:one_calendar }
     requirements:
         planificationID: \d+
         planificationPeriodID: \d+
 
-sd_core_planning_timetable:
-    path:     /planning/timetable/{planificationID}/{planificationPeriodID}/{date}
-    defaults: { _controller: SDCoreBundle:Planning:timetable }
+sd_core_planning_many_calendar:
+    path:     /planningmany/calendar/{planificationID}/{planificationPeriodID}/{date}
+    defaults: { _controller: SDCoreBundle:Planning:many_calendar }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+
+sd_core_planning_one_timetable:
+    path:     /planningone/timetable/{planificationID}/{planificationPeriodID}/{date}
+    defaults: { _controller: SDCoreBundle:Planning:one_timetable }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+
+sd_core_planning_many_timetable:
+    path:     /planningmany/timetable/{planificationID}/{planificationPeriodID}/{date}
+    defaults: { _controller: SDCoreBundle:Planning:many_timetable }
     requirements:
         planificationID: \d+
         planificationPeriodID: \d+

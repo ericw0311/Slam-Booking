@@ -69,6 +69,7 @@ planification.validate.not.allowed: You must select at least one resource
 
 planning: Planning
 planning.calendar: Calendar
+planning.stretched.out: Stretched out planning
 planning.timetable: Timetable
 
 

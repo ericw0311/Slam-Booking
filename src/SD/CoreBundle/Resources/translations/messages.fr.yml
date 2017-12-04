@@ -69,6 +69,7 @@ planification.validate.not.allowed: Vous devez sélectionner au moins une ressou
 
 planning: Planning
 planning.calendar: Calendrier
+planning.stretched.out: Planning étendu
 planning.timetable: Grille horaire
 
 queryBooking.ask.delete: Voulez-vous vraiment supprimer la requête %name% ?

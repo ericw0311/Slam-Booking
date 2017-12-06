@@ -27,16 +27,19 @@ class PlanningController extends Controller
     $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
 	$currentDate = date("Ymd");
 
-	// Premiere planification
-    $firstPlanification = $planificationRepository->getFirstPlanningPlanification($userContext->getCurrentFile(), new \DateTime());
+    $planifications = $planificationRepository->getPlanningPlanifications($userContext->getCurrentFile(), new \DateTime());
 
 	// Aucune planification
-	if ($firstPlanification === null) {
+	if (count($planifications) <= 0) {
 		return $this->redirectToRoute('sd_core_planning_noplanification');
     }
 
 	// Acces au planning d'une planification
-	return $this->redirectToRoute('sd_core_planning_many_calendar', array('planificationID' => $firstPlanification['planificationID'], 'planificationPeriodID' => $firstPlanification['planificationPeriodID'], 'date' => $currentDate));
+	if (count($planifications) > 1) {
+		return $this->redirectToRoute('sd_core_planning_many_timetable', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
+	} else {
+		return $this->redirectToRoute('sd_core_planning_one_timetable', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
+	}
 	}
 
 

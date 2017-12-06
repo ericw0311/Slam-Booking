@@ -42,6 +42,11 @@ class Booking
     private $file;
 
     /**
+    * @ORM\Column(name="created_at", type="datetime", nullable=false)
+    */
+    private $createdAt;
+
+    /**
      * @ORM\OneToMany(targetEntity="BookingLine", mappedBy="booking", cascade={"persist", "remove"})
      */
     private $bookingLines;
@@ -52,9 +57,14 @@ class Booking
     private $bookingUserFiles;
 
     /**
-    * @ORM\Column(name="created_at", type="datetime", nullable=false)
+    * @ORM\Column(name="beginning_date", type="datetime", nullable=false)
     */
-    private $createdAt;
+    private $beginningDate;
+
+    /**
+    * @ORM\Column(name="end_date", type="datetime", nullable=false)
+    */
+    private $endDate;
 
     /**
     * @ORM\Column(name="updated_at", type="datetime", nullable=true)

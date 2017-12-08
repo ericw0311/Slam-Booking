@@ -443,6 +443,14 @@ sd_core_planning_many_timetable:
         planificationID: \d+
         planificationPeriodID: \d+
 
+sd_core_booking_create:
+    path:     /booking/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{cells}
+    defaults: { _controller: SDCoreBundle:Booking:create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
 
 sd_core_parameter_numberLinesColumns:
     path:     /setNumberLinesColumns/{bundleCode}/{entityCode}

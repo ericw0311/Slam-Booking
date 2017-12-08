@@ -21,6 +21,10 @@
 	<a href="{{ path('sd_core_planning_many_calendar', { 'planificationID': i_p.ID, 'planificationPeriodID': i_p.planificationPeriodID, 'date': date|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ resourceTypeIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
 {% endblock %}
 
+{% block planning_one %}
+	<a href="{{ path('sd_core_planning_one_calendar', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-full"></span></a>
+{% endblock %}
+
 {% block planning %}
 {% include 'ADesignsCalendarBundle::calendar.html.twig' %}
 {% endblock %}

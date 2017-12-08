@@ -5,9 +5,13 @@
 
 {% extends "SDCoreBundle:Planning:planning.one.html.twig" %}
 
+{% block planning_many %}
+	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.global'|trans }}"><span class="glyphicon glyphicon-resize-small"></span></a>
+{% endblock %}
+
 {% block planning %}
 
-<div style="color:blue; text-align: center">
+<div class="well well-sm" style="color:blue; text-align: center">
 <a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousMonth|date('Ymd') }) }}" class="glyphicon glyphicon-fast-backward" title="{{ 'month.previous'|trans }}"></a>&nbsp;
 <a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousWeek|date('Ymd') }) }}" class="glyphicon glyphicon-backward" title="{{ 'week.previous'|trans }}"></a>&nbsp;
 <a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>&nbsp;

@@ -20,7 +20,9 @@
 <tr>
 	<td>{{ timetableLine.beginningTime|date("H:i") }}&nbsp;-&nbsp;{{ timetableLine.endTime|date("H:i") }}</td>
 {% for planificationResource in planificationResources %}
-	<td></td>
+        <td>
+<a href="{{ path('sd_core_booking_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd'), 'cells': (date|date('Ymd') ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID) }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
+        </td>
 {% endfor %}
 </tr>
 {% endfor %}

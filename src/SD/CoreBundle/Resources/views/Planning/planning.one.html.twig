@@ -13,7 +13,7 @@
 	<div class="container-fluid">
 		<ul class="nav navbar-nav">
 {% if planifications|length > 1 %}
-	<li><a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-small"></span></a></li>
+	<li>{% block planning_many %}{% endblock %}</li>
 {% endif %}
 {% if planification.internal %}
 	<li><a href="#"><span><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[planification.code] ~ '-32.png') }}">&nbsp;{{ planification.name }}</span></a></li>

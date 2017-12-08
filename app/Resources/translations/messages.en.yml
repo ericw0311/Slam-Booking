@@ -20,6 +20,8 @@ delete.not.allowed: Delete not allowed
 end.time: End time
 from: From
 modify: Modify
+month.next: Next month
+month.previous: Previous month
 month.JAN: January
 month.FEB: February
 month.MAR: Mars
@@ -52,4 +54,6 @@ update.not.allowed: Update not allowed
 user.account: User account
 validate: Validate
 validate.not.allowed: Validate not allowed
+week.next: Next week
+week.previous: Previous week
 yes: Yes

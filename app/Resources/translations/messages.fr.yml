@@ -20,6 +20,8 @@ delete.not.allowed: Suppression interdite
 end.time: Heure de fin
 from: De
 modify: Modifier
+month.next: Mois suivant
+month.previous: Mois précédent
 month.JAN: Janvier
 month.FEB: Février
 month.MAR: Mars
@@ -52,4 +54,6 @@ update.not.allowed: Modification interdite
 user.account: Compte utilisateur
 validate: Valider
 validate.not.allowed: Validation interdite
+week.next: Semaine suivante
+week.previous: Semaine précédente
 yes: Oui

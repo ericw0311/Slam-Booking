@@ -21,9 +21,13 @@
 	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': i_p.ID, 'planificationPeriodID': i_p.planificationPeriodID, 'date': date|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
 {% endblock %}
 
+{% block planning_one %}
+	<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-full"></span></a>
+{% endblock %}
+
 {% block planning %}
 
-<div style="color:blue; text-align: center">
+<div class="well well-sm" style="color:blue; text-align: center">
 <a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousMonth|date('Ymd') }) }}" class="glyphicon glyphicon-fast-backward" title="{{ 'month.previous'|trans }}"></a>&nbsp;
 <a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousWeek|date('Ymd') }) }}" class="glyphicon glyphicon-backward" title="{{ 'week.previous'|trans }}"></a>&nbsp;
 <a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>&nbsp;

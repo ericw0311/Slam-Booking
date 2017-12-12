@@ -4,6 +4,7 @@
 
 {% block planning_timetable %}
 
-{{ include("SDCoreBundle:Planning:timetable.opened.html.twig") }}
+{% set vars = {'booking_create': 'sd_core_booking_one_create'} %}
+{% include 'SDCoreBundle:Planning:timetable.opened.html.twig' with vars %}
 
 {% endblock %}

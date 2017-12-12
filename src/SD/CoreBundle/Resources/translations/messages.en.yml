@@ -11,6 +11,8 @@ activity.singular: Activity
 activity.updated.ok: The activity has been updated
 
 booking.create: Book
+booking.period.beginning.update: Modify beginning period
+booking.period.end.update: Modify end period
 
 dashboard.plural: Dashboards
 dashboard.singular: Dashboard

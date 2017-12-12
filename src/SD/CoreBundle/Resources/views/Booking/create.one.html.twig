@@ -1,0 +1,30 @@
+{# src/SD/CoreBundle/Resources/views/Booking/create.one.html.twig #}
+
+{% extends "SDCoreBundle:Booking:booking.html.twig" %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% block booking_details %}
+{{ include("SDCoreBundle:Booking:create.html.twig") }}
+{% endblock %}
+
+{% block booking_buttons %}
+	<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': beginningDate|date('Ymd') }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+{% endblock %}

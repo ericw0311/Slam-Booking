@@ -87,4 +87,6 @@ class Constants
 			5 => 'FRI',
 			6 => 'SAT',
 			7 => 'SUN');
+
+	const MAXIMUM_NUMBER_BOOKING_LINES = 50; // Nombre maximum de lignes dans une réservation
 }

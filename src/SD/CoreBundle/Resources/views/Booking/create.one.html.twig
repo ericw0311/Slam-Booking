@@ -2,27 +2,9 @@
 
 {% extends "SDCoreBundle:Booking:booking.html.twig" %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {% block booking_details %}
-{{ include("SDCoreBundle:Booking:create.html.twig") }}
+{% set vars = {'period_end': 'sd_core_booking_one_end_period_create'} %}
+{% include 'SDCoreBundle:Booking:create.html.twig' with vars %}
 {% endblock %}
 
 {% block booking_buttons %}

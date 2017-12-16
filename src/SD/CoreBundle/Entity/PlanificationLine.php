@@ -130,7 +130,7 @@ class PlanificationLine
      *
      * @param \SD\CoreBundle\Entity\Timetable $timetable
      *
-     * @return Timetable
+     * @return PlanificationLine
      */
     public function setTimetable(\SD\CoreBundle\Entity\Timetable $timetable)
     {

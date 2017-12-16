@@ -23,7 +23,6 @@ class BookingController extends Controller
 	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
     public function many_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $cells)
     {
@@ -35,7 +34,6 @@ class BookingController extends Controller
 	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
     public function one_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $cells)
     {
@@ -65,14 +63,64 @@ class BookingController extends Controller
 
 	if ($many) {
 		return $this->render('SDCoreBundle:Booking:create.many.html.twig',
-array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'cells' => $cells,
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine));
 	} else {
 		return $this->render('SDCoreBundle:Booking:create.one.html.twig',
-array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'cells' => $cells,
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine));
+	}
+    }
+
+
+    // Mise a jour de la periode de fin
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	*/
+    public function many_end_period_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $cells)
+    {
+	return BookingController::end_period_createAction($planification, $planificationPeriod, $resource, $cells, 1);
+    }
+
+    // Mise a jour de la periode de fin
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	*/
+    public function one_end_period_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $cells)
+    {
+	return BookingController::end_period_createAction($planification, $planificationPeriod, $resource, $cells, 0);
+    }
+
+    // Mise a jour de la periode de fin
+    public function end_period_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $cells, $many)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$cellArray  = explode("+", $cells);
+
+    $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLineID) = explode("-", $cellArray[0]);
+	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
+
+	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
+
+	if ($many) {
+		return $this->render('SDCoreBundle:Booking:period.end.create.many.html.twig',
+array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'cells' => $cells,
+	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine));
+	} else {
+		return $this->render('SDCoreBundle:Booking:period.end.create.one.html.twig',
+array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'cells' => $cells,
+	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine));
 	}
     }
 }

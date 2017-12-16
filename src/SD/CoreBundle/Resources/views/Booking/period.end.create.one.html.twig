@@ -1,0 +1,11 @@
+{# src/SD/CoreBundle/Resources/views/Booking/period.end.create.one.html.twig #}
+
+{% extends "SDCoreBundle:Booking:booking.html.twig" %}
+
+{% block booking_details %}
+{{ include("SDCoreBundle:Booking:period.end.html.twig") }}
+{% endblock %}
+
+{% block booking_buttons %}
+	<a href="{{ path('sd_core_booking_one_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'cells': cells }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+{% endblock %}

@@ -61,17 +61,10 @@ class BookingController extends Controller
 
 	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
 
-	if ($many) {
-		return $this->render('SDCoreBundle:Booking:create.many.html.twig',
+	return $this->render('SDCoreBundle:Booking:create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'cells' => $cells,
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine));
-	} else {
-		return $this->render('SDCoreBundle:Booking:create.one.html.twig',
-array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'cells' => $cells,
-	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
-	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine));
-	}
     }
 
 
@@ -113,14 +106,8 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
-	if ($many) {
-		return $this->render('SDCoreBundle:Booking:period.end.create.many.html.twig',
+	return $this->render('SDCoreBundle:Booking:period.end.create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'cells' => $cells,
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine));
-	} else {
-		return $this->render('SDCoreBundle:Booking:period.end.create.one.html.twig',
-array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'cells' => $cells,
-	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine));
-	}
     }
 }

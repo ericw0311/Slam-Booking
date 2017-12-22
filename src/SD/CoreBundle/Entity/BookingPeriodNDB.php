@@ -6,6 +6,7 @@ namespace SD\CoreBundle\Entity;
 class BookingPeriodNDB
 {
 	private $timetableLine;
+	private $status;
 
 	public function setTimetableLine(\SD\CoreBundle\Entity\TimetableLine $timetableLine)
 	{

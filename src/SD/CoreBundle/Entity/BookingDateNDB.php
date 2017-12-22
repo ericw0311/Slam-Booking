@@ -5,7 +5,7 @@ namespace SD\CoreBundle\Entity;
 // NDB = not database
 class BookingDateNDB
 {
-    private \Datetime $date;
+    private $date;
 	private $periods;
 
 	public function setDate(\Datetime $date)
@@ -29,4 +29,9 @@ class BookingDateNDB
 	{
 		$this->periods[] = $period;
 	}
+
+    public function getPeriods()
+    {
+        return $this->periods;
+    }
 }

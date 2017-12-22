@@ -1,3 +1,22 @@
 {# src/SD/CoreBundle/Resources/views/Booking/period.end.html.twig #}
 
-Je suis period.end.html.twig
+<ul class="nav nav-pills">
+{% for endPeriod in endPeriods %}
+  <li><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ endPeriod.date|date('Ymd') }}</a></li>
+{% endfor %}
+</ul>
+
+<div class="tab-content">
+{% for endPeriod in endPeriods %}
+  <div id="{{ endPeriod.date|date('Ymd') }}" class="tab-pane fade">
+
+{{ endPeriod.date|date('Ymd') }}
+
+{% for period in endPeriod.periods %}
+{{ period.timetableLine.beginningTime|date("H:i") }}
+{% endfor %}
+
+  </div>
+{% endfor %}
+</div>
+

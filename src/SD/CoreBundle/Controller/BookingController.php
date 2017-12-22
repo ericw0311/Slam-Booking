@@ -14,6 +14,8 @@ use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
 use SD\CoreBundle\Entity\Resource;
 
+use SD\CoreBundle\Api\BookingApi;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class BookingController extends Controller
@@ -106,8 +108,10 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
+    $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $beginningDate, $beginningTimetableLine);
+
 	return $this->render('SDCoreBundle:Booking:period.end.create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'cells' => $cells,
-	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine));
+	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine, 'endPeriods' => $endPeriods));
     }
 }

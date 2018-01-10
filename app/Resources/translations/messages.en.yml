@@ -15,6 +15,13 @@ day.THU: Thursday
 day.FRI: Friday
 day.SAT: Saturday
 day.SUN: Sunday
+day.abbr.MON: Mon
+day.abbr.TUE: Tue
+day.abbr.WED: Wed
+day.abbr.THU: Thu
+day.abbr.FRI: Fri
+day.abbr.SAT: Sat
+day.abbr.SUN: Sun
 delete: Delete
 delete.not.allowed: Delete not allowed
 end.time: End time
@@ -34,6 +41,18 @@ month.SEP: September
 month.OCT: October
 month.NOV: November
 month.DEC: December
+month.abbr.JAN: Jan
+month.abbr.FEB: Feb
+month.abbr.MAR: Mar
+month.abbr.APR: Apr
+month.abbr.MAY: Mai
+month.abbr.JUN: Jun
+month.abbr.JUL: Jul
+month.abbr.AUG: Aug
+month.abbr.SEP: Sep
+month.abbr.OCT: Oct
+month.abbr.NOV: Nov
+month.abbr.DEC: Dec
 no: No
 number.columns: Number of columns
 number.lines: Number of lines

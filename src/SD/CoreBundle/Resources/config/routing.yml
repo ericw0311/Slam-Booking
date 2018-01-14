@@ -444,7 +444,7 @@ sd_core_planning_one_timetable:
         planificationPeriodID: \d+
 
 sd_core_booking_many_create:
-    path:     /bookingmany/create/{planificationID}/{planificationPeriodID}/{resourceID}/{cells}
+    path:     /bookingmany/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}
     defaults: { _controller: SDCoreBundle:Booking:many_create }
     requirements:
         planificationID: \d+
@@ -452,7 +452,7 @@ sd_core_booking_many_create:
         resourceID: \d+
 
 sd_core_booking_one_create:
-    path:     /bookingone/create/{planificationID}/{planificationPeriodID}/{resourceID}/{cells}
+    path:     /bookingone/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}
     defaults: { _controller: SDCoreBundle:Booking:one_create }
     requirements:
         planificationID: \d+
@@ -460,7 +460,7 @@ sd_core_booking_one_create:
         resourceID: \d+
 
 sd_core_booking_many_end_period_create:
-    path:     /bookingmany/endperiodcreate/{planificationID}/{planificationPeriodID}/{resourceID}/{cells}
+    path:     /bookingmany/endperiodcreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}
     defaults: { _controller: SDCoreBundle:Booking:many_end_period_create }
     requirements:
         planificationID: \d+
@@ -468,7 +468,7 @@ sd_core_booking_many_end_period_create:
         resourceID: \d+
 
 sd_core_booking_one_end_period_create:
-    path:     /bookingone/endperiodcreate/{planificationID}/{planificationPeriodID}/{resourceID}/{cells}
+    path:     /bookingone/endperiodcreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}
     defaults: { _controller: SDCoreBundle:Booking:one_end_period_create }
     requirements:
         planificationID: \d+

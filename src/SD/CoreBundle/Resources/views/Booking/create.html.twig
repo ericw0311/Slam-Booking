@@ -2,12 +2,12 @@
 
 <div class="col-sm-6">
 
-<a href="#" class="list-group-item" title="{{ 'booking.period.beginning.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ ('day.' ~ (beginningDate|date("D")|upper))|trans }}&nbsp;{{ beginningDate|date("j") }}&nbsp;{{ (('month.' ~ (beginningDate|date("M")|upper))|trans)|lower }}&nbsp;{{ beginningDate|date("Y") }}&nbsp;:&nbsp;{{ beginningTimetableLine.beginningTime|date("H:i") }}&nbsp;-&nbsp;{{ beginningTimetableLine.endTime|date("H:i") }}</a>
+<a href="#" class="list-group-item" title="{{ 'booking.period.beginning.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(beginningDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(beginningTimetableLine) }}</a>
 
 </div>
 
 <div class="col-sm-6">
 
-<a href="{{ path(period_end, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'cells': cells }) }}" class="list-group-item" title="{{ 'booking.period.end.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ ('day.' ~ (endDate|date("D")|upper))|trans }}&nbsp;{{ endDate|date("j") }}&nbsp;{{ (('month.' ~ (endDate|date("M")|upper))|trans)|lower }}&nbsp;{{ endDate|date("Y") }}&nbsp;:&nbsp;{{ endTimetableLine.beginningTime|date("H:i") }}&nbsp;-&nbsp;{{ endTimetableLine.endTime|date("H:i") }}</a>
+<a href="{{ path(period_end, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList }) }}" class="list-group-item" title="{{ 'booking.period.end.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(endTimetableLine) }}</a>
 
 </div>

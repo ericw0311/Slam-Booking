@@ -7,6 +7,7 @@ class BookingPeriodNDB
 {
 	private $timetableLine;
 	private $status;
+	private $url;
 
 	public function setTimetableLine(\SD\CoreBundle\Entity\TimetableLine $timetableLine)
 	{
@@ -28,6 +29,17 @@ class BookingPeriodNDB
     public function getStatus()
     {
         return $this->status;
+    }
+
+	public function setUrl($url)
+	{
+		$this->url = $url;
+		return $this;
+	}
+
+    public function getUrl()
+    {
+        return $this->url;
     }
 
     public function __construct(\SD\CoreBundle\Entity\TimetableLine $timetableLine, $status)

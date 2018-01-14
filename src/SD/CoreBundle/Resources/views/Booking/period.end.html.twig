@@ -2,22 +2,26 @@
 
 <ul class="nav nav-pills">
 {% for endPeriod in endPeriods %}
-  <li><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ ('day.abbr.' ~ (endPeriod.date|date("D")|upper))|trans }}&nbsp;{{ endPeriod.date|date("j") }}&nbsp;{{ (('month.abbr.' ~ (endPeriod.date|date("M")|upper))|trans)|lower }}&nbsp;{{ endPeriod.date|date("y") }}</a></li>
-
+{% if loop.index <= 1 %}
+  <li class="active"><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ dateCourte(endPeriod.date) }}</a></li>
+{% else %}
+  <li><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ dateCourte(endPeriod.date) }}</a></li>
+{% endif %}
 {% endfor %}
 </ul>
 
 <div class="tab-content">
 {% for endPeriod in endPeriods %}
+{% if loop.index <= 1 %}
+  <div id="{{ endPeriod.date|date('Ymd') }}" class="tab-pane fade in active">
+{% else %}
   <div id="{{ endPeriod.date|date('Ymd') }}" class="tab-pane fade">
-
-{{ endPeriod.date|date('Ymd') }}
+{% endif %}
 
 {% for period in endPeriod.periods %}
-{{ period.timetableLine.beginningTime|date("H:i") }}
+	<a href="#" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
 {% endfor %}
 
   </div>
 {% endfor %}
 </div>
-

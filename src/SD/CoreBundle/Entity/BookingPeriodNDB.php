@@ -7,7 +7,7 @@ class BookingPeriodNDB
 {
 	private $timetableLine;
 	private $status;
-	private $url;
+	private $timetableLinesList;
 
 	public function setTimetableLine(\SD\CoreBundle\Entity\TimetableLine $timetableLine)
 	{
@@ -20,6 +20,17 @@ class BookingPeriodNDB
 		return $this->timetableLine;
 	}
 
+	public function setTimetableLinesList($timetableLinesList)
+	{
+		$this->timetableLinesList = $timetableLinesList;
+		return $this;
+	}
+
+    public function getTimetableLinesList()
+    {
+        return $this->timetableLinesList;
+    }
+
 	public function setStatus($status)
 	{
 		$this->status = $status;
@@ -31,20 +42,10 @@ class BookingPeriodNDB
         return $this->status;
     }
 
-	public function setUrl($url)
-	{
-		$this->url = $url;
-		return $this;
-	}
-
-    public function getUrl()
+    public function __construct(\SD\CoreBundle\Entity\TimetableLine $timetableLine, $timetableLinesList, $status)
     {
-        return $this->url;
-    }
-
-    public function __construct(\SD\CoreBundle\Entity\TimetableLine $timetableLine, $status)
-    {
-    $this->setTimetableLine($timetableLine);
-    $this->setStatus($status);
+		$this->setTimetableLine($timetableLine);
+		$this->setTimetableLinesList($timetableLinesList);
+		$this->setStatus($status);
     }
 }

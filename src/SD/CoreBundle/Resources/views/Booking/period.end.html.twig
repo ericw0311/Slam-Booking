@@ -19,7 +19,7 @@
 {% endif %}
 
 {% for period in endPeriod.periods %}
-	<a href="#" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
+	<a href="#" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}&nbsp;{{ period.timetableLinesList }}</a>
 {% endfor %}
 
   </div>

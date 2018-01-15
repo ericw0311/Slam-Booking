@@ -55,13 +55,19 @@ class BookingController extends Controller
 
     $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
 
-	list($beginningDateString, $beginningTimetableID, $beginningTimetableLineID) = explode("-", $cellArray[0]);
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("-", $cellArray[0]);
 	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
+
+	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
+	$beginningTimetableLineID = $beginningTimetableLines[0];
 
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
-	list($endDateString, $endTimetableID, $endTimetableLineID) = explode("-", $cellArray[count($cellArray)-1]);
+	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("-", $cellArray[count($cellArray)-1]);
 	$endDate = date_create_from_format("Ymd", $endDateString);
+
+	$endTimetableLines = explode("*", $endTimetableLinesList);
+	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
 
 	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
 

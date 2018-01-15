@@ -15,12 +15,12 @@ class BookingApi
 	$planificationLineRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
 	$timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
 	$endPeriods = array();
-	$i = 0;
+	$dateIndex = 0;
 	$numberPeriods = 0;
 
 	while ($numberPeriods < Constants::MAXIMUM_NUMBER_BOOKING_LINES) {
 		$date = clone $beginningDate;
-		$date->add(new \DateInterval('P'.$i.'D'));
+		$date->add(new \DateInterval('P'.$dateIndex.'D'));
 		
 		$planificationLine = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D'))));
 		if ($planificationLine !== null && $planificationLine->getActive() > 0) {
@@ -28,22 +28,27 @@ class BookingApi
 			$endDate = new BookingDateNDB($date);
 
 			$timetableLines = $timetableLineRepository->getTimetableLines($planificationLine->getTimetable());
+			$dateTimetableLinesList = $date->format('Ymd').'-'.$planificationLine->getTimetable()->getID();
 
-			foreach ($timetableLines as $timetableLine) {
+			foreach ($timetableLines as $key => $timetableLine) {
 
 				$status = "D";
 				if ($numberPeriods >= Constants::MAXIMUM_NUMBER_BOOKING_LINES || // On a atteint le nombre maximum de périodes d'une réservation.
-					($i <= 0 && $timetableLine->getBeginningTime() < $beginningTimetableLine->getBeginningTime())) // On est sur une période inférieure à la période de début de réservation
+					($dateIndex <= 0 && $timetableLine->getBeginningTime() < $beginningTimetableLine->getBeginningTime())) // On est sur une période inférieure à la période de début de réservation
 					{ $status = "N"; }
 
-				$endPeriod = new BookingPeriodNDB($timetableLine, $status);
+				$dateTimetableLinesList = ($key <= 0) ? ($dateTimetableLinesList.'-'.$timetableLine->getID()) : ($dateTimetableLinesList.'*'.$timetableLine->getID());
+
+				$endPeriod = new BookingPeriodNDB($timetableLine, ($dateIndex <= 0) ? $dateTimetableLinesList : ($timetableLinesList.'+'.$dateTimetableLinesList), $status);
 				$endDate->addPeriod($endPeriod);
 				
 				if ($status == "D" && $numberPeriods < Constants::MAXIMUM_NUMBER_BOOKING_LINES) { $numberPeriods++; }
 			}
 			$endPeriods[] = $endDate;
+
+			$timetableLinesList = ($dateIndex <= 0) ? $dateTimetableLinesList : ($timetableLinesList.'+'.$dateTimetableLinesList);
 		}
-		$i++;
+		$dateIndex++;
 	}
 	return $endPeriods;
     }

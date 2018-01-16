@@ -28,7 +28,7 @@ class BookingApi
 			$endDate = new BookingDateNDB($date);
 
 			$timetableLines = $timetableLineRepository->getTimetableLines($planificationLine->getTimetable());
-			$dateTimetableLinesList = $date->format('Ymd').'-'.$planificationLine->getTimetable()->getID();
+			$dateTimetableLinesList = $date->format('Ymd').'+'.$planificationLine->getTimetable()->getID();
 
 			foreach ($timetableLines as $key => $timetableLine) {
 
@@ -37,16 +37,16 @@ class BookingApi
 					($dateIndex <= 0 && $timetableLine->getBeginningTime() < $beginningTimetableLine->getBeginningTime())) // On est sur une période inférieure à la période de début de réservation
 					{ $status = "N"; }
 
-				$dateTimetableLinesList = ($key <= 0) ? ($dateTimetableLinesList.'-'.$timetableLine->getID()) : ($dateTimetableLinesList.'*'.$timetableLine->getID());
+				$dateTimetableLinesList = ($key <= 0) ? ($dateTimetableLinesList.'+'.$timetableLine->getID()) : ($dateTimetableLinesList.'*'.$timetableLine->getID());
 
-				$endPeriod = new BookingPeriodNDB($timetableLine, ($dateIndex <= 0) ? $dateTimetableLinesList : ($timetableLinesList.'+'.$dateTimetableLinesList), $status);
+				$endPeriod = new BookingPeriodNDB($timetableLine, ($dateIndex <= 0) ? $dateTimetableLinesList : ($timetableLinesList.'-'.$dateTimetableLinesList), $status);
 				$endDate->addPeriod($endPeriod);
 				
 				if ($status == "D" && $numberPeriods < Constants::MAXIMUM_NUMBER_BOOKING_LINES) { $numberPeriods++; }
 			}
 			$endPeriods[] = $endDate;
 
-			$timetableLinesList = ($dateIndex <= 0) ? $dateTimetableLinesList : ($timetableLinesList.'+'.$dateTimetableLinesList);
+			$timetableLinesList = ($dateIndex <= 0) ? $dateTimetableLinesList : ($timetableLinesList.'-'.$dateTimetableLinesList);
 		}
 		$dateIndex++;
 	}

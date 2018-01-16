@@ -51,11 +51,11 @@ class BookingController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$cellArray  = explode("+", $timetableLinesList);
+	$cellArray  = explode("-", $timetableLinesList);
 
     $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
 
-	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("-", $cellArray[0]);
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $cellArray[0]);
 	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
 
 	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
@@ -63,7 +63,7 @@ class BookingController extends Controller
 
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
-	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("-", $cellArray[count($cellArray)-1]);
+	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $cellArray[count($cellArray)-1]);
 	$endDate = date_create_from_format("Ymd", $endDateString);
 
 	$endTimetableLines = explode("*", $endTimetableLinesList);
@@ -109,11 +109,11 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$cellArray  = explode("+", $timetableLinesList);
+	$cellArray  = explode("-", $timetableLinesList);
 
     $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
 
-	list($beginningDateString, $beginningTimetableID, $beginningTimetableLineID) = explode("-", $cellArray[0]);
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLineID) = explode("+", $cellArray[0]);
 	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
 
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);

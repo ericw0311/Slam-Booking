@@ -19,7 +19,13 @@
 {% endif %}
 
 {% for period in endPeriod.periods %}
-	<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': period.timetableLinesList }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}&nbsp;{{ period.timetableLinesList }}</a>
+
+{% if period.status == 'D' %}
+	<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': period.timetableLinesList }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
+{% else %}
+	<li class="list-group-item list-group-item-warning"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</li>
+{% endif %}
+
 {% endfor %}
 
   </div>

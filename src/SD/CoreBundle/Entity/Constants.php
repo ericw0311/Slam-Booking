@@ -89,4 +89,5 @@ class Constants
 			7 => 'SUN');
 
 	const MAXIMUM_NUMBER_BOOKING_LINES = 50; // Nombre maximum de lignes dans une réservation
+	const MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED = 5; // Nombre maximum de dates affichées (utilisé pour la mise a jour des périodes de début et de fin des réservations)
 }

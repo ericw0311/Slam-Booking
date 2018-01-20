@@ -4,7 +4,7 @@
 
 {% block booking_details %}
 
-{% set vars = {'booking_create': 'sd_core_booking_many_create'} %}
+{% set vars = {'period_end': 'sd_core_booking_many_end_period_create', 'booking_create': 'sd_core_booking_many_create'} %}
 {% include 'SDCoreBundle:Booking:period.end.html.twig' with vars %}
 
 {% endblock %}

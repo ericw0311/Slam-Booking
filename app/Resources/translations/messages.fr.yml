@@ -22,6 +22,8 @@ day.abbr.THU: Jeu
 day.abbr.FRI: Ven
 day.abbr.SAT: Sam
 day.abbr.SUN: Dim
+days.next: Jours suivants
+days.previous: Jours précédents
 delete: Supprimer
 delete.not.allowed: Suppression interdite
 end.time: Heure de fin

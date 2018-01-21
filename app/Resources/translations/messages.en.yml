@@ -22,6 +22,8 @@ day.abbr.THU: Thu
 day.abbr.FRI: Fri
 day.abbr.SAT: Sat
 day.abbr.SUN: Sun
+days.next: Next days
+days.previous: Previous days
 delete: Delete
 delete.not.allowed: Delete not allowed
 end.time: End time

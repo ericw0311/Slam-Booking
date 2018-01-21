@@ -8,6 +8,6 @@
 
 <div class="col-sm-6">
 
-<a href="{{ path(period_end, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList }) }}" class="list-group-item" title="{{ 'booking.period.end.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(endTimetableLine) }}</a>
+<a href="{{ path(period_end, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'firstDateNumber': 1, 'userFileIDList': userFileIDList }) }}" class="list-group-item" title="{{ 'booking.period.end.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(endTimetableLine) }}</a>
 
 </div>

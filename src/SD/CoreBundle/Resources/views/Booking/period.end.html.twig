@@ -1,6 +1,9 @@
 {# src/SD/CoreBundle/Resources/views/Booking/period.end.html.twig #}
 
 <ul class="nav nav-pills">
+{% if previousFirstDateNumber > 0 %}
+  <li><a href="{{ path(period_end, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'firstDateNumber': previousFirstDateNumber, 'userFileIDList': userFileIDList }) }}" class="glyphicon glyphicon-backward" title="{{ 'days.previous'|trans }}"></a></li>
+{% endif %}
 {% for endPeriod in endPeriods %}
 {% if loop.index <= 1 %}
   <li class="active"><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ dateCourte(endPeriod.date) }}</a></li>
@@ -8,7 +11,9 @@
   <li><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ dateCourte(endPeriod.date) }}</a></li>
 {% endif %}
 {% endfor %}
-  <li><a href="{{ path(period_end, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList }) }}" class="glyphicon glyphicon-forward" title="{{ 'week.next'|trans }}"></a></li>
+{% if nextFirstDateNumber > 0 %}
+  <li><a href="{{ path(period_end, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'firstDateNumber': nextFirstDateNumber, 'userFileIDList': userFileIDList }) }}" class="glyphicon glyphicon-forward" title="{{ 'days.next'|trans }}"></a></li>
+{% endif %}
 </ul>
 
 <div class="tab-content">
@@ -20,7 +25,7 @@
 {% endif %}
 
 {% for period in endPeriod.periods %}
-	<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': period.timetableLinesList }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
+	<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': period.timetableLinesList, 'userFileIDList': userFileIDList }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
 {% endfor %}
 
   </div>

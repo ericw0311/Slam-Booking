@@ -21,7 +21,7 @@
 	<td>{{ timetableLine(timetableLine) }}</td>
 {% for planificationResource in planificationResources %}
         <td>
-<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': (date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID) }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
+<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': (date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID() }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
         </td>
 {% endfor %}
 </tr>

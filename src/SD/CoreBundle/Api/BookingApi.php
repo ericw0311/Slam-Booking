@@ -10,7 +10,8 @@ use SD\CoreBundle\Entity\Constants;
 
 class BookingApi
 {
-	static function getEndPeriods($em, PlanificationPeriod $planificationPeriod, \Datetime $beginningDate, TimetableLine $beginningTimetableLine)
+	// firstDateNumber: Premiere date affichee
+	static function getEndPeriods($em, PlanificationPeriod $planificationPeriod, \Datetime $beginningDate, TimetableLine $beginningTimetableLine, $firstDateNumber, &$nextFirstDateNumber)
 	{
 	$planificationLineRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
 	$timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
@@ -53,13 +54,17 @@ class BookingApi
 				if ($numberPeriods >= Constants::MAXIMUM_NUMBER_BOOKING_LINES) { $continue = false; } // Nombre maximum de periodes pour une reservation atteint
 			}
 			
-			$endPeriods[] = $endDate;
+			if ($numberDates >= $firstDateNumber) { $endPeriods[] = $endDate; }
+			
 			$timetableLinesList = ($numberDates <= 1) ? $dateTimetableLinesList : ($timetableLinesList.'-'.$dateTimetableLinesList);
 
-			if ($numberDates >= Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) { $continue = false; } // Nombre maximum de dates affichées atteint
+			if ($numberDates >= ($firstDateNumber - 1 + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED)) { $continue = false; } // Nombre maximum de dates affichées atteint
 		}
 		$dateIndex++;
 	}
+
+	// Premiere date affichee suivante: 0 si on a atteint le nombre de periodes de réservation maximum, calculée sinon
+	$nextFirstDateNumber = ($numberPeriods >= Constants::MAXIMUM_NUMBER_BOOKING_LINES) ? 0 : ($firstDateNumber + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
 	return $endPeriods;
     }
 }

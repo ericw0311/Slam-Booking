@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+use SD\CoreBundle\Entity\Constants;
 use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
@@ -27,9 +28,9 @@ class BookingController extends Controller
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function many_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList)
+    public function many_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList)
     {
-	return BookingController::create_Action($planification, $planificationPeriod, $resource, $date, $timetableLinesList, 1);
+	return BookingController::create_Action($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, 1);
     }
 
     // Création de réservation
@@ -39,13 +40,13 @@ class BookingController extends Controller
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function one_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList)
+    public function one_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList)
     {
-	return BookingController::create_Action($planification, $planificationPeriod, $resource, $date, $timetableLinesList, 0);
+	return BookingController::create_Action($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, 0);
     }
 
     // Création de réservation
-    public function create_Action(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $many)
+    public function create_Action(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -74,7 +75,7 @@ class BookingController extends Controller
 	return $this->render('SDCoreBundle:Booking:create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList,
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
-	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine));
+	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFileIDList' => $userFileIDList));
     }
 
 
@@ -85,9 +86,9 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function many_end_period_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList)
+    public function many_end_period_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $firstDateNumber, $userFileIDList)
     {
-	return BookingController::end_period_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, 1);
+	return BookingController::end_period_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $firstDateNumber, $userFileIDList, 1);
     }
 
     // Mise a jour de la periode de fin
@@ -97,13 +98,13 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function one_end_period_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList)
+    public function one_end_period_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $firstDateNumber, $userFileIDList)
     {
-	return BookingController::end_period_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, 0);
+	return BookingController::end_period_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $firstDateNumber, $userFileIDList, 0);
     }
 
     // Mise a jour de la periode de fin
-    public function end_period_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $many)
+    public function end_period_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -118,10 +119,15 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
-    $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $beginningDate, $beginningTimetableLine);
+    $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $beginningDate, $beginningTimetableLine, $firstDateNumber, $nextFirstDateNumber);
+
+	// Calucl du premier jour affiché précedent
+	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
 
 	return $this->render('SDCoreBundle:Booking:period.end.create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList,
-	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine, 'endPeriods' => $endPeriods));
+	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine, 
+	'endPeriods' => $endPeriods, 'firstDateNumber' => $firstDateNumber, 'previousFirstDateNumber' => $previousFirstDateNumber, 'nextFirstDateNumber' => $nextFirstDateNumber,
+	'userFileIDList' => $userFileIDList));
     }
 }

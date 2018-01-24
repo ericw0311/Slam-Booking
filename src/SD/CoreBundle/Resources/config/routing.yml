@@ -478,7 +478,7 @@ sd_core_booking_one_end_period_create:
         firstDateNumber: \d+
 
 sd_core_booking_many_user_files_create:
-    path:     /bookingmany/userfilescreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}{userFileIDInitialList}/{userFileIDList}
+    path:     /bookingmany/userfilescreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDInitialList}/{userFileIDList}
     defaults: { _controller: SDCoreBundle:Booking:many_user_files_create, userFileIDList: null }
     requirements:
         planificationID: \d+

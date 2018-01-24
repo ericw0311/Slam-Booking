@@ -40,8 +40,6 @@
 	</tbody>
 </table>
 
-ici_{{ timetableLinesList }}_la
-
 </div>
 
 <div class="col-sm-6">
@@ -61,15 +59,6 @@ ici_{{ timetableLinesList }}_la
 	</tbody>
 </table>
 
-</div>
-
-<div class="col-sm-12 well well-sm btn-group">
-	{% block link_cancel %}{% endblock %}
-{% if selectedUserFiles|length < 1 %}
-	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#validateModal"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'validate'|trans }}</del></button>
-{% else %}
-	{% block link_validate %}{% endblock %}
-{% endif %}
 </div>
 
 <!-- Modal -->
@@ -94,6 +83,4 @@ ici_{{ timetableLinesList }}_la
 
 {% endblock %}
 
-{% block booking_buttons %}
-	<a href="{{ path('sd_core_booking_one_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDInitialList }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-{% endblock %}
+{% block booking_buttons %}{% endblock %}

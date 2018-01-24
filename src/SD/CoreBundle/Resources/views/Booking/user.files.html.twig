@@ -1,0 +1,99 @@
+{# src/SD/CoreBundle/Resources/views/Booking/user.files.html.twig #}
+
+{% extends "SDCoreBundle:Booking:booking.html.twig" %}
+
+{% block booking_details %}
+
+<div class="col-sm-6">
+
+<table class="table table-striped">
+
+<thead><tr>
+{% if selectedUserFiles|length > 1 %}
+	<th colspan=4>
+{% else %}
+	<th colspan=2>
+{% endif %}
+	{{ 'users.selected'|trans }}</th></tr></thead>
+
+	<tbody>
+{% for userFile in selectedUserFiles %}
+	<tr>
+{% if selectedUserFiles|length > 1 %}
+{% if loop.index > 1 %}
+	<td>{% block link_sortBefore %}{% endblock %}</td>
+{% else %}
+	<td></td>
+{% endif %}
+{% if loop.index < selectedUserFiles|length %}
+	<td>{% block link_sortAfter %}{% endblock %}</td>
+{% else %}
+	<td></td>
+{% endif %}
+{% endif %}
+
+{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+    <td><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</td>
+	<td>{% block link_unselect %}{% endblock %}</td>
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
+
+ici_{{ timetableLinesList }}_la
+
+</div>
+
+<div class="col-sm-6">
+
+<table class="table table-striped">
+	<thead><tr><th colspan=2>{{ 'users'|trans }}</th></tr></thead>
+	<tbody>
+{% for userFile in availableUserFiles %}
+	<tr>
+	<td>{% block link_select %}{% endblock %}</td>
+	
+{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+<td><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</td>
+
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
+
+</div>
+
+<div class="col-sm-12 well well-sm btn-group">
+	{% block link_cancel %}{% endblock %}
+{% if selectedUserFiles|length < 1 %}
+	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#validateModal"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'validate'|trans }}</del></button>
+{% else %}
+	{% block link_validate %}{% endblock %}
+{% endif %}
+</div>
+
+<!-- Modal -->
+<div id="validateModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ 'validate.not.allowed'|trans }}</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{ 'booking.validate.not.allowed'|trans }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block booking_buttons %}
+	<a href="{{ path('sd_core_booking_one_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDInitialList }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+{% endblock %}

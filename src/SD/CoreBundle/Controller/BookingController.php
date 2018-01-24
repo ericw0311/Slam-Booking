@@ -72,10 +72,25 @@ class BookingController extends Controller
 
 	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
 
+	// Utilisateurs
+	$userFileIDArray = explode("-", $userFileIDList);
+
+	$userFiles = array();
+	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+
+	foreach ($userFileIDArray as $userFileID) {
+
+		$userFile = $userFileRepository->find($userFileID);
+		if ($userFile !== null) {
+			$userFiles[] = $userFile;
+		}
+	}
+
 	return $this->render('SDCoreBundle:Booking:create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList,
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
-	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFileIDList' => $userFileIDList));
+	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine,
+	'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList));
     }
 
 
@@ -129,5 +144,49 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine, 
 	'endPeriods' => $endPeriods, 'firstDateNumber' => $firstDateNumber, 'previousFirstDateNumber' => $previousFirstDateNumber, 'nextFirstDateNumber' => $nextFirstDateNumber,
 	'userFileIDList' => $userFileIDList));
+    }
+
+
+    // Mise a jour de la liste des utilisateurs
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function many_user_files_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDInitialList, $userFileIDList)
+    {
+	return BookingController::user_files_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDInitialList, $userFileIDList, 1);
+    }
+
+    // Mise a jour de la liste des utilisateurs
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function one_user_files_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDInitialList, $userFileIDList)
+    {
+	return BookingController::user_files_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDInitialList, $userFileIDList, 0);
+    }
+
+    // Mise a jour de la liste des utilisateurs
+    public function user_files_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDInitialList, $userFileIDList, $many)
+	{
+$memo_timetableLinesList = $timetableLinesList;
+
+
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	
+	$selectedUserFiles = BookingApi::getSelectedUserFiles($em, $userFileIDList);
+	
+	$availableUserFiles = BookingApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
+
+	return $this->render('SDCoreBundle:Booking:user.files.create.'.($many ? 'many' : 'one').'.html.twig',
+array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date, 'timetableLinesList' => $memo_timetableLinesList,
+'selectedUserFiles' => $selectedUserFiles, 'availableUserFiles' => $availableUserFiles, 'userFileIDList' => $userFileIDList, 'userFileIDInitialList' => $userFileIDInitialList));
     }
 }

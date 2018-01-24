@@ -4,7 +4,29 @@
 
 <a href="#" class="list-group-item" title="{{ 'booking.period.beginning.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(beginningDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(beginningTimetableLine) }}</a>
 
+{% if userFiles|length > 0 %}
+<table class="table table-striped">
+	<thead>
+	<tr>
+	<th>{{ 'user.plural'|trans }}&nbsp;
+<a href="{{ path(userFiles_path, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDInitialList': userFileIDList, 'userFileIDList': userFileIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'booking.user.list.update'|trans }}"></a>
+	</th>
+	</tr>
+	</thead>
+	<tbody>
+{% for userFile in userFiles %}
+	<tr>
+{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</td>
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
+{% endif %}
+
 </div>
+
+ici_{{ timetableLinesList }}_la
 
 <div class="col-sm-6">
 

@@ -3,7 +3,7 @@
 {% extends "SDCoreBundle:Booking:booking.html.twig" %}
 
 {% block booking_details %}
-{% set vars = {'period_end': 'sd_core_booking_one_end_period_create'} %}
+{% set vars = {'period_end': 'sd_core_booking_one_end_period_create', 'userFiles_path': 'sd_core_booking_one_user_files_create'} %}
 {% include 'SDCoreBundle:Booking:create.html.twig' with vars %}
 {% endblock %}
 

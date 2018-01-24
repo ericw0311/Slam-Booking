@@ -14,15 +14,26 @@ class UserFileRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getUserFilesCount($file)
     {
-    $queryBuilder = $this->createQueryBuilder('uf');
-    $queryBuilder->select($queryBuilder->expr()->count('uf'));
-    $queryBuilder->where('uf.file = :file')->setParameter('file', $file);
+    $qb = $this->createQueryBuilder('uf');
+    $qb->select($qb->expr()->count('uf'));
+    $qb->where('uf.file = :file')->setParameter('file', $file);
 
-    $query = $queryBuilder->getQuery();
+    $query = $qb->getQuery();
     $singleScalar = $query->getSingleScalarResult();
     return $singleScalar;
     }
 
+	public function getUserFiles($file)
+    {
+    $qb = $this->createQueryBuilder('uf');
+    $qb->where('uf.file = :file')->setParameter('file', $file);
+    $qb->orderBy('uf.firstName', 'ASC');
+    $qb->addOrderBy('uf.lastName', 'ASC');
+   
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
 
     public function getUserFilesExceptFileCreatorCount($file)
     {
@@ -53,14 +64,14 @@ class UserFileRepository extends \Doctrine\ORM\EntityRepository
 
     public function getDisplayedUserFiles($file, $firstRecordIndex, $maxRecord)
     {
-    $queryBuilder = $this->createQueryBuilder('uf');
-    $queryBuilder->where('uf.file = :file')->setParameter('file', $file);
-    $queryBuilder->orderBy('uf.firstName', 'ASC');
-    $queryBuilder->addOrderBy('uf.lastName', 'ASC');
-    $queryBuilder->setFirstResult($firstRecordIndex);
-    $queryBuilder->setMaxResults($maxRecord);
+    $qb = $this->createQueryBuilder('uf');
+    $qb->where('uf.file = :file')->setParameter('file', $file);
+    $qb->orderBy('uf.firstName', 'ASC');
+    $qb->addOrderBy('uf.lastName', 'ASC');
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
    
-    $query = $queryBuilder->getQuery();
+    $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
     }

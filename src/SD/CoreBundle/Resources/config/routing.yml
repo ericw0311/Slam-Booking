@@ -477,6 +477,22 @@ sd_core_booking_one_end_period_create:
         resourceID: \d+
         firstDateNumber: \d+
 
+sd_core_booking_many_user_files_create:
+    path:     /bookingmany/userfilescreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}{userFileIDInitialList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:many_user_files_create, userFileIDList: null }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_user_files_create:
+    path:     /bookingone/userfilescreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDInitialList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:one_user_files_create, userFileIDList: null }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
 sd_core_parameter_numberLinesColumns:
     path:     /setNumberLinesColumns/{bundleCode}/{entityCode}
     defaults: { _controller: SDCoreBundle:Parameter:numberLinesColumns }

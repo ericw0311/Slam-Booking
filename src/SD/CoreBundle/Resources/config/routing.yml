@@ -493,6 +493,22 @@ sd_core_booking_one_user_files_create:
         planificationPeriodID: \d+
         resourceID: \d+
 
+sd_core_booking_many_validate_create:
+    path:     /bookingmany/validatecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:many_validate_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_validate_create:
+    path:     /bookingone/validatecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:one_validate_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
 sd_core_parameter_numberLinesColumns:
     path:     /setNumberLinesColumns/{bundleCode}/{entityCode}
     defaults: { _controller: SDCoreBundle:Parameter:numberLinesColumns }

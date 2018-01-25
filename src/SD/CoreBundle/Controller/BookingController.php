@@ -14,6 +14,7 @@ use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
 use SD\CoreBundle\Entity\Resource;
+use SD\CoreBundle\Entity\Booking;
 
 use SD\CoreBundle\Api\BookingApi;
 
@@ -185,5 +186,68 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 	return $this->render('SDCoreBundle:Booking:user.files.create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList,
 'selectedUserFiles' => $selectedUserFiles, 'availableUserFiles' => $availableUserFiles, 'userFileIDList' => $userFileIDList, 'userFileIDInitialList' => $userFileIDInitialList));
+    }
+
+	// Validation de la création d'une réservation
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	*/
+    public function many_validate_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, Request $request)
+    {
+	return BookingController::validate_createAction($planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $request, 1);
+    }
+
+
+    // Validation de la création d'une réservation
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	*/
+	public function one_validate_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, Request $request)
+    {
+	return BookingController::validate_createAction($planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $request, 0);
+    }
+
+
+    // Validation de la création d'une réservation
+    public function validate_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, Request $request, $many)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+
+	$booking = new Booking($connectedUser, $userContext->getCurrentFile());
+	
+	$cellArray  = explode("-", $timetableLinesList);
+
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $cellArray[0]);
+
+	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
+	$beginningTimetableLineID = $beginningTimetableLines[0];
+
+	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
+
+	$booking->setBeginningDate(date_create_from_format('YmdHi', $beginningDateString.$beginningTimetableLine->getBeginningTime()->format('Hi')));
+
+	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $cellArray[count($cellArray)-1]);
+
+	$endTimetableLines = explode("*", $endTimetableLinesList);
+	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
+
+	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
+
+	$booking->setEndDate(date_create_from_format('YmdHi', $endDateString.$endTimetableLine->getEndTime()->format('Hi')));
+	
+	$em->persist($booking);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'booking.created.ok');
+
+	return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable',
+		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $beginningDateString));
     }
 }

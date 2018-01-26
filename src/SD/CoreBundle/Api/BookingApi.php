@@ -139,4 +139,23 @@ class BookingApi
 	$userFilesDB = $userFileRepository->getUserFiles($file);
 	return BookingApi::getAvailableUserFiles($userFilesDB, $selectedUserFileIDList);
 	}
+
+
+	// Convertit une URL comprenant une liste de grilles horaires (pour réservation) en un tableau de grilles horaires
+	static function getTimetableLines($timetableLinesUrl)
+	{
+	$timetableLineArray = array();
+	$urlArray  = explode("-", $timetableLinesUrl);
+
+	foreach ($urlArray as $urlDate) {
+
+		list($dateString, $timetableID, $timetableLinesList) = explode("+", $urlDate);	
+		$timetableLineIDArray = explode("*", $timetableLinesList);
+
+		foreach ($timetableLineIDArray as $timetableLineID) {
+			$timetableLineArray[] = ($dateString.'-'.$timetableID.'-'.$timetableLineID);
+		}
+	}
+	return $timetableLineArray;
+	}
 }

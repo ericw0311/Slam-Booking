@@ -15,6 +15,7 @@ use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
 use SD\CoreBundle\Entity\Resource;
 use SD\CoreBundle\Entity\Booking;
+use SD\CoreBundle\Entity\BookingLine;
 
 use SD\CoreBundle\Api\BookingApi;
 
@@ -212,38 +213,59 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
     }
 
 
-    // Validation de la création d'une réservation
+	// Validation de la création d'une réservation
     public function validate_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, Request $request, $many)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+	$plRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
+    $tRepository = $em->getRepository('SDCoreBundle:Timetable');
+    $tlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
 
 	$booking = new Booking($connectedUser, $userContext->getCurrentFile());
 	
-	$cellArray  = explode("-", $timetableLinesList);
+	$urlArray  = explode("-", $timetableLinesList);
 
-	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $cellArray[0]);
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $urlArray[0]);
 
 	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
 	$beginningTimetableLineID = $beginningTimetableLines[0];
 
-	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
+	$beginningTimetableLine = $tlRepository->find($beginningTimetableLineID);
 
 	$booking->setBeginningDate(date_create_from_format('YmdHi', $beginningDateString.$beginningTimetableLine->getBeginningTime()->format('Hi')));
 
-	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $cellArray[count($cellArray)-1]);
+	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $urlArray[count($urlArray)-1]);
 
 	$endTimetableLines = explode("*", $endTimetableLinesList);
 	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
 
-	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
+	$endTimetableLine = $tlRepository->find($endTimetableLineID);
 
 	$booking->setEndDate(date_create_from_format('YmdHi', $endDateString.$endTimetableLine->getEndTime()->format('Hi')));
-	
+
 	$em->persist($booking);
+
+	$timetableLines = BookingApi::getTimetableLines($timetableLinesList);
+
+	foreach ($timetableLines as $timetableLineString) {
+		list($dateString, $timetableID, $timetableLineID) = explode("-", $timetableLineString);
+		
+		$date = date_create_from_format('Ymd', $dateString);
+		
+		$bookingLine = new BookingLine($connectedUser, $booking);
+		$bookingLine->setDate($date);
+		$bookingLine->setPlanification($planification);
+		$bookingLine->setPlanificationPeriod($planificationPeriod);
+		$bookingLine->setPlanificationLine($plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D')))));
+		$bookingLine->setResource($resource);
+		$bookingLine->setTimetable($tRepository->find($timetableID));
+		$bookingLine->setTimetableLine($tlRepository->find($timetableLineID));
+		$em->persist($bookingLine);
+	}
+
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'booking.created.ok');
 

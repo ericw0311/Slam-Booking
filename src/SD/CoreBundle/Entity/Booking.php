@@ -22,6 +22,12 @@ class Booking
      */
     private $id;
 
+	/**
+     * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\Resource")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $resource;
+
     /**
      * @var string
      *
@@ -80,6 +86,29 @@ class Booking
     public function getId()
     {
         return $this->id;
+    }
+
+	/**
+     * Set resource
+     *
+     * @param \SD\CoreBundle\Entity\Resource $resource
+     *
+     * @return Booking
+     */
+    public function setResource(\SD\CoreBundle\Entity\Resource $resource)
+    {
+        $this->resource = $resource;
+        return $this;
+    }
+
+    /**
+     * Get resource
+     *
+     * @return \SD\UserBundle\Entity\Resource
+     */
+    public function getResource()
+    {
+        return $this->resource;
     }
 
     /**
@@ -198,10 +227,11 @@ class Booking
 		return $this->endDate;
     }
 
-    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file)
+    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file, \SD\CoreBundle\Entity\Resource $resource)
     {
 		$this->setUser($user);
 		$this->setFile($file);
+		$this->setResource($resource);
     }
 
    /**

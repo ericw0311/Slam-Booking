@@ -305,10 +305,11 @@ class BookingLine
         return $this->user;
     }
 
-	public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\Booking $booking)
+	public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\Booking $booking, \SD\CoreBundle\Entity\Resource $resource)
     {
     $this->setUser($user);
     $this->setBooking($booking);
+	$this->setResource($resource);
     }
 
     /**

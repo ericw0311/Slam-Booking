@@ -16,6 +16,7 @@ use SD\CoreBundle\Entity\PlanificationPeriod;
 use SD\CoreBundle\Entity\Resource;
 use SD\CoreBundle\Entity\Booking;
 use SD\CoreBundle\Entity\BookingLine;
+use SD\CoreBundle\Entity\BookingUser;
 
 use SD\CoreBundle\Api\BookingApi;
 
@@ -223,8 +224,9 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 	$plRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
     $tRepository = $em->getRepository('SDCoreBundle:Timetable');
     $tlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+    $ufRepository = $em->getRepository('SDCoreBundle:UserFile');
 
-	$booking = new Booking($connectedUser, $userContext->getCurrentFile());
+	$booking = new Booking($connectedUser, $userContext->getCurrentFile(), $resource);
 	
 	$urlArray  = explode("-", $timetableLinesList);
 
@@ -255,15 +257,23 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 		
 		$date = date_create_from_format('Ymd', $dateString);
 		
-		$bookingLine = new BookingLine($connectedUser, $booking);
+		$bookingLine = new BookingLine($connectedUser, $booking, $resource);
 		$bookingLine->setDate($date);
 		$bookingLine->setPlanification($planification);
 		$bookingLine->setPlanificationPeriod($planificationPeriod);
 		$bookingLine->setPlanificationLine($plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D')))));
-		$bookingLine->setResource($resource);
 		$bookingLine->setTimetable($tRepository->find($timetableID));
 		$bookingLine->setTimetableLine($tlRepository->find($timetableLineID));
 		$em->persist($bookingLine);
+	}
+
+	$order = 0;
+	$userFileIDArray = explode("-", $userFileIDList);
+
+	foreach ($userFileIDArray as $userFileID) {
+		$bookingUser = new BookingUser($connectedUser, $booking, $ufRepository->find($userFileID));
+		$bookingUser->setOrder(++$order);
+		$em->persist($bookingUser);
 	}
 
 	$em->flush();

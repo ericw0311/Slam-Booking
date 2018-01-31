@@ -11,6 +11,7 @@ activity.singular: Activity
 activity.updated.ok: The activity has been updated
 
 booking.create: Book
+booking.created.ok: The booking has been created
 booking.period.beginning.update: Modify beginning period
 booking.period.end.update: Modify end period
 booking.user.list.update: Modify users list
@@ -77,7 +78,6 @@ planning.calendar: Calendar
 planning.global: Global planning
 planning.stretched.out: Stretched out planning
 planning.timetable: Timetable
-
 
 queryBooking.ask.delete: Do you really want to delete query %name% ?
 queryBooking.back.to.list: Back to queries list
@@ -215,14 +215,17 @@ timetableLine.deleted.ok: The timetable slot has been deleted
 timetableLine.updated.ok: The timetable slot has been updated
 timetableLine.validate.and.create: Validate and add a timetable slot
 
+user: User
 user.account.type: Account type
 user.account.type.INDIVIDUAL: Individual
 user.account.type.ORGANISATION: Organisation
 user.firstName: First name
 user.lastName: Last name
 user.organisation.name: Organisation name
-user.plural: Users
-user.singular: User
+
+users: Users
+users.available: Available users
+users.selected: Selected users
 
 userFile.administrator.rights: The user has administrator rights on file
 userFile.ask.delete: Do you really want to remove user %name% from file ?

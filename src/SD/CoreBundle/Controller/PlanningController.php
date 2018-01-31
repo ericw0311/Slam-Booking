@@ -151,10 +151,15 @@ class PlanningController extends Controller
     $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
     $timetableLines = $timetableLineRepository->getTimetableLines($planificationLine->getTimetable());
 
+
+    $bookingRepository = $em->getRepository('SDCoreBundle:Booking');
+
+    $bookings = $bookingRepository->getBookings($userContext->getCurrentFile(), $date, $planification);
+
     return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.opened.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'timetableLines' => $timetableLines,
 			'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'nextWeek' => $nextWeek, 'previousWeek' => $previousWeek,
-			'nextMonth' => $nextMonth, 'previousMonth' => $previousMonth));
+			'nextMonth' => $nextMonth, 'previousMonth' => $previousMonth, 'bookings' => $bookings));
     }
 }

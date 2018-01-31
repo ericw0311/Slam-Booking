@@ -39,21 +39,7 @@ class PlanificationRepository extends \Doctrine\ORM\EntityRepository
     return $results;
     }
 
-    public function getPlanningPlanifications_sav($file)
-    {
-    $qb = $this->createQueryBuilder('p');
-    $qb->where('p.file = :file')->setParameter('file', $file);
-    $qb->orderBy('p.type', 'ASC');
-    $qb->addOrderBy('p.internal', 'DESC');
-    $qb->addOrderBy('p.code', 'ASC');
-    $qb->addOrderBy('p.name', 'ASC');
-   
-    $query = $qb->getQuery();
-    $results = $query->getResult();
-    return $results;
-    }
-
-	// Retourne la première planification affichée dans le planning
+   	// Retourne la première planification affichée dans le planning
 	public function getFirstPlanningPlanification_sav($file, \Datetime $date)
     {
     $qb = $this->createQueryBuilder('p');

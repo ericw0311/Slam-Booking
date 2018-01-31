@@ -1,5 +1,9 @@
 {# src/SD/CoreBundle/Resources/views/Planning/timetable.opened.html.twig #}
 
+{% for booking in bookings %}
+{{ booking.bookingID }}
+{% endfor %}
+
 <table class="table table-bordered table-striped">
 	<thead>
 	<tr>
@@ -28,3 +32,10 @@
 {% endfor %}
 	</tbody>
 </table>
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}

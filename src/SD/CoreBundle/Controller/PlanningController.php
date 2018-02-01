@@ -14,6 +14,8 @@ use SD\CoreBundle\Entity\FileContext;
 use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
 
+use SD\CoreBundle\Api\BookingApi;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class PlanningController extends Controller
@@ -154,7 +156,9 @@ class PlanningController extends Controller
 
     $bookingRepository = $em->getRepository('SDCoreBundle:Booking');
 
-    $bookings = $bookingRepository->getBookings($userContext->getCurrentFile(), $date, $planification);
+	$bookings_new = BookingApi::getBookings($em, $userContext->getCurrentFile(), $date, $planification, $planificationPeriod);
+
+    $bookings = $bookingRepository->getBookings($userContext->getCurrentFile(), $date, $planification, $planificationPeriod);
 
     return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.opened.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,

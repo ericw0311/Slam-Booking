@@ -1,7 +1,7 @@
 {# src/SD/CoreBundle/Resources/views/Planning/timetable.opened.html.twig #}
 
 {% for booking in bookings %}
-{{ booking.bookingID }}
+{{ booking.bookingID ~ 'A' ~ booking.planificationID ~ 'B' ~ booking.timetableLineID ~ 'C' ~ booking.nbrTimetableLine ~ 'D' }}
 {% endfor %}
 
 <table class="table table-bordered table-striped">

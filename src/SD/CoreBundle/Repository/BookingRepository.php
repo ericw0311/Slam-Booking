@@ -11,19 +11,84 @@ namespace SD\CoreBundle\Repository;
 class BookingRepository extends \Doctrine\ORM\EntityRepository
 {
 
-	public function getBookings($file, \Datetime $date, $planification)
+
+	public function getBookings_new($file, \Datetime $date, $planification, $planificationPeriod)
+	{
+	$qb = $this->createQueryBuilder('b');
+    $qb->select('b.id bID');
+    $qb->addSelect('bl.date date');
+    $qb->addSelect('bl.planification');
+    $qb->addSelect('bl.planificationPeriod');
+    $qb->addSelect('bl.planificationLine');
+    $qb->addSelect('bl.resource');
+    $qb->addSelect('bl.timetable');
+    $qb->addSelect('bl.timetableLine');
+
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere('bl.date = :date')->setParameter('date', $date);
+	$qb->andWhere('bl.planification = :planification')->setParameter('planification', $planification);
+	$qb->andWhere('bl.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+
+	/*
+	$qb->groupBy('b.id');
+	$qb->addGroupBy('bl.date');
+	$qb->addGroupBy('bl.planificationID');
+	$qb->addGroupBy('bl.planificationPeriodID');
+	$qb->addGroupBy('bl.planificationLineID');
+	$qb->addGroupBy('bl.resourceID');
+	$qb->addGroupBy('bl.timetableID');
+	*/
+
+	$qb->innerJoin('b.bookingLines', 'bl');
+	
+	$qb->orderBy('bl.date', 'ASC');
+	$qb->addOrderBy('b.id', 'ASC');
+	
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
+	}
+
+	public function getBookings($file, \Datetime $date, $planification, $planificationPeriod)
 	{
 	$qb = $this->createQueryBuilder('b');
     $qb->select('b.id bookingID');
     $qb->addSelect('bl.date date');
+    $qb->addSelect('p.id planificationID');
+
+    $qb->addSelect('pp.id planificationPeriodID');
+	$qb->addSelect('pl.id planificationLineID');
+	$qb->addSelect('r.id resourceID');
+	$qb->addSelect('t.id timetableID');
+    $qb->addSelect($qb->expr()->min('tl.id').' as timetableLineID');
+    $qb->addSelect($qb->expr()->count('tl.id').' as nbrTimetableLine');
 
 	$qb->where('b.file = :file')->setParameter('file', $file);
 	$qb->andWhere('bl.planification = :planification')->setParameter('planification', $planification);
 
 	$qb->innerJoin('b.bookingLines', 'bl');
+	$qb->innerJoin('bl.planification', 'p');
+	$qb->innerJoin('bl.planificationPeriod', 'pp');
+	$qb->innerJoin('bl.planificationLine', 'pl');
+	$qb->innerJoin('bl.resource', 'r');
+	$qb->innerJoin('bl.timetable', 't');
+	$qb->innerJoin('bl.timetableLine', 'tl');
 
-	$qb->orderBy('bl.date', 'ASC');
-	$qb->addOrderBy('b.id', 'ASC');
+	$qb->groupBy('b.id');
+	$qb->addGroupBy('bl.date');
+	$qb->addGroupBy('p.id');
+	$qb->addGroupBy('pp.id');
+	$qb->addGroupBy('pl.id');
+	$qb->addGroupBy('r.id');
+	$qb->addGroupBy('t.id');
+
+	$qb->orderBy('b.id', 'ASC');
+	$qb->addOrderBy('bl.date', 'ASC');
+	$qb->addOrderBy('p.id', 'ASC');
+	$qb->addOrderBy('pp.id', 'ASC');
+	$qb->addOrderBy('pl.id', 'ASC');
+	$qb->addOrderBy('r.id', 'ASC');
+	$qb->addOrderBy('t.id', 'ASC');
 
 	$query = $qb->getQuery();
 	$results = $query->getResult();

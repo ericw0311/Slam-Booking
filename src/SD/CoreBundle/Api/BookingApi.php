@@ -158,4 +158,18 @@ class BookingApi
 	}
 	return $timetableLineArray;
 	}
+
+
+	static function getBookings($em, \SD\CoreBundle\Entity\File $file, \Datetime $date, \SD\CoreBundle\Entity\Planification $planification, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)
+	{
+	$bookingRepository = $em->getRepository('SDCoreBundle:Booking');
+	$bookingsDB = $bookingRepository->getBookings($file, $date, $planification, $planificationPeriod);
+	$bookings = array();
+
+	foreach ($bookingsDB as $booking) {
+		$bookings[$booking['bookingID'].'-'.$booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID']] = $booking['nbrTimetableLine'];
+	}
+
+	return $bookings;
+	}
 }

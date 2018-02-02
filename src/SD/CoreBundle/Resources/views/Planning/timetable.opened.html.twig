@@ -1,7 +1,7 @@
 {# src/SD/CoreBundle/Resources/views/Planning/timetable.opened.html.twig #}
 
 {% for booking in bookings %}
-{{ booking.bookingID ~ 'A' ~ booking.planificationID ~ 'B' ~ booking.timetableLineID ~ 'C' ~ booking.nbrTimetableLine ~ 'D' }}
+{{ 'A' ~ booking.firstTimetableLineID ~ 'B' ~ booking.numberTimetableLines ~ 'C' ~ booking.cellClass ~ 'D' }}
 {% endfor %}
 
 <table class="table table-bordered table-striped">
@@ -24,9 +24,13 @@
 <tr>
 	<td>{{ timetableLine(timetableLine) }}</td>
 {% for planificationResource in planificationResources %}
-        <td>
+		<td>
+{% if bookings[date|date('Ymd') ~ '-' ~ planification.ID ~ '-' ~ planificationPeriod.ID ~ '-' ~ planificationLine.ID ~ '-' ~ planificationResource.resource.ID ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID] is defined %}
+{{ bookings[date|date('Ymd') ~ '-' ~ planification.ID ~ '-' ~ planificationPeriod.ID ~ '-' ~ planificationLine.ID ~ '-' ~ planificationResource.resource.ID ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID].numberTimetableLines }}
+{% else %}
 <a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': (date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID() }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
-        </td>
+{% endif %}
+		</td>
 {% endfor %}
 </tr>
 {% endfor %}

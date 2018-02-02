@@ -7,6 +7,7 @@ use SD\CoreBundle\Entity\TimetableLine;
 use SD\CoreBundle\Entity\BookingDateNDB;
 use SD\CoreBundle\Entity\BookingPeriodNDB;
 use SD\CoreBundle\Entity\UserFileNDBAdd;
+use SD\CoreBundle\Entity\BookingNDB;
 use SD\CoreBundle\Entity\UserFileNDBSelected;
 use SD\CoreBundle\Entity\Constants;
 
@@ -167,7 +168,9 @@ class BookingApi
 	$bookings = array();
 
 	foreach ($bookingsDB as $booking) {
-		$bookings[$booking['bookingID'].'-'.$booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID']] = $booking['nbrTimetableLine'];
+		$bookingNDB = new BookingNDB($booking['bookingID'], $booking['firstTimetableLineID'], $booking['nbrTimetableLines'], ($booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID']));
+
+		$bookings[$booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID'].'-'.$booking['firstTimetableLineID']] = $bookingNDB;
 	}
 
 	return $bookings;

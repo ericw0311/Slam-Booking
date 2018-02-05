@@ -30,9 +30,9 @@
 {% if bookings[key] is defined %}
 {% if bookings[key].type == 'H' %}
 {% if bookings[key].numberTimetableLines > 1 %}
-		<td rowspan={{ bookings[key].numberTimetableLines }}>
+		<td class="{{ bookings[key].cellClass }}" rowspan={{ bookings[key].numberTimetableLines }}>
 {% else %}
-		<td>
+		<td class="{{ bookings[key].cellClass }}">
 {% endif %}
 {{ bookings[key].numberTimetableLines }}
 		</td>

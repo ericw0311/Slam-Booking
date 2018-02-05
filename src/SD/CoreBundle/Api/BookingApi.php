@@ -171,20 +171,29 @@ class BookingApi
 		return $bookings;
 	}
 
+	$evenResourcesID = BookingApi::getEvenPlanifiedResourcesID($em, $planificationPeriod);
+
 	$memo_bookingID = 0;
+	$memo_resourceID = 0;
 	$currentBookingHeaderKey = "";
-	$lineCount = 0;
+	$bookingTimetableLinesCount = 0; // Compteur des lignes de la reservation courante.
+	$resourceBookingCount = 0; // Compteur des reservations de la ressource courante.
 
 	foreach ($bookingsDB as $booking) {
 
 		$key = $booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID'].'-'.$booking['timetableLineID'];
 
 		if ($memo_bookingID > 0 && $booking['bookingID'] <> $memo_bookingID) { // On a parcouru une reservation.
-			$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($lineCount);
-			$lineCount = 0;
+			$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount);
+			$bookingTimetableLinesCount = 0;
+			$resourceBookingCount++;
 		}
 
-		$lineCount++;
+		if ($booking['resourceID'] <> $memo_resourceID) { // On change de ressource.
+			$resourceBookingCount = 0;
+		}
+
+		$bookingTimetableLinesCount++;
 
 		if ($booking['bookingID'] <> $memo_bookingID) {
 			$type = 'H';
@@ -193,14 +202,39 @@ class BookingApi
 			$type = 'L';
 		}
 
-		$bookingNDB = new BookingNDB($booking['bookingID'], $type, 'blue');
+		$cellClass = (in_array($booking['resourceID'], $evenResourcesID) ? ((($resourceBookingCount % 2) < 1) ? 'success' : 'warning') : ((($resourceBookingCount % 2) < 1) ? 'info' : 'danger'));
+
+		$bookingNDB = new BookingNDB($booking['bookingID'], $type, $cellClass);
 		$bookings[$key] = $bookingNDB;
 
 		$memo_bookingID = $booking['bookingID'];
+		$memo_resourceID = $booking['resourceID'];
 	}
 
-	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($lineCount); // Derniere reservation reservation.
+	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount); // Derniere reservation reservation.
 
 	return $bookings;
+	}
+
+	// Retourne un tableau des ressources paires d'une periode de planification
+	static function getEvenPlanifiedResourcesID($em, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)
+	{
+    $prRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+    $planificationResources = $prRepository->getResources($planificationPeriod);
+
+	$resources = array();
+	$even = false;
+
+	foreach ($planificationResources as $planificationResource) {
+
+		if ($even) {
+			$resources[] = $planificationResource->getResource()->getID();
+			$even = false;
+		} else {
+			$even = true;
+		}
+	}
+	
+	return $resources;
 	}
 }

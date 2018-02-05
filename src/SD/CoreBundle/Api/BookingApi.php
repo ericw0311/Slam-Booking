@@ -167,11 +167,39 @@ class BookingApi
 	$bookingsDB = $bookingRepository->getBookings($file, $date, $planification, $planificationPeriod);
 	$bookings = array();
 
-	foreach ($bookingsDB as $booking) {
-		$bookingNDB = new BookingNDB($booking['bookingID'], $booking['firstTimetableLineID'], $booking['nbrTimetableLines'], ($booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID']));
-
-		$bookings[$booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID'].'-'.$booking['firstTimetableLineID']] = $bookingNDB;
+	if (count($bookingsDB) <= 0) {
+		return $bookings;
 	}
+
+	$memo_bookingID = 0;
+	$currentBookingHeaderKey = "";
+	$lineCount = 0;
+
+	foreach ($bookingsDB as $booking) {
+
+		$key = $booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID'].'-'.$booking['timetableLineID'];
+
+		if ($memo_bookingID > 0 && $booking['bookingID'] <> $memo_bookingID) { // On a parcouru une reservation.
+			$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($lineCount);
+			$lineCount = 0;
+		}
+
+		$lineCount++;
+
+		if ($booking['bookingID'] <> $memo_bookingID) {
+			$type = 'H';
+			$currentBookingHeaderKey = $key;
+		} else {
+			$type = 'L';
+		}
+
+		$bookingNDB = new BookingNDB($booking['bookingID'], $type, 'blue');
+		$bookings[$key] = $bookingNDB;
+
+		$memo_bookingID = $booking['bookingID'];
+	}
+
+	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($lineCount); // Derniere reservation reservation.
 
 	return $bookings;
 	}

@@ -7,7 +7,7 @@ namespace SD\CoreBundle\Entity;
 class BookingNDB
 {
 	private $id;
-	private $firstTimetableLineID;
+	private $type;
 	private $numberTimetableLines;
 	private $cellClass;
 
@@ -22,15 +22,15 @@ class BookingNDB
 	return $this->id;
 	}
 
-	public function setFirstTimetableLineID($firstTimetableLineID)
+	public function setType($type)
 	{
-	$this->firstTimetableLineID = $firstTimetableLineID;
+	$this->type = $type;
 	return $this;
 	}
 
-	public function getFirstTimetableLineID()
+	public function getType()
 	{
-	return $this->firstTimetableLineID;
+	return $this->type;
 	}
 
 	public function setNumberTimetableLines($numberTimetableLines)
@@ -55,11 +55,11 @@ class BookingNDB
 	return $this->cellClass;
 	}
 	
-	public function __construct($id, $firstTimetableLineID, $numberTimetableLines, $cellClass)
+	public function __construct($id, $type, $cellClass)
 	{
 	$this->setId($id);
-	$this->setFirstTimetableLineID($firstTimetableLineID);
-	$this->setNumberTimetableLines($numberTimetableLines);
+	$this->setType($type);
+	$this->setNumberTimetableLines(0);
 	$this->setCellClass($cellClass);
 	}
 }

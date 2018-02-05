@@ -24,8 +24,9 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	$qb->addSelect('pl.id planificationLineID');
 	$qb->addSelect('r.id resourceID');
 	$qb->addSelect('t.id timetableID');
-    $qb->addSelect($qb->expr()->min('tl.id').' as firstTimetableLineID');
-    $qb->addSelect($qb->expr()->count('tl.id').' as nbrTimetableLines');
+	$qb->addSelect('tl.id timetableLineID');
+	// $qb->addSelect($qb->expr()->min('tl.id').' as firstTimetableLineID');
+	// $qb->addSelect($qb->expr()->count('tl.id').' as nbrTimetableLines');
 
 	$qb->where('b.file = :file')->setParameter('file', $file);
 	$qb->andWhere("DATE_FORMAT(bl.date,'%Y%m%d') = :date")->setParameter('date', $date->format('Ymd'));
@@ -39,21 +40,21 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	$qb->innerJoin('bl.timetable', 't');
 	$qb->innerJoin('bl.timetableLine', 'tl');
 
-	$qb->groupBy('b.id');
+/*	$qb->groupBy('b.id');
 	$qb->addGroupBy('bl.date');
 	$qb->addGroupBy('p.id');
 	$qb->addGroupBy('pp.id');
 	$qb->addGroupBy('pl.id');
 	$qb->addGroupBy('r.id');
-	$qb->addGroupBy('t.id');
+	$qb->addGroupBy('t.id'); */
 
-	$qb->orderBy('b.id', 'ASC');
-	$qb->addOrderBy('bl.date', 'ASC');
+	$qb->orderBy('bl.date', 'ASC');
 	$qb->addOrderBy('p.id', 'ASC');
 	$qb->addOrderBy('pp.id', 'ASC');
 	$qb->addOrderBy('pl.id', 'ASC');
 	$qb->addOrderBy('r.id', 'ASC');
 	$qb->addOrderBy('t.id', 'ASC');
+	$qb->addOrderBy('tl.id', 'ASC');
 
 	$query = $qb->getQuery();
 	$results = $query->getResult();

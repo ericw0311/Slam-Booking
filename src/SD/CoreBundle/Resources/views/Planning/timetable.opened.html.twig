@@ -1,7 +1,7 @@
 {# src/SD/CoreBundle/Resources/views/Planning/timetable.opened.html.twig #}
 
 {% for booking in bookings %}
-{{ 'A' ~ booking.firstTimetableLineID ~ 'B' ~ booking.numberTimetableLines ~ 'C' ~ booking.cellClass ~ 'D' }}
+{{ 'A' ~ booking.id ~ 'B' ~ booking.type ~ 'C' ~ booking.numberTimetableLines ~ 'D' }}
 {% endfor %}
 
 <table class="table table-bordered table-striped">
@@ -24,15 +24,27 @@
 <tr>
 	<td>{{ timetableLine(timetableLine) }}</td>
 {% for planificationResource in planificationResources %}
-		<td>
-{% if bookings[date|date('Ymd') ~ '-' ~ planification.ID ~ '-' ~ planificationPeriod.ID ~ '-' ~ planificationLine.ID ~ '-' ~ planificationResource.resource.ID ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID] is defined %}
-{{ bookings[date|date('Ymd') ~ '-' ~ planification.ID ~ '-' ~ planificationPeriod.ID ~ '-' ~ planificationLine.ID ~ '-' ~ planificationResource.resource.ID ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID].numberTimetableLines }}
+
+{% set key = date|date('Ymd') ~ '-' ~ planification.ID ~ '-' ~ planificationPeriod.ID ~ '-' ~ planificationLine.ID ~ '-' ~ planificationResource.resource.ID ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID %}
+
+{% if bookings[key] is defined %}
+{% if bookings[key].type == 'H' %}
+{% if bookings[key].numberTimetableLines > 1 %}
+		<td rowspan={{ bookings[key].numberTimetableLines }}>
 {% else %}
-<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': (date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID() }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
+		<td>
 {% endif %}
+{{ bookings[key].numberTimetableLines }}
 		</td>
+{% endif %}
+{% else %}
+		<td>
+<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': (date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID() }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
+		</td>
+{% endif %}
 {% endfor %}
 </tr>
+
 {% endfor %}
 	</tbody>
 </table>

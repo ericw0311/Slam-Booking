@@ -31,6 +31,7 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	$qb->where('b.file = :file')->setParameter('file', $file);
 	$qb->andWhere("DATE_FORMAT(bl.date,'%Y%m%d') = :date")->setParameter('date', $date->format('Ymd'));
 	$qb->andWhere('bl.planification = :planification')->setParameter('planification', $planification);
+	$qb->andWhere('bl.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
 
 	$qb->innerJoin('b.bookingLines', 'bl');
 	$qb->innerJoin('bl.planification', 'p');

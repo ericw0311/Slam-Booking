@@ -211,7 +211,7 @@ class BookingApi
 		$memo_resourceID = $booking['resourceID'];
 	}
 
-	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount); // Derniere reservation reservation.
+	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount); // Derniere reservation
 
 	return $bookings;
 	}

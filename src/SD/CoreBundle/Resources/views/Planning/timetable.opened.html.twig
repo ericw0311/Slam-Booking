@@ -34,6 +34,8 @@
 {% else %}
 		<td class="{{ bookings[key].cellClass }}">
 {% endif %}
+<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
+<a href="#" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
 {{ bookings[key].numberTimetableLines }}
 		</td>
 {% endif %}

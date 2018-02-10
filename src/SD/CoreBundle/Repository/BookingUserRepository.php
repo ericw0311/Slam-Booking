@@ -10,4 +10,16 @@ namespace SD\CoreBundle\Repository;
  */
 class BookingUserRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getBookingUsers($booking)
+	{
+	$qb = $this->createQueryBuilder('bu');
+	$qb->select('uf.id userFileID');
+	$qb->addSelect('bu.order oorder');
+	$qb->where('bu.booking = :booking')->setParameter('booking', $booking);
+	$qb->innerJoin('bu.userFile', 'uf');
+	$qb->orderBy('bu.order', 'ASC');
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
+	}
 }

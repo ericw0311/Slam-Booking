@@ -90,12 +90,128 @@ class BookingController extends Controller
 	}
 
 	return $this->render('SDCoreBundle:Booking:create.'.($many ? 'many' : 'one').'.html.twig',
-array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList,
+array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+	'date' => $date, 'timetableLinesList' => $timetableLinesList,
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine,
 	'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList));
     }
 
+    // Initialisation de la mise à jour de réservation
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function many_init_updateAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    {
+	return BookingController::init_update_Action($booking, $planification, $planificationPeriod, $resource, $date, 1);
+    }
+
+    // Initialisation de la mise à jour de réservation
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function one_init_updateAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    {
+	return BookingController::init_update_Action($booking, $planification, $planificationPeriod, $resource, $date, 0);
+    }
+
+    // Initialisation de la mise à jour de réservation
+    public function init_update_Action(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $many)
+    {
+    $em = $this->getDoctrine()->getManager();
+
+	$timetableLinesList = BookingApi::getBookingLinesUrl($em, $booking);
+	$userFileIDList = BookingApi::getBookingUsersUrl($em, $booking);
+
+	return $this->redirectToRoute('sd_core_booking_'.($many ? 'many' : 'one').'_update',
+		array('bookingID' => $booking->getID(),
+		'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
+		'resourceID' => $resource->getID(), 'date' => $date,
+		'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList));
+    }
+
+    // Mise à jour de réservation
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function many_updateAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList)
+    {
+	return BookingController::update_Action($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, 1);
+    }
+
+    // Mise à jour de réservation
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function one_updateAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList)
+    {
+	return BookingController::update_Action($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, 0);
+    }
+
+    // Mise à jour de réservation
+    public function update_Action(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $many)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$cellArray  = explode("-", $timetableLinesList);
+
+    $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $cellArray[0]);
+	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
+
+	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
+	$beginningTimetableLineID = $beginningTimetableLines[0];
+
+	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
+
+	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $cellArray[count($cellArray)-1]);
+	$endDate = date_create_from_format("Ymd", $endDateString);
+
+	$endTimetableLines = explode("*", $endTimetableLinesList);
+	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
+
+	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
+
+	// Utilisateurs
+	$userFileIDArray = explode("-", $userFileIDList);
+
+	$userFiles = array();
+	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+
+	foreach ($userFileIDArray as $userFileID) {
+
+		$userFile = $userFileRepository->find($userFileID);
+		if ($userFile !== null) {
+			$userFiles[] = $userFile;
+		}
+	}
+
+	return $this->render('SDCoreBundle:Booking:update.'.($many ? 'many' : 'one').'.html.twig',
+array('userContext' => $userContext, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+	'date' => $date, 'timetableLinesList' => $timetableLinesList,
+	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
+	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine,
+	'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList));
+    }
 
     // Mise a jour de la periode de fin
     /**

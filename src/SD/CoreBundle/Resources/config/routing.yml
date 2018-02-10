@@ -443,6 +443,7 @@ sd_core_planning_one_timetable:
         planificationID: \d+
         planificationPeriodID: \d+
 
+# Création des réservations
 sd_core_booking_many_create:
     path:     /bookingmany/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}
     defaults: { _controller: SDCoreBundle:Booking:many_create }
@@ -505,6 +506,61 @@ sd_core_booking_one_validate_create:
     path:     /bookingone/validatecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}
     defaults: { _controller: SDCoreBundle:Booking:one_validate_create }
     requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+# Mise à jour des réservations
+sd_core_booking_many_init_update:
+    path:     /bookingmany/initupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}
+    defaults: { _controller: SDCoreBundle:Booking:many_init_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_init_update:
+    path:     /bookingone/initupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}
+    defaults: { _controller: SDCoreBundle:Booking:one_init_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_many_update:
+    path:     /bookingmany/update/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:many_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_update:
+    path:     /bookingone/update/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:one_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_many_validate_update:
+    path:     /bookingmany/validateupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:many_validate_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_validate_update:
+    path:     /bookingone/validateupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:one_validate_update }
+    requirements:
+        bookingID: \d+
         planificationID: \d+
         planificationPeriodID: \d+
         resourceID: \d+

@@ -237,4 +237,60 @@ class BookingApi
 	
 	return $resources;
 	}
+
+
+	// Retourne une chaine correspondant à la liste des creneaux horaires d'une réservation
+	static function getBookingLinesUrl($em, \SD\CoreBundle\Entity\Booking $booking)
+	{
+	$blRepository = $em->getRepository('SDCoreBundle:BookingLine');
+	$bookingLinesDB = $blRepository->getBookingLines($booking);
+	if (count($bookingLinesDB) <= 0) {
+		return '';
+	}
+
+	// On construit une chaine comprenant toutes périodes de la réservation.
+	// Les périodes sont regroupées par date séparées par un -
+	// Pour chaque date, on a le codage date + timetableID + timetableLineIDList
+	// timetableLineIDList est la liste des timetableLineID séparés par un *
+	$premier = true;
+
+	foreach ($bookingLinesDB as $bookingLine) {
+		if ($premier) {
+			$url = $bookingLine['date']->format('Ymd').'+'.$bookingLine['timetableID'].'+'.$bookingLine['timetableLineID'];
+		
+		} else if ($bookingLine['date']->format('Ymd') != $memo_date) {
+			$url .= '-'.$bookingLine['date']->format('Ymd').'+'.$bookingLine['timetableID'].'+'.$bookingLine['timetableLineID'];
+
+		} else {
+			$url .= '*'.$bookingLine['timetableLineID'];
+		}
+
+		$premier = false;
+		$memo_date = $bookingLine['date']->format('Ymd');
+	}
+	return $url;
+	}
+
+
+	// Retourne une chaine correspondant à la liste des utilisateurs d'une réservation
+	static function getBookingUsersUrl($em, \SD\CoreBundle\Entity\Booking $booking)
+	{
+	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
+	$bookingUsersDB = $buRepository->getBookingUsers($booking);
+	if (count($bookingUsersDB) <= 0) {
+		return '';
+	}
+
+	$premier = true;
+
+	foreach ($bookingUsersDB as $bookingUser) {
+		if ($premier) {
+			$url = $bookingUser['userFileID'];
+		} else {
+			$url .= '-'.$bookingUser['userFileID'];
+		}
+		$premier = false;
+	}
+	return $url;
+	}
 }

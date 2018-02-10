@@ -34,7 +34,7 @@
 {% else %}
 		<td class="{{ bookings[key].cellClass }}">
 {% endif %}
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
+<a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
 <a href="#" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
 {{ bookings[key].numberTimetableLines }}
 		</td>

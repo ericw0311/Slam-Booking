@@ -134,7 +134,7 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 	return $this->redirectToRoute('sd_core_booking_'.($many ? 'many' : 'one').'_update',
 		array('bookingID' => $booking->getID(),
 		'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
-		'resourceID' => $resource->getID(), 'date' => $date,
+		'resourceID' => $resource->getID(), 'date' => $date->format('Ymd'),
 		'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList));
     }
 

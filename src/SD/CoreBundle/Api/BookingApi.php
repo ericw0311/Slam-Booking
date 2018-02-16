@@ -3,6 +3,7 @@
 namespace SD\CoreBundle\Api;
 
 use SD\CoreBundle\Entity\PlanificationPeriod;
+use SD\CoreBundle\Entity\Resource;
 use SD\CoreBundle\Entity\TimetableLine;
 use SD\CoreBundle\Entity\BookingDateNDB;
 use SD\CoreBundle\Entity\BookingPeriodNDB;
@@ -14,10 +15,12 @@ use SD\CoreBundle\Entity\Constants;
 class BookingApi
 {
 	// firstDateNumber: Premiere date affichee
-	static function getEndPeriods($em, PlanificationPeriod $planificationPeriod, \Datetime $beginningDate, TimetableLine $beginningTimetableLine, $firstDateNumber, &$nextFirstDateNumber)
+	// bookingID: Identifient de la réservation mise à jour (0 si création de réservation)
+	static function getEndPeriods($em, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $beginningDate, TimetableLine $beginningTimetableLine, $bookingID, $firstDateNumber, &$nextFirstDateNumber)
 	{
-	$planificationLineRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
-	$timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+	$plRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
+	$tlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+	$blRepository = $em->getRepository('SDCoreBundle:BookingLine');
 	$endPeriods = array();
 	$dateIndex = 0;
 	$numberDates = 0;
@@ -27,30 +30,33 @@ class BookingApi
 	while ($continue) {
 		$date = clone $beginningDate;
 		$date->add(new \DateInterval('P'.$dateIndex.'D'));
-
-		$planificationLine = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D'))));
+		$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D'))));
 		if ($planificationLine !== null && $planificationLine->getActive() > 0) {
-
 			$numberDates++;
 			$endDate = new BookingDateNDB($date);
 			if ($dateIndex > 0) {
-				$timetableLines = $timetableLineRepository->getTimetableLines($planificationLine->getTimetable());
+				$timetableLines = $tlRepository->getTimetableLines($planificationLine->getTimetable());
 			} else {
-				$timetableLines = $timetableLineRepository->getCurrentAndNextTimetableLines($planificationLine->getTimetable(), $beginningTimetableLine->getID());
+				$timetableLines = $tlRepository->getCurrentAndNextTimetableLines($planificationLine->getTimetable(), $beginningTimetableLine->getID());
 			}
-
 			$dateTimetableLinesList = $date->format('Ymd').'+'.$planificationLine->getTimetable()->getID();
-			$firstDatePeriod = true; // Premiere periode de la date
-
-			foreach ($timetableLines as $key => $timetableLine) {
-
+			$firstDatePeriod = true; // Premiere période de la date
+			foreach ($timetableLines as $timetableLine) {
 				if ($continue) {
 	$dateTimetableLinesList = ($firstDatePeriod) ? ($dateTimetableLinesList.'+'.$timetableLine->getID()) : ($dateTimetableLinesList.'*'.$timetableLine->getID());
-
 	$periodTimetableLinesList = ($numberDates <= 1) ? $dateTimetableLinesList : ($timetableLinesList.'-'.$dateTimetableLinesList);
-					$endPeriod = new BookingPeriodNDB($timetableLine, $periodTimetableLinesList, "OK");
-					$endDate->addPeriod($endPeriod);
+	
+	// Recherche d'une ligne de réservation existante.
+	$bookingLineDB = $blRepository->findOneBy(array('resource' => $resource, 'date' => $date, 'timetable' => $timetableLine->getTimetable(), 'timetableLine' => $timetableLine));
+	if ($bookingLineDB === null || $bookingLineDB->getBooking()->getID() == $bookingID) { // La ressource n'est pas réservée pour le créneau (ou bien on est en mise à jour de réservation et le créneau est réservé pour la réservation à mettre à jour).
+					$status = "OK";
 					$numberPeriods++;
+	} else { // Une réservation existe sur ce créneau (ou une autre réservation que celle à mettre à jour)
+					$status = "KO";
+					$continue = false;
+	}
+					$endPeriod = new BookingPeriodNDB($timetableLine, $periodTimetableLinesList, $status);
+					$endDate->addPeriod($endPeriod);
 				}
 			
 				$firstDatePeriod = false;
@@ -60,12 +66,10 @@ class BookingApi
 			if ($numberDates >= $firstDateNumber) { $endPeriods[] = $endDate; }
 			
 			$timetableLinesList = ($numberDates <= 1) ? $dateTimetableLinesList : ($timetableLinesList.'-'.$dateTimetableLinesList);
-
 			if ($numberDates >= ($firstDateNumber - 1 + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED)) { $continue = false; } // Nombre maximum de dates affichées atteint
 		}
 		$dateIndex++;
 	}
-
 	// Premiere date affichee suivante: 0 si on a atteint le nombre de periodes de réservation maximum, calculée sinon
 	$nextFirstDateNumber = ($numberPeriods >= Constants::MAXIMUM_NUMBER_BOOKING_LINES) ? 0 : ($firstDateNumber + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
 	return $endPeriods;
@@ -163,8 +167,10 @@ class BookingApi
 
 	static function getBookings($em, \SD\CoreBundle\Entity\File $file, \Datetime $date, \SD\CoreBundle\Entity\Planification $planification, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)
 	{
-	$bookingRepository = $em->getRepository('SDCoreBundle:Booking');
-	$bookingsDB = $bookingRepository->getBookings($file, $date, $planification, $planificationPeriod);
+	$bRepository = $em->getRepository('SDCoreBundle:Booking');
+	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
+
+	$bookingsDB = $bRepository->getBookings($file, $date, $planification, $planificationPeriod);
 	$bookings = array();
 
 	if (count($bookingsDB) <= 0) {
@@ -185,6 +191,7 @@ class BookingApi
 
 		if ($memo_bookingID > 0 && $booking['bookingID'] <> $memo_bookingID) { // On a parcouru une reservation.
 			$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount);
+			$bookings[$currentBookingHeaderKey]->setUserFiles(BookingApi::getBookingUsersArray($em, $bRepository->find($memo_bookingID)));
 			$bookingTimetableLinesCount = 0;
 			$resourceBookingCount++;
 		}
@@ -212,7 +219,7 @@ class BookingApi
 	}
 
 	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount); // Derniere reservation
-
+	$bookings[$currentBookingHeaderKey]->setUserFiles(BookingApi::getBookingUsersArray($em, $bRepository->find($memo_bookingID)));
 	return $bookings;
 	}
 
@@ -292,5 +299,25 @@ class BookingApi
 		$premier = false;
 	}
 	return $url;
+	}
+
+
+	// Retourne un tableau des utilisateurs d'une réservation
+	static function getBookingUsersArray($em, \SD\CoreBundle\Entity\Booking $booking)
+	{
+	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
+	$ufRepository = $em->getRepository('SDCoreBundle:UserFile');
+	$bookingUsersDB = $buRepository->getBookingUsers($booking);
+
+	$userFiles = array();
+
+	if (count($bookingUsersDB) <= 0) {
+		return $userFiles;
+	}
+
+	foreach ($bookingUsersDB as $bookingUser) {
+		$userFiles[] = $ufRepository->find($bookingUser['userFileID']);
+	}
+	return $userFiles;
 	}
 }

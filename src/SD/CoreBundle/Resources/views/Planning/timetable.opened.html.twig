@@ -1,9 +1,5 @@
 {# src/SD/CoreBundle/Resources/views/Planning/timetable.opened.html.twig #}
 
-{% for booking in bookings %}
-{{ 'A' ~ booking.id ~ 'B' ~ booking.type ~ 'C' ~ booking.numberTimetableLines ~ 'D' }}
-{% endfor %}
-
 <table class="table table-bordered table-striped">
 	<thead>
 	<tr>
@@ -36,7 +32,13 @@
 {% endif %}
 <a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
 <a href="#" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
-{{ bookings[key].numberTimetableLines }}
+<ul>
+{% for userFile in bookings[key].userFiles %}
+<li>
+{{ userFile.getFirstAndLastName() }}
+</li>
+{% endfor %}
+</ul>
 		</td>
 {% endif %}
 {% else %}

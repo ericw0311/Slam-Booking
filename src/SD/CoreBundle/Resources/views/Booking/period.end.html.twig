@@ -34,7 +34,13 @@
 {% endif %}
 
 {% for period in endPeriod.periods %}
+
+{% if period.status == 'OK' %}
 	{% block createOrUpdateBookingLink %}{% endblock %}
+{% else %}
+<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('bundles/sdcore/images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
+{% endif %}
+
 {% endfor %}
 	</div>
 {% endfor %}

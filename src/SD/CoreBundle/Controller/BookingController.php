@@ -253,7 +253,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
-    $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $beginningDate, $beginningTimetableLine, $firstDateNumber, $nextFirstDateNumber);
+    $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, 0, $firstDateNumber, $nextFirstDateNumber);
 
 	// Calucl du premier jour affiché précedent
 	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
@@ -308,7 +308,7 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
-    $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $beginningDate, $beginningTimetableLine, $firstDateNumber, $nextFirstDateNumber);
+    $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, $booking->getID(), $firstDateNumber, $nextFirstDateNumber);
 
 	// Calucl du premier jour affiché précedent
 	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);

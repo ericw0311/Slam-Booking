@@ -30,15 +30,15 @@
 {% else %}
 		<td class="{{ bookings[key].cellClass }}">
 {% endif %}
-<a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
-<ul>
+<ul class="list-group">
 {% for userFile in bookings[key].userFiles %}
-<li>
+<li class="list-group-item">
 {{ userFile.getFirstAndLastName() }}
 </li>
 {% endfor %}
 </ul>
+<a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
+<a href="#" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
 		</td>
 {% endif %}
 {% else %}

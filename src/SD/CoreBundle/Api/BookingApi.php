@@ -80,11 +80,11 @@ class BookingApi
 	static function getSelectedUserFiles($em, $userFileIDList)
 	{
 	$userFileIDArray = explode('-', $userFileIDList);
-    $userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+    $ufRepository = $em->getRepository('SDCoreBundle:UserFile');
 	$selectedUserFiles = array();
 	$i = 0;
     foreach ($userFileIDArray as $userFileID) {
-		$userFileDB = $userFileRepository->find($userFileID);
+		$userFileDB = $ufRepository->find($userFileID);
 		if ($userFileDB !== null) {
 			$userFile = new UserFileNDBSelected(); // classe UserFile incluant les infos spécifiques aux utilisateurs sélectionnés
 			$userFile->setId($userFileDB->getId());
@@ -139,9 +139,9 @@ class BookingApi
 	// Retourne un tableau des ressources à planifier (initialisation de planification)
 	static function initAvailableUserFiles($em, \SD\CoreBundle\Entity\File $file, $selectedUserFileIDList)
 	{
-	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+	$ufRepository = $em->getRepository('SDCoreBundle:UserFile');
 
-	$userFilesDB = $userFileRepository->getUserFiles($file);
+	$userFilesDB = $ufRepository->getUserFiles($file);
 	return BookingApi::getAvailableUserFiles($userFilesDB, $selectedUserFileIDList);
 	}
 
@@ -165,7 +165,7 @@ class BookingApi
 	}
 
 
-	static function getBookings($em, \SD\CoreBundle\Entity\File $file, \Datetime $date, \SD\CoreBundle\Entity\Planification $planification, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)
+	static function getBookings($em, \SD\CoreBundle\Entity\File $file, \Datetime $date, \SD\CoreBundle\Entity\Planification $planification, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod, \SD\CoreBundle\Entity\UserFile $currentUserFile)
 	{
 	$bRepository = $em->getRepository('SDCoreBundle:Booking');
 	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
@@ -191,7 +191,7 @@ class BookingApi
 
 		if ($memo_bookingID > 0 && $booking['bookingID'] <> $memo_bookingID) { // On a parcouru une reservation.
 			$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount);
-			$bookings[$currentBookingHeaderKey]->setUserFiles(BookingApi::getBookingUsersArray($em, $bRepository->find($memo_bookingID)));
+			$bookings[$currentBookingHeaderKey]->setUserFiles(BookingApi::getBookingUsersArray($em, $bRepository->find($memo_bookingID), $currentUserFile));
 			$bookingTimetableLinesCount = 0;
 			$resourceBookingCount++;
 		}
@@ -219,7 +219,7 @@ class BookingApi
 	}
 
 	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount); // Derniere reservation
-	$bookings[$currentBookingHeaderKey]->setUserFiles(BookingApi::getBookingUsersArray($em, $bRepository->find($memo_bookingID)));
+	$bookings[$currentBookingHeaderKey]->setUserFiles(BookingApi::getBookingUsersArray($em, $bRepository->find($memo_bookingID), $currentUserFile));
 	return $bookings;
 	}
 
@@ -303,20 +303,21 @@ class BookingApi
 
 
 	// Retourne un tableau des utilisateurs d'une réservation
-	static function getBookingUsersArray($em, \SD\CoreBundle\Entity\Booking $booking)
+	static function getBookingUsersArray($em, \SD\CoreBundle\Entity\Booking $booking, \SD\CoreBundle\Entity\UserFile $currentUserFile)
 	{
 	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
-	$ufRepository = $em->getRepository('SDCoreBundle:UserFile');
-	$bookingUsersDB = $buRepository->getBookingUsers($booking);
+
+	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
 
 	$userFiles = array();
 
-	if (count($bookingUsersDB) <= 0) {
+	if (count($bookingUsers) <= 0) { // Ce cas ne doit pas arriver. Toute réservation a au moins un utilisateur. Mais si cela arrive, on initialise la liste des utilisateurs avec l'utilisateur courant
+		$userFiles[] = $currentUserFile;
 		return $userFiles;
 	}
 
-	foreach ($bookingUsersDB as $bookingUser) {
-		$userFiles[] = $ufRepository->find($bookingUser['userFileID']);
+	foreach ($bookingUsers as $bookingUser) {
+		$userFiles[] = $bookingUser->getUserFile();
 	}
 	return $userFiles;
 	}

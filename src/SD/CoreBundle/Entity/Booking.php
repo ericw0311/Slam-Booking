@@ -23,6 +23,12 @@ class Booking
     private $id;
 
 	/**
+     * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\Planification")
+     * @ORM\JoinColumn(nullable=false)
+     */
+	private $planification;
+
+	/**
      * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\Resource")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -87,6 +93,29 @@ class Booking
     {
         return $this->id;
     }
+
+	/**
+     * Set planification
+     *
+     * @param \SD\CoreBundle\Entity\Planification $planification
+     *
+     * @return Booking
+     */
+	public function setPlanification(\SD\CoreBundle\Entity\Planification $planification)
+	{
+		$this->planification = $planification;
+		return $this;
+	}
+
+	/**
+	 * Get planification
+     *
+     * @return \SD\UserBundle\Entity\Planification
+	 */
+	public function getPlanification()
+	{
+		return $this->planification;
+	}
 
 	/**
      * Set resource
@@ -227,10 +256,11 @@ class Booking
 		return $this->endDate;
     }
 
-    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file, \SD\CoreBundle\Entity\Resource $resource)
+    public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file, \SD\CoreBundle\Entity\Planification $planification, \SD\CoreBundle\Entity\Resource $resource)
     {
 		$this->setUser($user);
 		$this->setFile($file);
+		$this->setPlanification($planification);
 		$this->setResource($resource);
     }
 
@@ -248,5 +278,16 @@ class Booking
     public function updateDate()
     {
         $this->updatedAt = new \DateTime();
+    }
+    
+    
+    public function get_tprr_createdAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function get_tprr_updatedAt()
+    {
+        return $this->updatedAt;
     }
 }

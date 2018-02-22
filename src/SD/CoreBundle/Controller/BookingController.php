@@ -438,8 +438,8 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
     $tlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
     $ufRepository = $em->getRepository('SDCoreBundle:UserFile');
 
-	$booking = new Booking($connectedUser, $userContext->getCurrentFile(), $resource);
-	
+	$booking = new Booking($connectedUser, $userContext->getCurrentFile(), $planification, $resource);
+
 	$urlArray  = explode("-", $timetableLinesList);
 
 	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $urlArray[0]);

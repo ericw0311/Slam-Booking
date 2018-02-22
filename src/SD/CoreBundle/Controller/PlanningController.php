@@ -14,6 +14,7 @@ use SD\CoreBundle\Entity\FileContext;
 use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
 
+use SD\CoreBundle\Api\PlanningApi;
 use SD\CoreBundle\Api\BookingApi;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -81,6 +82,8 @@ class PlanningController extends Controller
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	PlanningApi::setCurrentCalendarPlanification($em, $connectedUser, $planification); // Le calendrier lit en base la planification courante
 
     $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
 
@@ -153,7 +156,7 @@ class PlanningController extends Controller
     $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
     $timetableLines = $timetableLineRepository->getTimetableLines($planificationLine->getTimetable());
 
-	$bookings = BookingApi::getBookings($em, $userContext->getCurrentFile(), $date, $planification, $planificationPeriod);
+	$bookings = BookingApi::getBookings($em, $userContext->getCurrentFile(), $date, $planification, $planificationPeriod, $userContext->getCurrentUserFile());
 
     return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.opened.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,

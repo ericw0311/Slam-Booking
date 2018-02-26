@@ -5,8 +5,11 @@ use ADesigns\CalendarBundle\Event\CalendarEvent;
 use ADesigns\CalendarBundle\Entity\EventEntity;
 use Doctrine\ORM\EntityManager;
 
-use SD\CoreBundle\Api\PlanningApi;
 use SD\CoreBundle\Entity\UserContext;
+use SD\CoreBundle\Entity\Constants;
+
+use SD\CoreBundle\Api\ResourceApi;
+use SD\CoreBundle\Api\PlanningApi;
 
 class CalendarEventListener
 {
@@ -86,6 +89,14 @@ class CalendarEventListener
 
 	$currentCalendarPlanificationID = PlanningApi::getCurrentCalendarPlanificationID($entityManager, $connectedUser);
 
+
+	$ppRepository = $entityManager->getRepository('SDCoreBundle:PlanificationPeriod');
+	$prRepository = $entityManager->getRepository('SDCoreBundle:PlanificationResource');
+
+	$resourcesColors = ResourceApi::getCalendarResourcesColor($entityManager, $pRepository->find($currentCalendarPlanificationID));
+
+	$this->getLogger()->info('CalendarEventListener.loadEvents 2-bis _'.$currentCalendarPlanificationID.'_'.count($resourcesColors).'_');
+
 	$SBEvents = $bRepository->getCalendarBookings($userContext->getCurrentFile(), $pRepository->find($currentCalendarPlanificationID));
 
 	$this->getLogger()->info('CalendarEventListener.loadEvents 3');
@@ -95,8 +106,20 @@ class CalendarEventListener
 		$eventEntity = new EventEntity($SBEvent->getID().'toto', $SBEvent->getBeginningDate(), $SBEvent->getEndDate());
 		//optional calendar event settings
 		$eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
-		$eventEntity->setBgColor('#1927c7'); //set the background color of the event's label
-		$eventEntity->setFgColor('#e8dbb8'); //set the foreground color of the event's label
+
+		if (isset($resourcesColors[$SBEvent->getResource()->getID()])) {
+			$bgColor = Constants::CALENDAR_RESOURCE_COLOR[$resourcesColors[$SBEvent->getResource()->getID()]]['BGC'];
+			$fgColor = Constants::CALENDAR_RESOURCE_COLOR[$resourcesColors[$SBEvent->getResource()->getID()]]['FGC'];
+		} else {
+			$bgColor = Constants::CALENDAR_RESOURCE_DEFAULT_COLOR['BGC'];
+			$fgColor = Constants::CALENDAR_RESOURCE_DEFAULT_COLOR['FGC'];
+		}
+
+
+		// $eventEntity->setBgColor('#1927c7'); //set the background color of the event's label
+		// $eventEntity->setFgColor('#e8dbb8'); //set the foreground color of the event's label
+		$eventEntity->setBgColor($bgColor); //set the background color of the event's label
+		$eventEntity->setFgColor($fgColor); //set the foreground color of the event's label
 		$eventEntity->setUrl($this->getRouter()->generate('sd_core_resource_edit', array('resourceID' => $SBEvent->getID()))); // url to send user to when event label is clicked
 		// $eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
 		//finally, add the event to the CalendarEvent for displaying on the calendar

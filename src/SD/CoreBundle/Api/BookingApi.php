@@ -12,6 +12,8 @@ use SD\CoreBundle\Entity\BookingNDB;
 use SD\CoreBundle\Entity\UserFileNDBSelected;
 use SD\CoreBundle\Entity\Constants;
 
+use SD\CoreBundle\Api\ResourceApi;
+
 class BookingApi
 {
 	// firstDateNumber: Premiere date affichee
@@ -177,7 +179,7 @@ class BookingApi
 		return $bookings;
 	}
 
-	$evenResourcesID = BookingApi::getEvenPlanifiedResourcesID($em, $planificationPeriod);
+	$evenResourcesID = ResourceApi::getEvenPlanifiedResourcesID($em, $planificationPeriod);
 
 	$memo_bookingID = 0;
 	$memo_resourceID = 0;
@@ -222,29 +224,6 @@ class BookingApi
 	$bookings[$currentBookingHeaderKey]->setUserFiles(BookingApi::getBookingUsersArray($em, $bRepository->find($memo_bookingID), $currentUserFile));
 	return $bookings;
 	}
-
-	// Retourne un tableau des ressources paires d'une periode de planification
-	static function getEvenPlanifiedResourcesID($em, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)
-	{
-    $prRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
-    $planificationResources = $prRepository->getResources($planificationPeriod);
-
-	$resources = array();
-	$even = false;
-
-	foreach ($planificationResources as $planificationResource) {
-
-		if ($even) {
-			$resources[] = $planificationResource->getResource()->getID();
-			$even = false;
-		} else {
-			$even = true;
-		}
-	}
-	
-	return $resources;
-	}
-
 
 	// Retourne une chaine correspondant à la liste des creneaux horaires d'une réservation
 	static function getBookingLinesUrl($em, \SD\CoreBundle\Entity\Booking $booking)

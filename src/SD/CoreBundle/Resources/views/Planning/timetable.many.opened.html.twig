@@ -4,7 +4,7 @@
 
 {% block planning_timetable %}
 
-{% set vars = {'booking_create': 'sd_core_booking_many_create', 'booking_update': 'sd_core_booking_many_init_update'} %}
+{% set vars = {'booking_create': 'sd_core_booking_many_create', 'booking_update': 'sd_core_booking_many_init_update', 'booking_delete': 'sd_core_booking_many_delete'} %}
 {% include 'SDCoreBundle:Planning:timetable.opened.html.twig' with vars %}
 
 {% endblock %}

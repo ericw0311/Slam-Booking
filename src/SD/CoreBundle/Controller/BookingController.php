@@ -55,25 +55,7 @@ class BookingController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$cellArray  = explode("-", $timetableLinesList);
-
-    $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
-
-	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $cellArray[0]);
-	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
-
-	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
-	$beginningTimetableLineID = $beginningTimetableLines[0];
-
-	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
-
-	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $cellArray[count($cellArray)-1]);
-	$endDate = date_create_from_format("Ymd", $endDateString);
-
-	$endTimetableLines = explode("*", $endTimetableLinesList);
-	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
-
-	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
+	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
 
 	// Utilisateurs
 	$userFileIDArray = explode("-", $userFileIDList);
@@ -171,25 +153,7 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$cellArray  = explode("-", $timetableLinesList);
-
-    $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
-
-	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $cellArray[0]);
-	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
-
-	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
-	$beginningTimetableLineID = $beginningTimetableLines[0];
-
-	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
-
-	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $cellArray[count($cellArray)-1]);
-	$endDate = date_create_from_format("Ymd", $endDateString);
-
-	$endTimetableLines = explode("*", $endTimetableLinesList);
-	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
-
-	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
+	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
 
 	// Utilisateurs
 	$userFileIDArray = explode("-", $userFileIDList);
@@ -610,4 +574,131 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable',
 		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $beginningDateString));
     }
+
+    // Suppression d'une réservation
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function many_deleteAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    {
+	return BookingController::delete_Action($booking, $planification, $planificationPeriod, $resource, $date, 1);
+    }
+
+    // Suppression d'une réservation
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function one_deleteAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    {
+	return BookingController::delete_Action($booking, $planification, $planificationPeriod, $resource, $date, 0);
+    }
+
+    // Suppression d'une réservation
+    public function delete_Action(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $many)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$timetableLinesList = BookingApi::getBookingLinesUrl($em, $booking);
+	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
+
+	$userFileIDList = BookingApi::getBookingUsersUrl($em, $booking);
+
+	// Utilisateurs
+	$userFileIDArray = explode("-", $userFileIDList);
+
+	$userFiles = array();
+	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+
+	foreach ($userFileIDArray as $userFileID) {
+
+		$userFile = $userFileRepository->find($userFileID);
+		if ($userFile !== null) {
+			$userFiles[] = $userFile;
+		}
+	}
+
+	return $this->render('SDCoreBundle:Booking:delete.'.($many ? 'many' : 'one').'.html.twig',
+array('userContext' => $userContext, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+	'date' => $date, 'timetableLinesList' => $timetableLinesList,
+	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
+	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine,
+	'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList));
+    }
+
+	// Validation de la suppression d'une réservation
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+	public function many_validate_deleteAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, Request $request)
+	{
+	return BookingController::validate_deleteAction($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $request, 1);
+	}
+
+	// Validation de la suppression d'une réservation
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+	public function one_validate_deleteAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, Request $request)
+    {
+	return BookingController::validate_deleteAction($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $request, 0);
+    }
+
+	// Validation de la suppression d'une réservation
+    public function validate_deleteAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, Request $request, $many)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $form = $this->get('form.factory')->create();
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+        // Inutile de persister ici, Doctrine connait déjà la reservation
+        $em->remove($booking);
+        $em->flush();
+        $request->getSession()->getFlashBag()->add('notice', 'booking.deleted.ok');
+		return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable',
+		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $date));
+    }
+
+	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
+
+	// Utilisateurs
+	$userFileIDArray = explode("-", $userFileIDList);
+
+	$userFiles = array();
+	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
+
+	foreach ($userFileIDArray as $userFileID) {
+
+		$userFile = $userFileRepository->find($userFileID);
+		if ($userFile !== null) {
+			$userFiles[] = $userFile;
+		}
+	}
+
+	return $this->render('SDCoreBundle:Booking:delete.'.($many ? 'many' : 'one').'.html.twig',
+		array('userContext' => $userContext, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+		'date' => $date, 'timetableLinesList' => $timetableLinesList,
+		'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
+		'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine,
+		'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList));
+	}
 }

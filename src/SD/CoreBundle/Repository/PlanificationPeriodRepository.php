@@ -68,7 +68,6 @@ class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
 	return $results;
 	}
 
-
 	// Retourne la derniere periode d'une planification
 	public function getLastPlanificationPeriod($planification)
     {

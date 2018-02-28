@@ -12,8 +12,10 @@ activity.updated.ok: The activity has been updated
 
 booking.create: Book
 booking.created.ok: The booking has been created
+booking.deleted.ok: The booking has been deleted
 booking.period.beginning.update: Modify beginning period
 booking.period.end.update: Modify end period
+booking.updated.ok: The booking has been updated
 booking.user.list.update: Modify users list
 
 dashboard.plural: Dashboards

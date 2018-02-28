@@ -599,18 +599,38 @@ sd_core_booking_one_user_files_update:
         planificationPeriodID: \d+
         resourceID: \d+
 
-sd_core_booking_many_validate_update:
-    path:     /bookingmany/validateupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}
-    defaults: { _controller: SDCoreBundle:Booking:many_validate_update }
+sd_core_booking_many_delete:
+    path:     /bookingmany/delete/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}
+    defaults: { _controller: SDCoreBundle:Booking:many_delete }
     requirements:
+        bookingID: \d+
         planificationID: \d+
         planificationPeriodID: \d+
         resourceID: \d+
 
-sd_core_booking_one_validate_update:
-    path:     /bookingone/validateupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}
-    defaults: { _controller: SDCoreBundle:Booking:one_validate_update }
+sd_core_booking_one_delete:
+    path:     /bookingone/delete/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}
+    defaults: { _controller: SDCoreBundle:Booking:one_delete }
     requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_many_validate_delete:
+    path:     /bookingmany/validatedelete/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:many_validate_delete }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_validate_delete:
+    path:     /bookingone/validatedelete/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}
+    defaults: { _controller: SDCoreBundle:Booking:one_validate_delete }
+    requirements:
+        bookingID: \d+
         planificationID: \d+
         planificationPeriodID: \d+
         resourceID: \d+

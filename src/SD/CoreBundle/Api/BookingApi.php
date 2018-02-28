@@ -257,6 +257,35 @@ class BookingApi
 	return $url;
 	}
 
+	// Retourne les informations de début et de fin de réservation à partir d'une liste de périodes contenue dans une Url
+    static function getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, &$beginningDate, &$beginningTimetableLine, &$endDate, &$endTimetableLine)
+	{
+	$cellArray  = explode("-", $timetableLinesList);
+
+    $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $cellArray[0]);
+	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
+
+	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
+	$beginningTimetableLineID = $beginningTimetableLines[0];
+
+	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
+
+	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $cellArray[count($cellArray)-1]);
+	$endDate = date_create_from_format("Ymd", $endDateString);
+
+	$endTimetableLines = explode("*", $endTimetableLinesList);
+	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
+
+	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
+	}
+
+
+
+
+
+
 
 	// Retourne une chaine correspondant à la liste des utilisateurs d'une réservation
 	static function getBookingUsersUrl($em, \SD\CoreBundle\Entity\Booking $booking)

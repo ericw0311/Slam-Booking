@@ -22,12 +22,9 @@ $(function () {
 		dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
 		monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Décembre'],
 		monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aou','Sep','Oct','Nov','Déc'],
-        timeFormat: {
-            // for agendaWeek and agendaDay
-            agenda: 'h:mmt',    // 5:00 - 6:30
-            // for all other views
-            '': 'h:mmt'         // 7p
-        },
+		axisFormat: 'hh:mm',
+		allDaySlot: false,
+		timeFormat: 'hh:mm',
         titleFormat: {
             month: 'MMMM yyyy',
             week: 'MMMM yyyy',

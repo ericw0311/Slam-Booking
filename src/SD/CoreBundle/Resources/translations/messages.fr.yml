@@ -10,6 +10,7 @@ activity.plural: Activités
 activity.singular: Activité
 activity.updated.ok: L'activité a bien été modifiée
 
+booking.ask.delete: Voulez-vous vraiment supprimer cette réservation ?
 booking.create: Réserver
 booking.created.ok: La réservation a bien été créée
 booking.deleted.ok: La réservation a bien été supprimée

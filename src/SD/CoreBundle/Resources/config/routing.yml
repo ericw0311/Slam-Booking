@@ -617,24 +617,6 @@ sd_core_booking_one_delete:
         planificationPeriodID: \d+
         resourceID: \d+
 
-sd_core_booking_many_validate_delete:
-    path:     /bookingmany/validatedelete/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}
-    defaults: { _controller: SDCoreBundle:Booking:many_validate_delete }
-    requirements:
-        bookingID: \d+
-        planificationID: \d+
-        planificationPeriodID: \d+
-        resourceID: \d+
-
-sd_core_booking_one_validate_delete:
-    path:     /bookingone/validatedelete/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}
-    defaults: { _controller: SDCoreBundle:Booking:one_validate_delete }
-    requirements:
-        bookingID: \d+
-        planificationID: \d+
-        planificationPeriodID: \d+
-        resourceID: \d+
-
 sd_core_parameter_numberLinesColumns:
     path:     /setNumberLinesColumns/{bundleCode}/{entityCode}
     defaults: { _controller: SDCoreBundle:Parameter:numberLinesColumns }

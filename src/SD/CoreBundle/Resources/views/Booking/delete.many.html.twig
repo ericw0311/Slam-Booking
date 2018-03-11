@@ -2,6 +2,10 @@
 
 {% extends "SDCoreBundle:Booking:create.or.update.html.twig" %}
 
+{% block form_start %}
+{{ form_start(form) }}
+{% endblock %}
+
 {% block userFiles_list_link %}
 <li class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ userFiles[0].getFirstAndLastName() }}</li>
 {% endblock %}
@@ -15,5 +19,13 @@
 
 {% block booking_buttons %}
 	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-	<a href="{{ path('sd_core_booking_many_validate_delete', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
+    <button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+{% endblock %}
+
+{% block ask_delete %}
+<p class="text-danger">{{ 'booking.ask.delete'|trans }}</p>
+{% endblock %}
+
+{% block form_end %}
+{{ form_end(form) }}
 {% endblock %}

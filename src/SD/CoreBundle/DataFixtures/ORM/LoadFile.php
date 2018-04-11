@@ -26,13 +26,11 @@ $fileAdmin = new File($this->getReference('user-1160')); $fileAdmin->setName('AC
 $fileAdmin = new File($this->getReference('user-1323')); $fileAdmin->setName('RESERVATION de SALLES'); $manager->persist($fileAdmin); $manager->flush(); $this->addReference('file-598', $fileAdmin);
 $fileAdmin = new File($this->getReference('user-1408')); $fileAdmin->setName('SQUASH'); $manager->persist($fileAdmin); $manager->flush(); $this->addReference('file-612', $fileAdmin);
 $fileAdmin = new File($this->getReference('user-1418')); $fileAdmin->setName('Gestion'); $manager->persist($fileAdmin); $manager->flush(); $this->addReference('file-614', $fileAdmin);
-$fileAdmin = new File($this->getReference('user-1526')); $fileAdmin->setName('LA VILLA AUX OLIVIERS'); $manager->persist($fileAdmin); $manager->flush(); $this->addReference('file-648', $fileAdmin);
-$fileAdmin = new File($this->getReference('user-1602')); $fileAdmin->setName('Sallereunionparisopera'); $manager->persist($fileAdmin); $manager->flush(); $this->addReference('file-690', $fileAdmin);
+$fileAdmin = new File($this->getReference('user-1602')); $fileAdmin->setName('SallereunionLevallois'); $manager->persist($fileAdmin); $manager->flush(); $this->addReference('file-690', $fileAdmin);
 $fileAdmin = new File($this->getReference('user-1602')); $fileAdmin->setName('Conf Call KPC'); $manager->persist($fileAdmin); $manager->flush(); $this->addReference('file-691', $fileAdmin);
 $fileAdmin = new File($this->getReference('user-1661')); $fileAdmin->setName('ASRV tennis'); $manager->persist($fileAdmin); $manager->flush(); $this->addReference('file-707', $fileAdmin);
 $fileAdmin = new File($this->getReference('user-1868')); $fileAdmin->setName('Salles des travaux pratiques sciences'); $manager->persist($fileAdmin); $manager->flush(); $this->addReference('file-757', $fileAdmin);
     }
-
 
     public function getOrder()
     {

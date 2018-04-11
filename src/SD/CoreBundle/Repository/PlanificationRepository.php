@@ -80,8 +80,8 @@ class PlanificationRepository extends \Doctrine\ORM\EntityRepository
     {
 	$qb->innerJoin('p.planificationPeriods', 'pp', Expr\Join::WITH,
 		$qb->expr()->andX(
-			$qb->expr()->orX($qb->expr()->isNull('pp.beginningDate'), $qb->expr()->gte('pp.beginningDate', ':beginningDate')),
-			$qb->expr()->orX($qb->expr()->isNull('pp.endDate'), $qb->expr()->lte('pp.endDate', ':endDate'))));
+			$qb->expr()->orX($qb->expr()->isNull('pp.beginningDate'), $qb->expr()->lte('pp.beginningDate', ':beginningDate')),
+			$qb->expr()->orX($qb->expr()->isNull('pp.endDate'), $qb->expr()->gte('pp.endDate', ':endDate'))));
     }
 
 	// Planifications affichées dans le planning: paramètres de la période

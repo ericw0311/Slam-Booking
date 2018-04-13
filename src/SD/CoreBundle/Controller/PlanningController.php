@@ -13,6 +13,9 @@ use SD\CoreBundle\Entity\UserContext;
 use SD\CoreBundle\Entity\FileContext;
 use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
+use SD\CoreBundle\Entity\Ddate;
+
+use SD\CoreBundle\Form\DdateType;
 
 use SD\CoreBundle\Api\PlanningApi;
 use SD\CoreBundle\Api\BookingApi;
@@ -158,10 +161,13 @@ class PlanningController extends Controller
 
 	$bookings = BookingApi::getBookings($em, $userContext->getCurrentFile(), $date, $planification, $planificationPeriod, $userContext->getCurrentUserFile());
 
+    $ddate = new Ddate();
+    $form = $this->createForm(DdateType::class, $ddate);
+
     return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.opened.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'timetableLines' => $timetableLines,
 			'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'nextWeek' => $nextWeek, 'previousWeek' => $previousWeek,
-			'nextMonth' => $nextMonth, 'previousMonth' => $previousMonth, 'bookings' => $bookings));
+			'nextMonth' => $nextMonth, 'previousMonth' => $previousMonth, 'bookings' => $bookings, 'form' => $form->createView()));
     }
 }

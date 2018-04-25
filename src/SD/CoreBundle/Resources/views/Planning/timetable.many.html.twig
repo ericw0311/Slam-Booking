@@ -46,9 +46,9 @@
 </div>
 
 <div class="col-sm-6">
-<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>
+<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>
 	{{ ('day.' ~ (date|date("D")|upper))|trans }}&nbsp;{{ date|date("j") }}&nbsp;{{ (('month.' ~ (date|date("M")|upper))|trans)|lower }}&nbsp;{{ date|date("Y") }}&nbsp;
-<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
+<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
 </div>
 
 </div>

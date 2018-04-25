@@ -42,9 +42,9 @@ class PlanningController extends Controller
 
 	// Acces au planning d'une planification
 	if (count($planifications) > 1) {
-		return $this->redirectToRoute('sd_core_planning_many_timetable', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
+		return $this->redirectToRoute('sd_core_planning_many_timetable_pp', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
 	} else {
-		return $this->redirectToRoute('sd_core_planning_one_timetable', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
+		return $this->redirectToRoute('sd_core_planning_one_timetable_pp', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
 	}
 	}
 

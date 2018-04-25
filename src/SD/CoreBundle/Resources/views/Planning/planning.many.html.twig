@@ -8,6 +8,7 @@
 {% block title %}{{ parent() }} Planning{% endblock %}
 
 {% block body %}
+{% block form_start %}{% endblock %}
 
 <div class="col-sm-3">
 
@@ -45,8 +46,8 @@
 		<li>{% block planning_one %}{% endblock %}</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-	<li><a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-th"></span>&nbsp;{{ 'planning.timetable'|trans }}</a></li>
-	<li><a href="{{ path('sd_core_planning_many_calendar', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ 'planning.calendar'|trans }}</a></li>
+	<li><a href="{{ path('sd_core_planning_many_timetable_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-th"></span>&nbsp;{{ 'planning.timetable'|trans }}</a></li>
+	<li><a href="{{ path('sd_core_planning_many_calendar', { 'planificationID': planification.ID, 'date': date|date('Ymd') }) }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ 'planning.calendar'|trans }}</a></li>
 		</ul>
 	</div>
 </nav>
@@ -55,4 +56,5 @@
 
 </div>
 
+{% block form_end %}{% endblock %}
 {% endblock %}

@@ -60,114 +60,201 @@ class PlanningController extends Controller
     // Affichage du calendrier d'une planification
     /**
     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
-    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
     */
-    public function many_calendarAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
+    public function many_calendarAction(Planification $planification, \Datetime $date)
     {
-	return PlanningController::calendarAction($planification, $planificationPeriod, $date, 1);
+	return PlanningController::calendarAction($planification, $date, 1);
     }
 
     // Affichage du calendrier d'une planification
     /**
     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
-    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
     */
-    public function one_calendarAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
+    public function one_calendarAction(Planification $planification, \Datetime $date)
     {
-	return PlanningController::calendarAction($planification, $planificationPeriod, $date, 0);
+	return PlanningController::calendarAction($planification, $date, 0);
     }
 
     // Affichage du calendrier d'une planification
-    public function calendarAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $many)
+    public function calendarAction(Planification $planification, \Datetime $date, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
 	PlanningApi::setCurrentCalendarPlanification($em, $connectedUser, $planification); // Le calendrier lit en base la planification courante
+	PlanningApi::setCurrentCalendarMany($em, $connectedUser, $many); // Le calendrier lit en base le type d'affichage (one ou many)
 
     $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
 
     $planifications = $planificationRepository->getPlanningPlanifications($userContext->getCurrentFile(), $date);
 
     return $this->render('SDCoreBundle:Planning:calendar.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planifications' => $planifications, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'date' => $date));
+		array('userContext' => $userContext, 'planifications' => $planifications, 'planification' => $planification, 'date' => $date));
     }
 
     // Affichage de la grille horaire journaliere d'une planification
     /**
 	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
-    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function many_timetableAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
+    public function many_timetableAction(Planification $planification, \Datetime $date, Request $request)
     {
-	return PlanningController::timetableAction($planification, $planificationPeriod, $date, 1);
+	return PlanningController::timetableAction($planification, $date, 1, $request);
     }
 
     // Affichage de la grille horaire journaliere d'une planification
     /**
 	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
-    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function one_timetableAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
+    public function one_timetableAction(Planification $planification, \Datetime $date, Request $request)
     {
-	return PlanningController::timetableAction($planification, $planificationPeriod, $date, 0);
+	return PlanningController::timetableAction($planification, $date, 0, $request);
     }
 
     // Affichage de la grille horaire journaliere d'une planification
-    public function timetableAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $many)
+    public function timetableAction(Planification $planification, \Datetime $date, $many, Request $request)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
+	$lDate = $date;
 
-    $planifications = $planificationRepository->getPlanningPlanifications($userContext->getCurrentFile(), $date);
+    $ddate = new Ddate();
+    $form = $this->createForm(DdateType::class, $ddate);
 
-	$previousDate = clone $date;
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+		$lDate = $ddate->getDate();
+	}
+
+    $pRepository = $em->getRepository('SDCoreBundle:Planification');
+
+    $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), $lDate);
+
+	if (count($planifications) <= 0) {
+		return $this->redirectToRoute('sd_core_planning_noplanification');
+    }
+
+	$planificationFound = false;
+	$planificationPeriodID = 0;
+	foreach ($planifications as $i_planification) {
+		if ($i_planification['ID'] == $planification->getID()) { $planificationFound = true; $planificationPeriodID = $i_planification['planificationPeriodID']; break; } // La planification en cours est dans la liste des planifications ouvertes à la date en cours.
+	}
+
+    $ppRepository = $em->getRepository('SDCoreBundle:PlanificationPeriod');
+
+	if ($planificationFound) {
+		$lPlanification = $planification;
+		$planificationPeriod = $ppRepository->find($planificationPeriodID);
+	} else {
+		$lPlanification = $pRepository->find($planifications[0]['ID']);
+		$planificationPeriod = $ppRepository->find($planifications[0]['planificationPeriodID']);
+	}
+
+	$previousDate = clone $lDate;
 	$previousDate->sub(new \DateInterval('P1D'));
-	$previousWeek = clone $date;
-	$previousWeek->sub(new \DateInterval('P7D'));
-	$previousMonth = clone $date;
-	$previousMonth->sub(new \DateInterval('P1M'));
-	$nextDate = clone $date;
+	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
-	$nextWeek = clone $date;
-	$nextWeek->add(new \DateInterval('P7D'));
-	$nextMonth = clone $date;
-	$nextMonth->add(new \DateInterval('P1M'));
 
-    $planificationResourceRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
-    $planificationResources = $planificationResourceRepository->getResources($planificationPeriod);
+    $prRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+    $planificationResources = $prRepository->getResources($planificationPeriod);
 
-    $planificationLineRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
-	$planificationLine = $planificationLineRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D'))));
+    $plRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
+	$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($lDate->format('D'))));
 
 	if ($planificationLine === null || $planificationLine->getActive() < 1) {
 		return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.closed.html.twig',
-	array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
+	array('userContext' => $userContext, 'planification' => $lPlanification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources,
-			'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'nextWeek' => $nextWeek, 'previousWeek' => $previousWeek,
-			'nextMonth' => $nextMonth, 'previousMonth' => $previousMonth));
+			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'form' => $form->createView()));
 	}
 
     $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
     $timetableLines = $timetableLineRepository->getTimetableLines($planificationLine->getTimetable());
 
-	$bookings = BookingApi::getBookings($em, $userContext->getCurrentFile(), $date, $planification, $planificationPeriod, $userContext->getCurrentUserFile());
+	$bookings = BookingApi::getBookings($em, $userContext->getCurrentFile(), $lDate, $lPlanification, $planificationPeriod, $userContext->getCurrentUserFile());
+
+
+    return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.opened.html.twig',
+		array('userContext' => $userContext, 'planification' => $lPlanification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
+			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'timetableLines' => $timetableLines,
+			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
+    }
+
+
+    // Affichage de la grille horaire journaliere d'une planification
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function many_timetable_ppAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, Request $request)
+    {
+	return PlanningController::timetable_ppAction($planification, $planificationPeriod, $date, 1, $request);
+    }
+
+    // Affichage de la grille horaire journaliere d'une planification
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function one_timetable_ppAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, Request $request)
+    {
+	return PlanningController::timetable_ppAction($planification, $planificationPeriod, $date, 0, $request);
+    }
+
+    // Affichage de la grille horaire journaliere d'une planification A REPRENDRE
+    public function timetable_ppAction(Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $many, Request $request)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$lDate = $date;
 
     $ddate = new Ddate();
     $form = $this->createForm(DdateType::class, $ddate);
 
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+		$lDate = $ddate->getDate();
+	}
+
+    $pRepository = $em->getRepository('SDCoreBundle:Planification');
+
+    $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), $lDate);
+
+	$previousDate = clone $lDate;
+	$previousDate->sub(new \DateInterval('P1D'));
+	$nextDate = clone $lDate;
+	$nextDate->add(new \DateInterval('P1D'));
+
+    $prRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+    $planificationResources = $prRepository->getResources($planificationPeriod);
+
+    $plRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
+	$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($lDate->format('D'))));
+
+	if ($planificationLine === null || $planificationLine->getActive() < 1) {
+		return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.closed.html.twig',
+	array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
+			'planifications' => $planifications, 'planificationResources' => $planificationResources,
+			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'form' => $form->createView()));
+	}
+
+    $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+    $timetableLines = $timetableLineRepository->getTimetableLines($planificationLine->getTimetable());
+
+	$bookings = BookingApi::getBookings($em, $userContext->getCurrentFile(), $lDate, $planification, $planificationPeriod, $userContext->getCurrentUserFile());
+
+
     return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.opened.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'timetableLines' => $timetableLines,
-			'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'nextWeek' => $nextWeek, 'previousWeek' => $previousWeek,
-			'nextMonth' => $nextMonth, 'previousMonth' => $previousMonth, 'bookings' => $bookings, 'form' => $form->createView()));
+			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
     }
 }

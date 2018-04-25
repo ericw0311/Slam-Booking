@@ -88,6 +88,7 @@ class CalendarEventListener
 	$pRepository = $entityManager->getRepository('SDCoreBundle:Planification');
 
 	$currentCalendarPlanificationID = PlanningApi::getCurrentCalendarPlanificationID($entityManager, $connectedUser);
+	$currentCalendarMany = PlanningApi::getCurrentCalendarManyValue($entityManager, $connectedUser);
 
 
 	$ppRepository = $entityManager->getRepository('SDCoreBundle:PlanificationPeriod');
@@ -120,7 +121,9 @@ class CalendarEventListener
 		// $eventEntity->setFgColor('#e8dbb8'); //set the foreground color of the event's label
 		$eventEntity->setBgColor($bgColor); //set the background color of the event's label
 		$eventEntity->setFgColor($fgColor); //set the foreground color of the event's label
-		$eventEntity->setUrl($this->getRouter()->generate('sd_core_resource_edit', array('resourceID' => $SBEvent->getID()))); // url to send user to when event label is clicked
+		$eventEntity->setUrl($this->getRouter()->generate('sd_core_resource_edit',
+	array('bookingID' => $SBEvent->getID(), 'planificationID' => $SBEvent->getPlanification()->getID(), 'resourceID' => $SBEvent->getResource()->getID()))); // url to send user to when event label is clicked
+
 		// $eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
 		//finally, add the event to the CalendarEvent for displaying on the calendar
 		$calendarEvent->addEvent($eventEntity);

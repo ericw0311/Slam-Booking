@@ -6,35 +6,52 @@
 {% extends "SDCoreBundle:Planning:planning.many.html.twig" %}
 
 {% block planification_internal_active %}
-	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': i_p.ID, 'planificationPeriodID': i_p.planificationPeriodID, 'date': date|date('Ymd') }) }}" class="list-group-item active"><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[i_p.code] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
+	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="list-group-item active"><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[i_p.code] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
 {% endblock %}
 
 {% block planification_internal %}
-	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': i_p.ID, 'planificationPeriodID': i_p.planificationPeriodID, 'date': date|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[i_p.code] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
+	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[i_p.code] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
 {% endblock %}
 
 {% block planification_external_active %}
-	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': i_p.ID, 'planificationPeriodID': i_p.planificationPeriodID, 'date': date|date('Ymd') }) }}" class="list-group-item active"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
+	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="list-group-item active"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
 {% endblock %}
 
 {% block planification_external %}
-	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': i_p.ID, 'planificationPeriodID': i_p.planificationPeriodID, 'date': date|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
+	<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[i_p.type] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
 {% endblock %}
 
 {% block planning_one %}
-	<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-full"></span></a>
+	<a href="{{ path('sd_core_planning_one_timetable_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-full"></span></a>
+{% endblock %}
+
+{% block form_start %}
+	{{ form_start(form, {'attr': {'class': 'form-inline'}}) }}
+{% endblock %}
+
+{% block form_end %}
+	{{ form_end(form) }}
 {% endblock %}
 
 {% block planning %}
 
-<div class="well well-sm" style="color:blue; text-align: center">
-<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousMonth|date('Ymd') }) }}" class="glyphicon glyphicon-fast-backward" title="{{ 'month.previous'|trans }}"></a>&nbsp;
-<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousWeek|date('Ymd') }) }}" class="glyphicon glyphicon-backward" title="{{ 'week.previous'|trans }}"></a>&nbsp;
-<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>&nbsp;
-{{ ('day.' ~ (date|date("D")|upper))|trans }}&nbsp;{{ date|date("j") }}&nbsp;{{ (('month.' ~ (date|date("M")|upper))|trans)|lower }}&nbsp;{{ date|date("Y") }}&nbsp;
-<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
-<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextWeek|date('Ymd') }) }}" class="glyphicon glyphicon-forward" title="{{ 'week.next'|trans }}"></a>
-<a href="{{ path('sd_core_planning_many_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextMonth|date('Ymd') }) }}" class="glyphicon glyphicon-fast-forward" title="{{ 'month.next'|trans }}"></a>
+<div class="well well-sm" style="color:blue">
+<div class="row">
+
+<div class="col-sm-6">
+	{{ form_widget(form.date) }}
+<button type="submit" class="btn btn-default">
+	<span class="glyphicon glyphicon-th"></span>
+</button>
+</div>
+
+<div class="col-sm-6">
+<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>
+	{{ ('day.' ~ (date|date("D")|upper))|trans }}&nbsp;{{ date|date("j") }}&nbsp;{{ (('month.' ~ (date|date("M")|upper))|trans)|lower }}&nbsp;{{ date|date("Y") }}&nbsp;
+<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
+</div>
+
+</div>
 </div>
 
 {% block planning_timetable %}

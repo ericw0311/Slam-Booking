@@ -47,7 +47,7 @@ class UserParameter
     /**
      * @var int
      *
-     * @ORM\Column(name="integerValue", type="integer")
+     * @ORM\Column(name="integerValue", type="integer", nullable=true)
      */
     private $integerValue;
 

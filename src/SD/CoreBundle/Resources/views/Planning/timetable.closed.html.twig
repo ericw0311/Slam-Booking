@@ -1,64 +1,23 @@
 {# src/SD/CoreBundle/Resources/views/Planning/timetable.closed.html.twig #}
 
 <table class="table table-bordered table-striped">
-    <thead>
-      <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="success">success&nbsp
-<a href="#" class="glyphicon glyphicon-plus" title="{{ 'modify'|trans }}"></a>
-        </td>
-        <td class="warning">warning&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-        <td class="success">success&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-      </tr>
-      <tr>
-        <td class="info">info&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-        <td class="danger" rowspan=2>danger&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-        <td class="info">info&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-      </tr>
-      <tr>
-        <td class="success">success&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-        <td class="success">success&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-      </tr>
-      <tr>
-        <td class="info">info&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-        <td class="warning">warning&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-        <td class="info">info&nbsp
-<a href="#" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="#" class="glyphicon glyphicon-trash" title="{{ 'modify'|trans }}"></a>
-        </td>
-      </tr>
-    </tbody>
+	<thead>
+	<tr>
+{% for planificationResource in planificationResources %}
+	<th>
+{% if planificationResource.resource.internal %}
+	<img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[planificationResource.resource.code] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% else %}
+	<img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[planificationResource.resource.type] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% endif %}
+	</th>
+{% endfor %}
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+	<td colspan={{ planificationResources|length }}>C'est fermé</td>
+	</tr>
+	</tbody>
 </table>
+

@@ -10,6 +10,7 @@ class FileContext
     protected $activityCount = 0;
     protected $resourceCount = 0;
     protected $planificationCount = 0;
+	protected $allBookingsCount = 0;
 
     public function setUserFileCount($userFileCount)
     {
@@ -77,22 +78,36 @@ class FileContext
     return $this->planificationCount;
     }
 
+    public function setAllBookingsCount($bookingsCount)
+    {
+    $this->allBookingsCount = $bookingsCount;
+    return $this;
+    }
+
+    public function getAllBookingsCount()
+    {
+    return $this->allBookingsCount;
+    }
+
     function __construct($em, \SD\CoreBundle\Entity\File $file)
     {
-    $userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
-    $this->setUserFileCount($userFileRepository->getUserFilesCount($file));
+    $ufRepository = $em->getRepository('SDCoreBundle:UserFile');
+    $this->setUserFileCount($ufRepository->getUserFilesCount($file));
 
-    $labelRepository = $em->getRepository('SDCoreBundle:Label');
-    $this->setLabelCount($labelRepository->getLabelsCount($file));
+    $lRepository = $em->getRepository('SDCoreBundle:Label');
+    $this->setLabelCount($lRepository->getLabelsCount($file));
 
-    $timetableRepository = $em->getRepository('SDCoreBundle:Timetable');
-    $this->setTimetableCount($timetableRepository->getTimetablesCount($file));
+    $tRepository = $em->getRepository('SDCoreBundle:Timetable');
+    $this->setTimetableCount($tRepository->getTimetablesCount($file));
 
-    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
-    $this->setResourceCount($resourceRepository->getResourcesCount($file));
+    $rRepository = $em->getRepository('SDCoreBundle:Resource');
+    $this->setResourceCount($rRepository->getResourcesCount($file));
 
-    $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
-    $this->setPlanificationCount($planificationRepository->getPlanificationsCount($file));
+    $pRepository = $em->getRepository('SDCoreBundle:Planification');
+    $this->setPlanificationCount($pRepository->getPlanificationsCount($file));
+
+    $bRepository = $em->getRepository('SDCoreBundle:Booking');
+    $this->setAllBookingsCount($bRepository->getAllBookingsCount($file));
 
     return $this;
     }

@@ -29,6 +29,7 @@ class DefaultController extends Controller
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
+
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
     $fileContext = new FileContext($em, $userContext->getCurrentFile()); // contexte dossier

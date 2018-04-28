@@ -16,8 +16,11 @@ booking.created.ok: La réservation a bien été créée
 booking.deleted.ok: La réservation a bien été supprimée
 booking.period.beginning.update: Modifier la période de début
 booking.period.end.update: Modifier la période de fin
+booking.plural: Réservations
+booking.singular: Réservation
 booking.updated.ok: La réservation a bien été modifiée
 booking.user.list.update: Modifier la liste des utilisateurs
+
 
 dashboard.plural: Tableaux de bord
 dashboard.singular: Tableau de bord

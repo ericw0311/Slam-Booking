@@ -167,12 +167,12 @@ class BookingApi
 	}
 
 
-	static function getBookings($em, \SD\CoreBundle\Entity\File $file, \Datetime $date, \SD\CoreBundle\Entity\Planification $planification, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod, \SD\CoreBundle\Entity\UserFile $currentUserFile)
+	static function getTimetableBookings($em, \SD\CoreBundle\Entity\File $file, \Datetime $date, \SD\CoreBundle\Entity\Planification $planification, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod, \SD\CoreBundle\Entity\UserFile $currentUserFile)
 	{
 	$bRepository = $em->getRepository('SDCoreBundle:Booking');
 	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
 
-	$bookingsDB = $bRepository->getBookings($file, $date, $planification, $planificationPeriod);
+	$bookingsDB = $bRepository->getTimetableBookings($file, $date, $planification, $planificationPeriod);
 	$bookings = array();
 
 	if (count($bookingsDB) <= 0) {

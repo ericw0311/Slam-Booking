@@ -87,8 +87,8 @@ class PlanificationRepository extends \Doctrine\ORM\EntityRepository
 	// Planifications affichées dans le planning: paramètres de la période
 	public function getPlanningPlanificationsPeriodParameters($qb, \Datetime $date)
     {
-	$qb->setParameter('beginningDate', $date);
-	$qb->setParameter('endDate', $date);
+	$qb->setParameter('beginningDate', $date->format('Ymd'));
+	$qb->setParameter('endDate', $date->format('Ymd'));
     }
 
 	// Planifications affichées dans le planning: tri

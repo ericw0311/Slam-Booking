@@ -415,17 +415,23 @@ sd_core_planning_noplanification:
     path:     /planning/noplanification
     defaults: { _controller: SDCoreBundle:Planning:noplanification }
 
+sd_core_planning_booking_list:
+    path:     /planning/bookinglist/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Planning:booking_list }
+
 sd_core_planning_many_calendar:
-    path:     /planningmany/calendar/{planificationID}/{date}
+    path:     /planningmany/calendar/{planificationID}/{planificationPeriodID}/{date}
     defaults: { _controller: SDCoreBundle:Planning:many_calendar }
     requirements:
         planificationID: \d+
+        planificationPeriodID: \d+
 
 sd_core_planning_one_calendar:
-    path:     /planningone/calendar/{planificationID}/{date}
+    path:     /planningone/calendar/{planificationID}/{planificationPeriodID}/{date}
     defaults: { _controller: SDCoreBundle:Planning:one_calendar }
     requirements:
         planificationID: \d+
+        planificationPeriodID: \d+
 
 sd_core_planning_many_timetable:
     path:     /planningmany/timetable/{planificationID}/{date}

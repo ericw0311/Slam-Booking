@@ -16,6 +16,8 @@ booking.created.ok: The booking has been created
 booking.deleted.ok: The booking has been deleted
 booking.period.beginning.update: Modify beginning period
 booking.period.end.update: Modify end period
+booking.plural: Bookings
+booking.singular: Booking
 booking.updated.ok: The booking has been updated
 booking.user.list.update: Modify users list
 

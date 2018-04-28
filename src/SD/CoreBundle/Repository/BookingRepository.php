@@ -13,7 +13,8 @@ use SD\CoreBundle\DQL\DateFormatFunctionDQL;
 
 class BookingRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function getBookings($file, \Datetime $date, $planification, $planificationPeriod)
+	// Affichage des réservations dans la grille horaire journalière
+	public function getTimetableBookings($file, \Datetime $date, $planification, $planificationPeriod)
 	{
 	$qb = $this->createQueryBuilder('b');
     $qb->select('b.id bookingID');
@@ -25,8 +26,6 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	$qb->addSelect('r.id resourceID');
 	$qb->addSelect('t.id timetableID');
 	$qb->addSelect('tl.id timetableLineID');
-	// $qb->addSelect($qb->expr()->min('tl.id').' as firstTimetableLineID');
-	// $qb->addSelect($qb->expr()->count('tl.id').' as nbrTimetableLines');
 
 	$qb->where('b.file = :file')->setParameter('file', $file);
 	$qb->andWhere("DATE_FORMAT(bl.date,'%Y%m%d') = :date")->setParameter('date', $date->format('Ymd'));
@@ -40,14 +39,6 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	$qb->innerJoin('bl.resource', 'r');
 	$qb->innerJoin('bl.timetable', 't');
 	$qb->innerJoin('bl.timetableLine', 'tl');
-
-/*	$qb->groupBy('b.id');
-	$qb->addGroupBy('bl.date');
-	$qb->addGroupBy('p.id');
-	$qb->addGroupBy('pp.id');
-	$qb->addGroupBy('pl.id');
-	$qb->addGroupBy('r.id');
-	$qb->addGroupBy('t.id'); */
 
 	$qb->orderBy('bl.date', 'ASC');
 	$qb->addOrderBy('p.id', 'ASC');
@@ -68,6 +59,30 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
     $qb = $this->createQueryBuilder('b');
     $qb->where('b.file = :file')->setParameter('file', $file);
 	$qb->andWhere('b.planification = :planification')->setParameter('planification', $planification);
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
+	// Toutes les réservations d'un dossier
+	public function getAllBookingsCount($file)
+    {
+    $qb = $this->createQueryBuilder('b');
+    $qb->select($qb->expr()->count('b'));
+    $qb->where('b.file = :file')->setParameter('file', $file);
+    $query = $qb->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+
+	public function getAllBookings($file, $firstRecordIndex, $maxRecord)
+    {
+    $qb = $this->createQueryBuilder('b');
+    $qb->where('b.file = :file')->setParameter('file', $file);
+    $qb->orderBy('b.beginningDate', 'ASC');
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+  
     $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;

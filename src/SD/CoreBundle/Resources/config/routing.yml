@@ -634,5 +634,5 @@ sd_core_booking_one_delete:
         resourceID: \d+
 
 sd_core_parameter_numberLinesColumns:
-    path:     /setNumberLinesColumns/{bundleCode}/{entityCode}/{listLink}
+    path:     /setNumberLinesColumns/{bundleCode}/{entityCode}
     defaults: { _controller: SDCoreBundle:Parameter:numberLinesColumns }

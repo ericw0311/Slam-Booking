@@ -1,5 +1,7 @@
 {# src/SD/CoreBundle/Resources/views/list-layout.html.twig #}
 
+{% set entityPaths = constant('SD\\CoreBundle\\Entity\\Constants::ENTITY_PATHS') %}
+
 {% extends "::layout.html.twig" %}
 
 {% block title %}{{ parent() }} List{% endblock %}
@@ -12,27 +14,27 @@
 {% block body %}
 
 <div class="well well-sm">
-{% if listContext.displayCreateLink %}
-<a href="{{ path(listContext.getCreateLink) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> {{ (listContext.getEntityCode ~ '.create')|trans }}</a>
+{% if entityPaths[listContext.entityCode]['display_add'] %}
+<a href="{{ path(entityPaths[listContext.entityCode]['add']) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> {{ (listContext.entityCode ~ '.create')|trans }}</a>
 {% endif %}
-<a href="{{ path('sd_core_parameter_numberLinesColumns', { 'bundleCode': listContext.bundleCode, 'entityCode': listContext.entityCode, 'listLink': listContext.listLink }) }}" class="btn btn-default"><i class="glyphicon glyphicon-wrench"></i> {{ 'parameters'|trans }}</a>
+<a href="{{ path('sd_core_parameter_numberLinesColumns', { 'bundleCode': listContext.bundleCode, 'entityCode': listContext.entityCode }) }}" class="btn btn-default"><i class="glyphicon glyphicon-wrench"></i> {{ 'parameters'|trans }}</a>
 </div>
 
 {% if (listContext.numberPages > 1) %}
   
 <ul class="pagination">
 {% if listContext.pageNumber > 2 %}
-	<li><a href="{{ path(listContext.listLink, { 'pageNumber': 1 }) }}">1</a></li>
+	<li><a href="{{ path(entityPaths[listContext.entityCode]['list'], { 'pageNumber': 1 }) }}">1</a></li>
 {% endif %}
 {% if listContext.pageNumber > 1 %}
-	<li><a href="{{ path(listContext.listLink, { 'pageNumber': (listContext.pageNumber-1) }) }}">{{ (listContext.pageNumber-1) }}</a></li>
+	<li><a href="{{ path(entityPaths[listContext.entityCode]['list'], { 'pageNumber': (listContext.pageNumber-1) }) }}">{{ (listContext.pageNumber-1) }}</a></li>
 {% endif %}
-	<li class="active"><a href="{{ path(listContext.listLink, { 'pageNumber': listContext.pageNumber }) }}">{{ listContext.pageNumber }}</a></li>
+	<li class="active"><a href="{{ path(entityPaths[listContext.entityCode]['list'], { 'pageNumber': listContext.pageNumber }) }}">{{ listContext.pageNumber }}</a></li>
 {% if listContext.pageNumber < listContext.numberPages %}
-	<li><a href="{{ path(listContext.listLink, { 'pageNumber': (listContext.pageNumber+1) }) }}">{{ (listContext.pageNumber+1) }}</a></li>
+	<li><a href="{{ path(entityPaths[listContext.entityCode]['list'], { 'pageNumber': (listContext.pageNumber+1) }) }}">{{ (listContext.pageNumber+1) }}</a></li>
 {% endif %}
 {% if listContext.pageNumber < (listContext.numberPages-1) %}
-	<li><a href="{{ path(listContext.listLink, { 'pageNumber': listContext.numberPages }) }}">{{ listContext.numberPages }}</a></li>
+	<li><a href="{{ path(entityPaths[listContext.entityCode]['list'], { 'pageNumber': listContext.numberPages }) }}">{{ listContext.numberPages }}</a></li>
 {% endif %}
 </ul>
 

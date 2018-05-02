@@ -39,6 +39,7 @@ class SDExtension extends \Twig_Extension
             new \Twig_SimpleFunction('dateCourte', array($this, 'date_courte')),
             new \Twig_SimpleFunction('dateLongue', array($this, 'date_longue')),
             new \Twig_SimpleFunction('timetableLine', array($this, 'timetable_line')),
+            new \Twig_SimpleFunction('periode', array($this, 'periode')),
         );
     }
 
@@ -53,6 +54,16 @@ class SDExtension extends \Twig_Extension
     public function date_longue(\Datetime $date)
     {
 		return $this->getTranslator()->trans('day.'.strtoupper($date->format('D'))).' '.$date->format('d/m/Y');
+    }
+
+	// Retourne un période début - fin en ne gardant la date de fin que si elle est différente de la date de début.
+    public function periode(\Datetime $beginningDate, \Datetime $endDate)
+    {
+		if (strcmp($endDate->format('d/m/Y'), $beginningDate->format('d/m/Y')) > 0) {
+			return $beginningDate->format('d/m/Y H:i').' - '.$endDate->format('d/m/Y H:i');
+		} else {
+			return $beginningDate->format('d/m/Y H:i').' - '.$endDate->format('H:i');
+		}
     }
 
 	// Retourne un creneau horaire

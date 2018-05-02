@@ -17,9 +17,10 @@ use SD\CoreBundle\Form\UserParameterNLCType;
 class ParameterController extends Controller
 {
 	// Met a jour le nombre de lignes et le nombre de colonnes pour l'affichage d'une liste d'entites
-	// bundleCode: Code du bundle de l'entite
+	// bundleCode: Code du composant de l'entité
 	// entityCode: Code de la liste affichee (logiquement, c'est le code de l'entite elle meme)
-    public function numberLinesColumnsAction($bundleCode, $entityCode, Request $request)
+	// $listLink, : Lien d'affichage de la liste des enregistrements
+    public function numberLinesColumnsAction($bundleCode, $entityCode, $listLink, Request $request)
     {
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -62,9 +63,9 @@ class ParameterController extends Controller
 
 		$em->flush();
 		$request->getSession()->getFlashBag()->add('notice', 'number.lines.columns.updated.ok');
-		return $this->redirectToRoute('sd_'.$bundleCode.'_'.$entityCode.'_list', array('pageNumber' => 1));
+		return $this->redirectToRoute($listLink, array('pageNumber' => 1));
 	}
 
-	return $this->render('SDCoreBundle:Parameter:numberLinesColumns.html.twig', array('userContext' => $userContext, 'bundleCode' => $bundleCode, 'entityCode' => $entityCode, 'form' => $form->createView()));
+	return $this->render('SDCoreBundle:Parameter:numberLinesColumns.html.twig', array('userContext' => $userContext, 'entityCode' => $entityCode, 'listLink' => $listLink, 'form' => $form->createView()));
 	}
 }

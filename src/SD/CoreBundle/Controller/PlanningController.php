@@ -71,7 +71,7 @@ class PlanningController extends Controller
     $bRepository = $em->getRepository('SDCoreBundle:Booking');
     $numberRecords = $bRepository->getAllBookingsCount($userContext->getCurrentFile());
 
-    $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords, 'sd_core_planning_booking_list', 'sd_core_booking_add_not_defined');
+    $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords, 'sd_core_planning_booking_list', 'sd_core_booking_add_not_defined', false);
     $listBookings = $bRepository->getAllBookings($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',

@@ -37,7 +37,7 @@
 
   <div class="panel-footer">
     <div class="btn-group">
-<a href="{{ path('sd_' ~ bundleCode ~ '_' ~ entityCode ~ '_list', { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ (entityCode ~ '.back.to.list')|trans }}</a>
+<a href="{{ path(listLink, { 'pageNumber': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ (entityCode ~ '.back.to.list')|trans }}</a>
 <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
     </div>
   </div>

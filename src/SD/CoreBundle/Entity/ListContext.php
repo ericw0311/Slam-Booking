@@ -8,22 +8,16 @@ class ListContext
     protected $entityCode; // Code de l'entite
     protected $pageNumber; // Numero de la page affichee
     protected $numberRecords; // Nombre d'enregistrements total
-    protected $listLink; // Lien d'affichage de la liste des enregistrements
-    protected $createLink; // Lien de creation d'un enregistrement
-    protected $displayCreateLink; // Affichage du lien de creation d'un enregistrement
 
     protected $numberLines; // Nombre de lignes pouvant etre affichees sur une page
     protected $numberColumns; // Nombre de colonnes pouvant etre affichees sur une page
 
-    function __construct($em, $user, $bundleCode, $entityCode, $pageNumber, $numberRecords, $listLink, $createLink, $displayCreateLink = true) {
+    function __construct($em, $user, $bundleCode, $entityCode, $pageNumber, $numberRecords) {
 
     $this->bundleCode = $bundleCode;
     $this->entityCode = $entityCode;
     $this->pageNumber = $pageNumber;
     $this->numberRecords = $numberRecords;
-    $this->listLink = $listLink;
-    $this->createLink = $createLink;
-    $this->displayCreateLink = $displayCreateLink;
 
     $userParameterRepository = $em->getRepository('SDCoreBundle:UserParameter');
 
@@ -56,23 +50,6 @@ class ListContext
     public function getNumberRecords()
     {
     return $this->numberRecords;
-    }
-
-    // Lien d'affichage de la liste des enregistrements
-    public function getListLink()
-    {
-    return $this->listLink;
-    }
-
-    // Lien de creation d'un enregistrement
-    public function getCreateLink()
-    {
-    return $this->createLink;
-    }
-
-    public function getDisplayCreateLink()
-    {
-    return $this->displayCreateLink;
     }
 
     public function getNumberLines()

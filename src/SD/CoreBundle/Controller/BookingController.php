@@ -455,7 +455,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'booking.created.ok');
 
-	return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable',
+	return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable_pp',
 		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $beginningDateString));
     }
 
@@ -571,7 +571,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'booking.updated.ok');
-	return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable',
+	return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable_pp',
 		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $beginningDateString));
     }
 
@@ -634,7 +634,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
         $em->remove($booking);
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'booking.deleted.ok');
-		return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable',
+		return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable_pp',
 		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $date->format('Ymd')));
     }
 

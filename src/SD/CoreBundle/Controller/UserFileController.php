@@ -42,7 +42,7 @@ class UserFileController extends Controller
 
     $numberRecords = $userFileRepository->getUserFilesCount($userContext->getCurrentFile());
 
-    $listContext = new ListContext($em, $connectedUser, 'core', 'userFile', $pageNumber, $numberRecords, 'sd_core_userFile_list', 'sd_core_userFile_email');
+    $listContext = new ListContext($em, $connectedUser, 'core', 'userFile', $pageNumber, $numberRecords);
 
     $listUserFiles = $userFileRepository->getDisplayedUserFiles($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 

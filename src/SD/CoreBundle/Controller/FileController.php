@@ -35,7 +35,7 @@ class FileController extends Controller {
     $fileRepository = $em->getRepository('SDCoreBundle:File');
     $numberRecords = $fileRepository->getUserFilesCount($connectedUser);
 
-    $listContext = new ListContext($em, $connectedUser, 'core', 'file', $pageNumber, $numberRecords, 'sd_core_file_list', 'sd_core_file_add');
+    $listContext = new ListContext($em, $connectedUser, 'core', 'file', $pageNumber, $numberRecords);
 
     $listFiles = $fileRepository->getUserDisplayedFiles($connectedUser, $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
 

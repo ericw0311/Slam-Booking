@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use SD\CoreBundle\Entity\UserContext;
-use SD\CoreBundle\Entity\FileContext;
 use SD\CoreBundle\Entity\ListContext;
 use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
@@ -44,11 +43,9 @@ class PlanningController extends Controller
 
 	// Acces au planning d'une planification
 	if (count($planifications) > 1) {
-		// return $this->redirectToRoute('sd_core_planning_many_timetable_pp', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
-		return $this->redirectToRoute('sd_core_planning_many_timetable', array('planificationID' => $planifications[0]['ID'], 'date' => $currentDate));
+		return $this->redirectToRoute('sd_core_planning_many_timetable_pp', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
 	} else {
-		// return $this->redirectToRoute('sd_core_planning_one_timetable_pp', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
-		return $this->redirectToRoute('sd_core_planning_one_timetable', array('planificationID' => $planifications[0]['ID'], 'date' => $currentDate));
+		return $this->redirectToRoute('sd_core_planning_one_timetable_pp', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
 	}
 	}
 
@@ -61,7 +58,7 @@ class PlanningController extends Controller
     return $this->render('SDCoreBundle:Planning:noplanification.html.twig', array('userContext' => $userContext));
 	}
 
-	public function booking_listAction($pageNumber)
+	public function all_booking_listAction($pageNumber)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -71,8 +68,59 @@ class PlanningController extends Controller
     $bRepository = $em->getRepository('SDCoreBundle:Booking');
     $numberRecords = $bRepository->getAllBookingsCount($userContext->getCurrentFile());
 
-    $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords, 'sd_core_planning_booking_list', 'sd_core_booking_add_not_defined', false);
+    $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords);
     $listBookings = $bRepository->getAllBookings($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+                
+    return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings));
+    }
+
+	public function current_user_booking_listAction($pageNumber)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $bRepository = $em->getRepository('SDCoreBundle:Booking');
+    $numberRecords = $bRepository->getUserFileBookingsCount($userContext->getCurrentFile(), $userContext->getCurrentUserFile());
+
+    $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords);
+    $listBookings = $bRepository->getUserFileBookings($userContext->getCurrentFile(), $userContext->getCurrentUserFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+                
+    return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings));
+    }
+
+	public function in_progress_booking_listAction($pageNumber)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $bRepository = $em->getRepository('SDCoreBundle:Booking');
+    $numberRecords = $bRepository->getFromDatetimeBookingsCount($userContext->getCurrentFile(), new \DateTime());
+
+    $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords);
+    $listBookings = $bRepository->getFromDatetimeBookings($userContext->getCurrentFile(), new \DateTime(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+                
+    return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings));
+    }
+
+	public function current_user_in_progress_booking_listAction($pageNumber)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $bRepository = $em->getRepository('SDCoreBundle:Booking');
+    $numberRecords = $bRepository->getUserFileFromDatetimeBookingsCount($userContext->getCurrentFile(), $userContext->getCurrentUserFile(), new \DateTime());
+
+    $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords);
+    $listBookings = $bRepository->getUserFileFromDatetimeBookings($userContext->getCurrentFile(), $userContext->getCurrentUserFile(), new \DateTime(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
 		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings));
@@ -252,46 +300,45 @@ class PlanningController extends Controller
 	$logger = $this->get('logger');
 	$logger->info('DBG 101');
 
-	$lDate = $date;
-
     $ddate = new Ddate();
     $form = $this->createForm(DdateType::class, $ddate);
 
-    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-		$lDate = $ddate->getDate();
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) { // Si l'utilisateur change de date, on ré oriente vers la route qui recherche la période de planification
+		return $this->redirectToRoute('sd_core_planning_'.($many ? 'many' : 'one').'_timetable', 
+			array('planificationID' => $planification->getID(), 'date' => $ddate->getDate()->format("Ymd")));
 	}
 
     $pRepository = $em->getRepository('SDCoreBundle:Planification');
 
-    $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), $lDate);
+    $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), $date);
 
-	$previousDate = clone $lDate;
+	$previousDate = clone $date;
 	$previousDate->sub(new \DateInterval('P1D'));
-	$nextDate = clone $lDate;
+	$nextDate = clone $date;
 	$nextDate->add(new \DateInterval('P1D'));
 
     $prRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
     $planificationResources = $prRepository->getResources($planificationPeriod);
 
     $plRepository = $em->getRepository('SDCoreBundle:PlanificationLine');
-	$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($lDate->format('D'))));
+	$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D'))));
 
 	if ($planificationLine === null || $planificationLine->getActive() < 1) {
 		return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.closed.html.twig',
 	array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources,
-			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'form' => $form->createView()));
+			'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'form' => $form->createView()));
 	}
 
     $timetableLineRepository = $em->getRepository('SDCoreBundle:TimetableLine');
     $timetableLines = $timetableLineRepository->getTimetableLines($planificationLine->getTimetable());
 
-	$bookings = BookingApi::getTimetableBookings($em, $userContext->getCurrentFile(), $lDate, $planification, $planificationPeriod, $userContext->getCurrentUserFile());
+	$bookings = BookingApi::getTimetableBookings($em, $userContext->getCurrentFile(), $date, $planification, $planificationPeriod, $userContext->getCurrentUserFile());
 
 
     return $this->render('SDCoreBundle:Planning:timetable.'.($many ? 'many' : 'one').'.opened.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'timetableLines' => $timetableLines,
-			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
+			'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
     }
 }

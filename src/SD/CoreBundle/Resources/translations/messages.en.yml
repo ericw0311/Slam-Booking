@@ -10,17 +10,21 @@ activity.plural: Activities
 activity.singular: Activity
 activity.updated.ok: The activity has been updated
 
+booking.all: All bookings
 booking.ask.delete: Do you really want to delete this booking ?
 booking.back.to.list: Back to bookings list
 booking.create: Book
 booking.created.ok: The booking has been created
 booking.deleted.ok: The booking has been deleted
+booking.in.progress: Bookings in progress
 booking.period.beginning.update: Modify beginning period
 booking.period.end.update: Modify end period
 booking.plural: Bookings
 booking.singular: Booking
 booking.updated.ok: The booking has been updated
 booking.user.list.update: Modify users list
+booking.your: Your bookings
+booking.your.in.progress: Your bookings in progress
 
 dashboard.plural: Dashboards
 dashboard.singular: Dashboard

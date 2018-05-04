@@ -38,7 +38,7 @@ class ResourceController extends Controller
 
     $numberRecords = $resourceRepository->getResourcesCount($userContext->getCurrentFile());
 
-    $listContext = new ListContext($em, $connectedUser, 'core', 'resource', $pageNumber, $numberRecords, 'sd_core_resource_list', 'sd_core_resource_classification');
+    $listContext = new ListContext($em, $connectedUser, 'core', 'resource', $pageNumber, $numberRecords);
 
     $listResources = $resourceRepository->getDisplayedResources($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 

@@ -415,9 +415,21 @@ sd_core_planning_noplanification:
     path:     /planning/noplanification
     defaults: { _controller: SDCoreBundle:Planning:noplanification }
 
-sd_core_planning_booking_list:
-    path:     /planning/bookinglist/{pageNumber}
-    defaults: { _controller: SDCoreBundle:Planning:booking_list }
+sd_core_planning_all_booking_list:
+    path:     /planning/allbookinglist/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Planning:all_booking_list }
+
+sd_core_planning_current_user_booking_list:
+    path:     /planning/currentuserbookinglist/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Planning:current_user_booking_list }
+
+sd_core_planning_in_progress_booking_list:
+    path:     /planning/inprogressbookinglist/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Planning:in_progress_booking_list }
+
+sd_core_planning_current_user_in_progress_booking_list:
+    path:     /planning/currentuserinprogressbookinglist/{pageNumber}
+    defaults: { _controller: SDCoreBundle:Planning:current_user_in_progress_booking_list }
 
 sd_core_planning_many_calendar:
     path:     /planningmany/calendar/{planificationID}/{planificationPeriodID}/{date}

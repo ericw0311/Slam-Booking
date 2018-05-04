@@ -11,6 +11,9 @@ class FileContext
     protected $resourceCount = 0;
     protected $planificationCount = 0;
 	protected $allBookingsCount = 0;
+	protected $inProgressBookingsCount = 0;
+	protected $currentUserBookingsCount = 0;
+	protected $currentUserInProgressBookingsCount = 0;
 
     public function setUserFileCount($userFileCount)
     {
@@ -89,7 +92,40 @@ class FileContext
     return $this->allBookingsCount;
     }
 
-    function __construct($em, \SD\CoreBundle\Entity\File $file)
+	public function setInProgressBookingsCount($bookingsCount)
+	{
+	$this->inProgressBookingsCount = $bookingsCount;
+	return $this;
+	}
+
+	public function getInProgressBookingsCount()
+	{
+	return $this->inProgressBookingsCount;
+	}
+
+	public function setCurrentUserBookingsCount($bookingsCount)
+	{
+	$this->currentUserBookingsCount = $bookingsCount;
+	return $this;
+	}
+
+	public function getCurrentUserBookingsCount()
+	{
+	return $this->currentUserBookingsCount;
+	}
+
+	public function setCurrentUserInProgressBookingsCount($bookingsCount)
+	{
+	$this->currentUserInProgressBookingsCount = $bookingsCount;
+	return $this;
+	}
+
+	public function getCurrentUserInProgressBookingsCount()
+	{
+	return $this->currentUserInProgressBookingsCount;
+	}
+
+    function __construct($em, \SD\CoreBundle\Entity\File $file, \SD\CoreBundle\Entity\UserFile $userfile)
     {
     $ufRepository = $em->getRepository('SDCoreBundle:UserFile');
     $this->setUserFileCount($ufRepository->getUserFilesCount($file));
@@ -109,6 +145,21 @@ class FileContext
     $bRepository = $em->getRepository('SDCoreBundle:Booking');
     $this->setAllBookingsCount($bRepository->getAllBookingsCount($file));
 
+	if ($this->getAllBookingsCount() <= 0) {
+		$this->setInProgressBookingsCount(0);
+		$this->setCurrentUserBookingsCount(0);
+		$this->setCurrentUserInProgressBookingsCount(0);
+
+	} else {
+		$this->setInProgressBookingsCount($bRepository->getFromDatetimeBookingsCount($file, new \DateTime()));
+		$this->setCurrentUserBookingsCount($bRepository->getUserFileBookingsCount($file, $userfile));
+
+		if ($this->getInProgressBookingsCount() <= 0 || $this->getCurrentUserBookingsCount() <= 0) {
+			$this->setCurrentUserInProgressBookingsCount(0);
+		} else {
+			$this->setCurrentUserInProgressBookingsCount($bRepository->getUserFileFromDatetimeBookingsCount($file, $userfile, new \DateTime()));
+		}
+	}
     return $this;
     }
 }

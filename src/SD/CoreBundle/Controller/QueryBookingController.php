@@ -33,7 +33,7 @@ class QueryBookingController extends Controller
 
     $numberRecords = $queryBookingRepository->getQueryBookingCount($userContext->getCurrentFile());
 
-    $listContext = new ListContext($em, $connectedUser, 'core', 'queryBooking', $pageNumber, $numberRecords, 'sd_core_queryBooking_list', 'sd_core_queryBooking_add');
+    $listContext = new ListContext($em, $connectedUser, 'core', 'queryBooking', $pageNumber, $numberRecords);
 
     $listQueryBooking = $queryBookingRepository->getDisplayedQueryBooking($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 

@@ -2,6 +2,7 @@
 
 namespace SD\CoreBundle\Repository;
 
+use Doctrine\ORM\Query\Expr;
 use SD\CoreBundle\DQL\DateFormatFunctionDQL;
 
 /**
@@ -68,7 +69,7 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	public function getAllBookingsCount($file)
     {
     $qb = $this->createQueryBuilder('b');
-    $qb->select($qb->expr()->count('b'));
+	$qb->select($qb->expr()->count('b'));
     $qb->where('b.file = :file')->setParameter('file', $file);
     $query = $qb->getQuery();
     $singleScalar = $query->getSingleScalarResult();
@@ -86,5 +87,108 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
     $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
+    }
+
+	// Les réservations d'un dossier au delà d'une date
+	public function getFromDatetimeBookingsCount($file, \Datetime $dateTime)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$qb->select($qb->expr()->count('b'));
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere("DATE_FORMAT(b.beginningDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+	}
+
+	public function getFromDatetimeBookings($file, \Datetime $dateTime, $firstRecordIndex, $maxRecord)
+    {
+    $qb = $this->createQueryBuilder('b');
+    $qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere("DATE_FORMAT(b.beginningDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
+    $qb->orderBy('b.beginningDate', 'ASC');
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+  
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+	
+	// Les réservations d'un dossier et d'un utilisateur
+	public function getUserFileBookingsCount($file, $userFile)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$qb->select($qb->expr()->count('b'));
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	
+	$this->getBookingUser($qb);
+	$this->getBookingUserParameter($qb, $userFile);
+
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+	}
+
+	public function getUserFileBookings($file, $userFile, $firstRecordIndex, $maxRecord)
+	{
+    $qb = $this->createQueryBuilder('b');
+    $qb->where('b.file = :file')->setParameter('file', $file);
+
+	$this->getBookingUser($qb);
+	$this->getBookingUserParameter($qb, $userFile);
+
+    $qb->orderBy('b.beginningDate', 'ASC');
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+  
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+	}
+
+	// Les réservations d'un dossier et d'un utilisateur au delà d'une date
+	public function getUserFileFromDatetimeBookingsCount($file, $userFile, \Datetime $dateTime)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$qb->select($qb->expr()->count('b'));
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere("DATE_FORMAT(b.beginningDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
+	
+	$this->getBookingUser($qb);
+	$this->getBookingUserParameter($qb, $userFile);
+
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+	}
+
+	public function getUserFileFromDatetimeBookings($file, $userFile, \Datetime $dateTime, $firstRecordIndex, $maxRecord)
+	{
+    $qb = $this->createQueryBuilder('b');
+    $qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere("DATE_FORMAT(b.beginningDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
+
+	$this->getBookingUser($qb);
+	$this->getBookingUserParameter($qb, $userFile);
+
+    $qb->orderBy('b.beginningDate', 'ASC');
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+  
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+	}
+
+	// Utilisateur de réservation
+	public function getBookingUser($qb)
+	{
+	$qb->innerJoin('b.bookingUserFiles', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.userFile', ':userFile'));
+	}
+
+	public function getBookingUserParameter($qb, $userFile)
+    {
+	$qb->setParameter('userFile', $userFile);
     }
 }

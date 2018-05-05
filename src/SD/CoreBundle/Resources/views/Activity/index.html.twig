@@ -2,6 +2,8 @@
 
 {% extends "SDCoreBundle::list-layout.html.twig" %}
 
+{% set create_path, list_path, display_create_path = 'sd_core_activity_add', 'sd_core_activity_list', true %}
+
 {% block title %}{{ parent() }} activity{% endblock %}
 
 {% block listRow %}

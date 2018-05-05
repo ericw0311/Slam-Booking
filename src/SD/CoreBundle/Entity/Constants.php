@@ -81,22 +81,6 @@ class Constants
 			'TRUCK' => 'truck'
 		);
 
-
-	// Indique les routes de création et d'affichage de la liste par entité.
-	// Elles sont toutes construites sur le même principe à l'exception de l'entité "booking" car les réservations sont affichées dans le controller "planning"
-	// De plus, il n'y a pas de route de création depuis les listes de réservations
-	const ENTITY_PATHS = array(
-		'activity' => array('add' => 'sd_core_activity_add', 'list' => 'sd_core_label_list', 'display_add' => true),
-		'booking' => array('add' => 'sd_core_booking_add', 'list' => 'sd_core_planning_all_booking_list', 'display_add' => false),
-		'file' => array('add' => 'sd_core_file_add', 'list' => 'sd_core_file_list', 'display_add' => true),
-		'label' => array('add' => 'sd_core_label_add', 'list' => 'sd_core_label_list', 'display_add' => true),
-		'planification' => array('add' => 'sd_core_planification_type', 'list' => 'sd_core_planification_list', 'display_add' => true),
-		'queryBooking' => array('add' => 'sd_core_queryBooking_add', 'list' => 'sd_core_queryBooking_list', 'display_add' => true),
-		'resource' => array('add' => 'sd_core_resource_classification', 'list' => 'sd_core_resource_list', 'display_add' => true),
-		'timetable' => array('add' => 'sd_core_timetable_add', 'list' => 'sd_core_timetable_list', 'display_add' => true),
-		'userFile' => array('add' => 'sd_core_userFile_email', 'list' => 'sd_core_userFile_list', 'display_add' => true)
-	);
-
 	const WEEK_DAY_CODE = array(
 			1 => 'MON',
 			2 => 'TUE',

@@ -72,7 +72,7 @@ class PlanningController extends Controller
     $listBookings = $bRepository->getAllBookings($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_all_booking_list'));
     }
 
 	public function current_user_booking_listAction($pageNumber)
@@ -89,7 +89,7 @@ class PlanningController extends Controller
     $listBookings = $bRepository->getUserFileBookings($userContext->getCurrentFile(), $userContext->getCurrentUserFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_current_user_booking_list'));
     }
 
 	public function in_progress_booking_listAction($pageNumber)
@@ -106,7 +106,7 @@ class PlanningController extends Controller
     $listBookings = $bRepository->getFromDatetimeBookings($userContext->getCurrentFile(), new \DateTime(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_in_progress_booking_list'));
     }
 
 	public function current_user_in_progress_booking_listAction($pageNumber)
@@ -123,7 +123,7 @@ class PlanningController extends Controller
     $listBookings = $bRepository->getUserFileFromDatetimeBookings($userContext->getCurrentFile(), $userContext->getCurrentUserFile(), new \DateTime(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_current_user_in_progress_booking_list'));
     }
 
     // Affichage du calendrier d'une planification

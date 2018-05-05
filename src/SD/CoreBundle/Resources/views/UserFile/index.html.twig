@@ -2,6 +2,8 @@
 
 {% extends "SDCoreBundle::list-layout.html.twig" %}
 
+{% set create_path, list_path, display_create_path = 'sd_core_userFile_email', 'sd_core_userFile_list', true %}
+
 {% block title %}{{ parent() }} userFile{% endblock %}
 
 {% block listRow %}

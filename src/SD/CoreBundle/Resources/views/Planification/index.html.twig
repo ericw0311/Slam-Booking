@@ -5,6 +5,8 @@
 
 {% extends "SDCoreBundle::list-layout.html.twig" %}
 
+{% set create_path, list_path, display_create_path = 'sd_core_planification_type', 'sd_core_planification_list', true %}
+
 {% block title %}{{ parent() }} planification{% endblock %}
 
 {% block listRow %}

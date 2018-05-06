@@ -79,11 +79,25 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	public function getAllBookings($file, $firstRecordIndex, $maxRecord)
     {
     $qb = $this->createQueryBuilder('b');
+
+    $qb->select('b.id');
+	$qb->addSelect('b.beginningDate');
+	$qb->addSelect('b.endDate');
+    $qb->addSelect('p.id planificationID');
+    $qb->addSelect('r.name resource_name');
+    $qb->addSelect('uf.lastName user_name');
+
     $qb->where('b.file = :file')->setParameter('file', $file);
+
+	$qb->innerJoin('b.planification', 'p');
+	$qb->innerJoin('b.resource', 'r');
+	$this->getBookingUser_order($qb, 1);
+	$qb->innerJoin('bu.userFile', 'uf');
+
     $qb->orderBy('b.beginningDate', 'ASC');
-    $qb->setFirstResult($firstRecordIndex);
-    $qb->setMaxResults($maxRecord);
-  
+	$qb->setFirstResult($firstRecordIndex);
+	$qb->setMaxResults($maxRecord);
+
     $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
@@ -191,4 +205,10 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
     {
 	$qb->setParameter('userFile', $userFile);
     }
+
+	// Utilisateur de réservation ayant un ordre donné
+	public function getBookingUser_order($qb, $order)
+	{
+	$qb->innerJoin('b.bookingUserFiles', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.order', ':order'))->setParameter('order', $order);
+	}
 }

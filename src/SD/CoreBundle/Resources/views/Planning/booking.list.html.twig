@@ -12,7 +12,7 @@
 {% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
     <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
 	{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
-	<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': listBookings[i*listContext.numberLinesDisplayed+j].planification.ID, 'date': listBookings[i*listContext.numberLinesDisplayed+j].beginningDate|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/booking-32.png') }}">&nbsp;{{ listBookings[i*listContext.numberLinesDisplayed+j].resource.name }}&nbsp;{{ periode(listBookings[i*listContext.numberLinesDisplayed+j].beginningDate, listBookings[i*listContext.numberLinesDisplayed+j].endDate) }}</a>
+	<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': listBookings[i*listContext.numberLinesDisplayed+j].planificationID, 'date': listBookings[i*listContext.numberLinesDisplayed+j].beginningDate|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/booking-32.png') }}">&nbsp;{{ listBookings[i*listContext.numberLinesDisplayed+j].resource_name }}&nbsp;{{ periode(listBookings[i*listContext.numberLinesDisplayed+j].beginningDate, listBookings[i*listContext.numberLinesDisplayed+j].endDate) }}&nbsp;{{ listBookings[i*listContext.numberLinesDisplayed+j].user_name }}</a>
 	{% endfor %}
     </div>
 {% endfor %}

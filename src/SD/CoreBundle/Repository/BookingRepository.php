@@ -78,29 +78,19 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 
 	public function getAllBookings($file, $firstRecordIndex, $maxRecord)
     {
-    $qb = $this->createQueryBuilder('b');
+	$qb = $this->createQueryBuilder('b');
+	$this->getListSelect($qb);
 
-    $qb->select('b.id');
-	$qb->addSelect('b.beginningDate');
-	$qb->addSelect('b.endDate');
-    $qb->addSelect('p.id planificationID');
-    $qb->addSelect('r.name resource_name');
-    $qb->addSelect('uf.lastName user_name');
+	$qb->where('b.file = :file')->setParameter('file', $file);
 
-    $qb->where('b.file = :file')->setParameter('file', $file);
+	$this->getListJoin_1($qb);
+	$this->getListSort($qb);
 
-	$qb->innerJoin('b.planification', 'p');
-	$qb->innerJoin('b.resource', 'r');
-	$this->getBookingUser_order($qb, 1);
-	$qb->innerJoin('bu.userFile', 'uf');
-
-    $qb->orderBy('b.beginningDate', 'ASC');
 	$qb->setFirstResult($firstRecordIndex);
 	$qb->setMaxResults($maxRecord);
-
-    $query = $qb->getQuery();
-    $results = $query->getResult();
-    return $results;
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
     }
 
 	// Les réservations d'un dossier au delà d'une date
@@ -108,8 +98,10 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	{
 	$qb = $this->createQueryBuilder('b');
 	$qb->select($qb->expr()->count('b'));
+
 	$qb->where('b.file = :file')->setParameter('file', $file);
-	$qb->andWhere("DATE_FORMAT(b.beginningDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
+	$qb->andWhere("DATE_FORMAT(b.endDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
+
 	$query = $qb->getQuery();
 	$singleScalar = $query->getSingleScalarResult();
 	return $singleScalar;
@@ -117,16 +109,20 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 
 	public function getFromDatetimeBookings($file, \Datetime $dateTime, $firstRecordIndex, $maxRecord)
     {
-    $qb = $this->createQueryBuilder('b');
-    $qb->where('b.file = :file')->setParameter('file', $file);
-	$qb->andWhere("DATE_FORMAT(b.beginningDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
-    $qb->orderBy('b.beginningDate', 'ASC');
-    $qb->setFirstResult($firstRecordIndex);
-    $qb->setMaxResults($maxRecord);
-  
-    $query = $qb->getQuery();
-    $results = $query->getResult();
-    return $results;
+	$qb = $this->createQueryBuilder('b');
+	$this->getListSelect($qb);
+
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere("DATE_FORMAT(b.endDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
+
+	$this->getListJoin_1($qb);
+	$this->getListSort($qb);
+
+	$qb->setFirstResult($firstRecordIndex);
+	$qb->setMaxResults($maxRecord);
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
     }
 	
 	// Les réservations d'un dossier et d'un utilisateur
@@ -135,9 +131,8 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	$qb = $this->createQueryBuilder('b');
 	$qb->select($qb->expr()->count('b'));
 	$qb->where('b.file = :file')->setParameter('file', $file);
-	
-	$this->getBookingUser($qb);
-	$this->getBookingUserParameter($qb, $userFile);
+
+	$this->getUserFileJoin($qb, $userFile);
 
 	$query = $qb->getQuery();
 	$singleScalar = $query->getSingleScalarResult();
@@ -146,16 +141,16 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 
 	public function getUserFileBookings($file, $userFile, $firstRecordIndex, $maxRecord)
 	{
-    $qb = $this->createQueryBuilder('b');
-    $qb->where('b.file = :file')->setParameter('file', $file);
+	$qb = $this->createQueryBuilder('b');
+	$this->getListSelect($qb);
 
-	$this->getBookingUser($qb);
-	$this->getBookingUserParameter($qb, $userFile);
+	$qb->where('b.file = :file')->setParameter('file', $file);
 
-    $qb->orderBy('b.beginningDate', 'ASC');
+	$this->getListJoin_2($qb, $userFile);
+	$this->getListSort($qb);
+
     $qb->setFirstResult($firstRecordIndex);
     $qb->setMaxResults($maxRecord);
-  
     $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
@@ -166,11 +161,11 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 	{
 	$qb = $this->createQueryBuilder('b');
 	$qb->select($qb->expr()->count('b'));
+
 	$qb->where('b.file = :file')->setParameter('file', $file);
-	$qb->andWhere("DATE_FORMAT(b.beginningDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
-	
-	$this->getBookingUser($qb);
-	$this->getBookingUserParameter($qb, $userFile);
+	$qb->andWhere("DATE_FORMAT(b.endDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
+
+	$this->getUserFileJoin($qb, $userFile);
 
 	$query = $qb->getQuery();
 	$singleScalar = $query->getSingleScalarResult();
@@ -179,36 +174,65 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 
 	public function getUserFileFromDatetimeBookings($file, $userFile, \Datetime $dateTime, $firstRecordIndex, $maxRecord)
 	{
-    $qb = $this->createQueryBuilder('b');
-    $qb->where('b.file = :file')->setParameter('file', $file);
-	$qb->andWhere("DATE_FORMAT(b.beginningDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
+	$qb = $this->createQueryBuilder('b');
+	$this->getListSelect($qb);
 
-	$this->getBookingUser($qb);
-	$this->getBookingUserParameter($qb, $userFile);
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere("DATE_FORMAT(b.endDate,'%Y%m%d%H%i') >= :dateTime")->setParameter('dateTime', $dateTime->format('YmdHi'));
 
-    $qb->orderBy('b.beginningDate', 'ASC');
+	$this->getListJoin_2($qb, $userFile);
+	$this->getListSort($qb);
+
     $qb->setFirstResult($firstRecordIndex);
     $qb->setMaxResults($maxRecord);
-  
     $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
 	}
 
-	// Utilisateur de réservation
-	public function getBookingUser($qb)
+	// Listes de réservations: partie Select
+	public function getListSelect($qb)
 	{
-	$qb->innerJoin('b.bookingUserFiles', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.userFile', ':userFile'));
+	$qb->select('b.id');
+	$qb->addSelect('b.beginningDate');
+	$qb->addSelect('b.endDate');
+	$qb->addSelect('p.id planificationID');
+	$qb->addSelect('r.name resource_name');
+	$qb->addSelect('r.code resource_code');
+	$qb->addSelect('r.type resource_type');
+	$qb->addSelect('r.internal resource_internal');
+	$qb->addSelect('uf.firstName user_first_name');
+	$qb->addSelect('uf.lastName user_last_name');
+	$qb->addSelect('uf.administrator administrator');
 	}
 
-	public function getBookingUserParameter($qb, $userFile)
-    {
-	$qb->setParameter('userFile', $userFile);
-    }
-
-	// Utilisateur de réservation ayant un ordre donné
-	public function getBookingUser_order($qb, $order)
+	// Listes de réservations: partie Jointure avec sélection de l'utilisateur d'ordre 1
+	public function getListJoin_1($qb)
 	{
-	$qb->innerJoin('b.bookingUserFiles', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.order', ':order'))->setParameter('order', $order);
+	$qb->innerJoin('b.planification', 'p');
+	$qb->innerJoin('b.resource', 'r');
+	$qb->innerJoin('b.bookingUserFiles', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.order', ':order'))->setParameter('order', 1);
+	$qb->innerJoin('bu.userFile', 'uf');
+	}
+
+	// Jointure pour sélection de l'utilisateur transmis
+	public function getUserFileJoin($qb, $userFile)
+	{
+	$qb->innerJoin('b.bookingUserFiles', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.userFile', ':userFile'))->setParameter('userFile', $userFile);
+	}
+
+	// Listes de réservations: partie Jointure avec sélection de l'utilisateur transmis
+	public function getListJoin_2($qb, $userFile)
+	{
+	$qb->innerJoin('b.planification', 'p');
+	$qb->innerJoin('b.resource', 'r');
+	$this->getUserFileJoin($qb, $userFile);
+	$qb->innerJoin('bu.userFile', 'uf');
+	}
+
+	// Listes de réservations: partie Tri
+	public function getListSort($qb)
+	{
+	$qb->orderBy('b.beginningDate', 'ASC');
 	}
 }

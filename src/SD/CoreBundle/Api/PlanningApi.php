@@ -58,7 +58,6 @@ class PlanningApi
     $em->flush();
 	}
 	
-	
     // Retourne la planification en cours d'un utilisateur
     static function getCurrentCalendarMany($em, \SD\UserBundle\Entity\User $user)
     {
@@ -93,4 +92,12 @@ class PlanningApi
 	}
 	$em->flush();
     }
+
+    // Retourne le nombre de planifications d'un dossier actives à la date du jour
+	static function getNumberOfPlanifications($em, \SD\CoreBundle\Entity\File $file)
+    {
+    $pRepository = $em->getRepository('SDCoreBundle:Planification');
+	$planifications = $pRepository->getPlanningPlanifications($file, new \DateTime());
+	return count($planifications);
+	}
 }

@@ -71,8 +71,14 @@ class PlanningController extends Controller
     $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords);
     $listBookings = $bRepository->getAllBookings($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
+	$planning_path = 'sd_core_planning_one_timetable'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
+	$numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
+	if ($numberPlanifications > 1) {
+		$planning_path = 'sd_core_planning_many_timetable';
+	}
+
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_all_booking_list'));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_all_booking_list', 'planning_path' => $planning_path));
     }
 
 	public function current_user_booking_listAction($pageNumber)
@@ -88,8 +94,14 @@ class PlanningController extends Controller
     $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords);
     $listBookings = $bRepository->getUserFileBookings($userContext->getCurrentFile(), $userContext->getCurrentUserFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
+	$planning_path = 'sd_core_planning_one_timetable'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
+	$numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
+	if ($numberPlanifications > 1) {
+		$planning_path = 'sd_core_planning_many_timetable';
+	}
+
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_current_user_booking_list'));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_all_booking_list', 'planning_path' => $planning_path));
     }
 
 	public function in_progress_booking_listAction($pageNumber)
@@ -105,8 +117,14 @@ class PlanningController extends Controller
     $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords);
     $listBookings = $bRepository->getFromDatetimeBookings($userContext->getCurrentFile(), new \DateTime(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
+	$planning_path = 'sd_core_planning_one_timetable'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
+	$numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
+	if ($numberPlanifications > 1) {
+		$planning_path = 'sd_core_planning_many_timetable';
+	}
+
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_in_progress_booking_list'));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_all_booking_list', 'planning_path' => $planning_path));
     }
 
 	public function current_user_in_progress_booking_listAction($pageNumber)
@@ -122,8 +140,14 @@ class PlanningController extends Controller
     $listContext = new ListContext($em, $connectedUser, 'core', 'booking', $pageNumber, $numberRecords);
     $listBookings = $bRepository->getUserFileFromDatetimeBookings($userContext->getCurrentFile(), $userContext->getCurrentUserFile(), new \DateTime(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
+	$planning_path = 'sd_core_planning_one_timetable'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
+	$numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
+	if ($numberPlanifications > 1) {
+		$planning_path = 'sd_core_planning_many_timetable';
+	}
+
     return $this->render('SDCoreBundle:Planning:booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_current_user_in_progress_booking_list'));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'sd_core_planning_all_booking_list', 'planning_path' => $planning_path));
     }
 
     // Affichage du calendrier d'une planification

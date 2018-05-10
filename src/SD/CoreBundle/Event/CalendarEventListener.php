@@ -58,41 +58,15 @@ class CalendarEventListener
 	$filter = $request->get('filter');
 	// load events using your custom logic here,
 	// for instance, retrieving events from a repository
-	/*
-	$SBEvents = $entityManager->getRepository('SDCoreBundle:Resource')
-		->createQueryBuilder('r')
-		->where('r.file = :file')->setParameter('file', $userContext->getCurrentFile())
-		->getQuery()->getResult();
-	*/
-
-	/*
-	$bRepository = $entityManager->getRepository('SDCoreBundle:Resource');
-	$SBEvents = $bRepository->getCalendarBookings($userContext->getCurrentFile());
-
-	foreach($SBEvents as $SBEvent) {
-		// $this->getLogger()->info('CalendarEventListener.loadEvents 3 _'.date_format($SBEvent->get_tprr_createdAt(), 'Y-m-d H:i:s').'_');
-		$eventEntity = new EventEntity($SBEvent->getName(), $SBEvent->get_tprr_createdAt(), $SBEvent->get_tprr_updatedAt());
-		//optional calendar event settings
-		$eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
-		$eventEntity->setBgColor($SBEvent->getBackgroundColor()); //set the background color of the event's label
-		$eventEntity->setFgColor($SBEvent->getForegroundColor()); //set the foreground color of the event's label
-		$eventEntity->setUrl($this->getRouter()->generate('sd_core_resource_edit', array('resourceID' => $SBEvent->getID()))); // url to send user to when event label is clicked
-		// $eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
-		//finally, add the event to the CalendarEvent for displaying on the calendar
-		$calendarEvent->addEvent($eventEntity);
-	}
-	*/
 
 	$this->getLogger()->info('CalendarEventListener.loadEvents 2');
-	$bRepository = $entityManager->getRepository('SDCoreBundle:Booking');
 	$pRepository = $entityManager->getRepository('SDCoreBundle:Planification');
+	$bRepository = $entityManager->getRepository('SDCoreBundle:Booking');
+	$buRepository = $entityManager->getRepository('SDCoreBundle:BookingUser');
 
 	$currentCalendarPlanificationID = PlanningApi::getCurrentCalendarPlanificationID($entityManager, $connectedUser);
 	$currentCalendarMany = PlanningApi::getCurrentCalendarManyValue($entityManager, $connectedUser);
 
-
-	$ppRepository = $entityManager->getRepository('SDCoreBundle:PlanificationPeriod');
-	$prRepository = $entityManager->getRepository('SDCoreBundle:PlanificationResource');
 
 	$resourcesColors = ResourceApi::getCalendarResourcesColor($entityManager, $pRepository->find($currentCalendarPlanificationID));
 
@@ -104,7 +78,10 @@ class CalendarEventListener
 	foreach($SBEvents as $SBEvent) {
 //		$this->getLogger()->info('CalendarEventListener.loadEvents 4 _'.$SBEvent['bookingID'].'_'.$SBEvent['beginningDate']->format('YmdHi').'_'.$SBEvent['endDate']->format('YmdHi').'_');
 //		$this->getLogger()->info('CalendarEventListener.loadEvents 5 _'.$SBEvent['dateTest'].'_');
-		$eventEntity = new EventEntity($SBEvent->getID().'toto', $SBEvent->getBeginningDate(), $SBEvent->getEndDate());
+
+		$bookingUser = $buRepository->findOneBy(array('booking' => $SBEvent, 'order' => 1));
+
+		$eventEntity = new EventEntity($bookingUser->getUserFile()->getFirstAndLastName(), $SBEvent->getBeginningDate(), $SBEvent->getEndDate());
 		//optional calendar event settings
 		$eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
 
@@ -116,13 +93,10 @@ class CalendarEventListener
 			$fgColor = Constants::CALENDAR_RESOURCE_DEFAULT_COLOR['FGC'];
 		}
 
-
-		// $eventEntity->setBgColor('#1927c7'); //set the background color of the event's label
-		// $eventEntity->setFgColor('#e8dbb8'); //set the foreground color of the event's label
 		$eventEntity->setBgColor($bgColor); //set the background color of the event's label
 		$eventEntity->setFgColor($fgColor); //set the foreground color of the event's label
-		$eventEntity->setUrl($this->getRouter()->generate('sd_core_resource_edit',
-	array('bookingID' => $SBEvent->getID(), 'planificationID' => $SBEvent->getPlanification()->getID(), 'resourceID' => $SBEvent->getResource()->getID()))); // url to send user to when event label is clicked
+		$eventEntity->setUrl($this->getRouter()->generate('sd_core_planning_one_timetable',
+	array('planificationID' => $SBEvent->getPlanification()->getID(), 'date' => $SBEvent->getBeginningDate()->format("Ymd")))); // url to send user to when event label is clicked
 
 		// $eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
 		//finally, add the event to the CalendarEvent for displaying on the calendar

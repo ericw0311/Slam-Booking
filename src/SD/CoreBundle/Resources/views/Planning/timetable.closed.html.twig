@@ -1,0 +1,23 @@
+{# src/SD/CoreBundle/Resources/views/Planning/timetable.closed.html.twig #}
+
+<table class="table table-bordered table-striped">
+	<thead>
+	<tr>
+{% for planificationResource in planificationResources %}
+	<th>
+{% if planificationResource.resource.internal %}
+	<img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[planificationResource.resource.code] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% else %}
+	<img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[planificationResource.resource.type] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% endif %}
+	</th>
+{% endfor %}
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+	<td colspan={{ planificationResources|length }}>C'est fermé</td>
+	</tr>
+	</tbody>
+</table>
+

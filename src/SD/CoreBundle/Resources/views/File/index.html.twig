@@ -2,6 +2,8 @@
 
 {% extends "SDCoreBundle::list-layout.html.twig" %}
 
+{% set create_path, list_path, display_create_path = 'sd_core_file_add', 'sd_core_file_list', true %}
+
 {% block title %}{{ parent() }} file{% endblock %}
 
 {% block listRow %}

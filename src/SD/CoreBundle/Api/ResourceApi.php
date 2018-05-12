@@ -181,4 +181,46 @@ class ResourceApi
 
 	return ResourceApi::getResourcesToPlanify($resourcesToPlanifyDB, $selectedResourcesID);
     }
+
+	// Retourne un tableau des ressources paires d'une periode de planification
+	static function getEvenPlanifiedResourcesID($em, \SD\CoreBundle\Entity\PlanificationPeriod $planificationPeriod)
+	{
+    $prRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+    $planificationResources = $prRepository->getResources($planificationPeriod);
+
+	$resources = array();
+	$even = false;
+
+	foreach ($planificationResources as $planificationResource) {
+
+		if ($even) {
+			$resources[] = $planificationResource->getResource()->getID();
+			$even = false;
+		} else {
+			$even = true;
+		}
+	}
+	
+	return $resources;
+	}
+
+	// Retourne un tableau des ressources d'une planification indiquant pour chacune l'indice de la couleur d'affichage dans le calendrier
+	static function getCalendarResourcesColor($em, \SD\CoreBundle\Entity\Planification $planification)
+	{
+    $ppRepository = $em->getRepository('SDCoreBundle:PlanificationPeriod');
+    $prRepository = $em->getRepository('SDCoreBundle:PlanificationResource');
+
+	$planificationPeriod = $ppRepository->getLastPlanificationPeriod($planification);
+
+    $planificationResources = $prRepository->getResources($planificationPeriod);
+	$numberOfColors = count(Constants::CALENDAR_RESOURCE_COLOR); // Nombre de couleurs différentes pour l'affichage des ressources dans le calendrier
+ 
+	$resources = array();
+	$i = 0;
+
+	foreach ($planificationResources as $planificationResource) {
+		$resources[$planificationResource->getResource()->getID()] = (++$i % $numberOfColors);
+	}
+	return $resources;
+	}
 }

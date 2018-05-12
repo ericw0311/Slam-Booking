@@ -35,7 +35,7 @@ class PlanificationController extends Controller
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
     $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
     $numberRecords = $planificationRepository->getPlanificationsCount($userContext->getCurrentFile());
-    $listContext = new ListContext($em, $connectedUser, 'core', 'planification', $pageNumber, $numberRecords, 'sd_core_planification_list', 'sd_core_planification_type');
+    $listContext = new ListContext($em, $connectedUser, 'core', 'planification', $pageNumber, $numberRecords);
     $listPlanifications = $planificationRepository->getDisplayedPlanifications($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 
     return $this->render('SDCoreBundle:Planification:index.html.twig',

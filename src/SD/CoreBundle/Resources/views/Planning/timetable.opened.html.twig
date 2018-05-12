@@ -1,0 +1,61 @@
+{# src/SD/CoreBundle/Resources/views/Planning/timetable.opened.html.twig #}
+
+<table class="table table-bordered table-striped">
+	<thead>
+	<tr>
+	<th></th>
+{% for planificationResource in planificationResources %}
+	<th>
+{% if planificationResource.resource.internal %}
+	<img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[planificationResource.resource.code] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% else %}
+	<img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[planificationResource.resource.type] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% endif %}
+	</th>
+{% endfor %}
+	</tr>
+	</thead>
+	<tbody>
+{% for timetableLine in timetableLines %}
+<tr>
+	<td>{{ timetableLine(timetableLine) }}</td>
+{% for planificationResource in planificationResources %}
+
+{% set key = date|date('Ymd') ~ '-' ~ planification.ID ~ '-' ~ planificationPeriod.ID ~ '-' ~ planificationLine.ID ~ '-' ~ planificationResource.resource.ID ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID %}
+
+{% if bookings[key] is defined %}
+{% if bookings[key].type == 'H' %}
+{% if bookings[key].numberTimetableLines > 1 %}
+		<td class="{{ bookings[key].cellClass }}" rowspan={{ bookings[key].numberTimetableLines }}>
+{% else %}
+		<td class="{{ bookings[key].cellClass }}">
+{% endif %}
+<ul class="list-group">
+{% for userFile in bookings[key].userFiles %}
+<li class="list-group-item">
+{{ userFile.getFirstAndLastName() }}
+</li>
+{% endfor %}
+</ul>
+<a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
+<a href="{{ path(booking_delete, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
+		</td>
+{% endif %}
+{% else %}
+		<td>
+<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': (date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID() }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
+		</td>
+{% endif %}
+{% endfor %}
+</tr>
+
+{% endfor %}
+	</tbody>
+</table>
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}

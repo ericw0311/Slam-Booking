@@ -1,5 +1,4 @@
 <?php
-
 namespace SD\CoreBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -62,6 +61,19 @@ class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
 	$queryBuilder->where('pp.planification = :planification')->setParameter('planification', $planification);
 	$queryBuilder->andWhere('pp.id > :planificationPeriodID')->setParameter('planificationPeriodID', $planificationPeriodID);
 	$queryBuilder->orderBy('pp.id', 'ASC');
+	$queryBuilder->setMaxResults(1);
+
+	$query = $queryBuilder->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
+
+	// Retourne la derniere periode d'une planification
+	public function getLastPlanificationPeriod($planification)
+    {
+	$queryBuilder = $this->createQueryBuilder('pp');
+	$queryBuilder->where('pp.planification = :planification')->setParameter('planification', $planification);
+	$queryBuilder->orderBy('pp.id', 'DESC');
 	$queryBuilder->setMaxResults(1);
 
 	$query = $queryBuilder->getQuery();

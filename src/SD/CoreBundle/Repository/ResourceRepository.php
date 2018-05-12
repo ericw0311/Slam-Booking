@@ -148,4 +148,15 @@ class ResourceRepository extends \Doctrine\ORM\EntityRepository
 	$results = $query->getResult();
 	return $results;
     }
+
+	// Affichage des réservations dans le calendrier
+	public function getCalendarBookings($file)
+    {
+    $qb = $this->createQueryBuilder('r');
+    $qb->where('r.file = :file')->setParameter('file', $file);
+   
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
 }

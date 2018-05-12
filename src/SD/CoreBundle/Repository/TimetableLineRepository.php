@@ -85,6 +85,19 @@ class TimetableLineRepository extends \Doctrine\ORM\EntityRepository
 	return $results;
 	}
 
+	// Retourne le creneau horaire courant et les suivants
+	public function getCurrentAndNextTimetableLines($timetable, $timetableLineID)
+    {
+	$queryBuilder = $this->createQueryBuilder('tl');
+	$queryBuilder->where('tl.timetable = :timetable')->setParameter('timetable', $timetable);
+	$queryBuilder->andWhere('tl.id >= :timetableLineID')->setParameter('timetableLineID', $timetableLineID);
+	$queryBuilder->orderBy('tl.id', 'ASC');
+
+	$query = $queryBuilder->getQuery();
+    $results = $query->getResult();
+	return $results;
+	}
+
 	// Retourne le dernier creneau horaire
 	public function getLastTimetableLine($timetable)
 	{

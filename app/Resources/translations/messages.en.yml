@@ -6,6 +6,8 @@ back: Retour
 beginning.time: Beginning time
 cancel: Cancel
 close: Close
+day.next: Next day
+day.previous: Previous day
 day.MON: Monday
 day.TUE: Tuesday
 day.WED: Wednesday
@@ -13,11 +15,22 @@ day.THU: Thursday
 day.FRI: Friday
 day.SAT: Saturday
 day.SUN: Sunday
+day.abbr.MON: Mon
+day.abbr.TUE: Tue
+day.abbr.WED: Wed
+day.abbr.THU: Thu
+day.abbr.FRI: Fri
+day.abbr.SAT: Sat
+day.abbr.SUN: Sun
+days.next: Next days
+days.previous: Previous days
 delete: Delete
 delete.not.allowed: Delete not allowed
 end.time: End time
 from: From
 modify: Modify
+month.next: Next month
+month.previous: Previous month
 month.JAN: January
 month.FEB: February
 month.MAR: Mars
@@ -30,6 +43,18 @@ month.SEP: September
 month.OCT: October
 month.NOV: November
 month.DEC: December
+month.abbr.JAN: Jan
+month.abbr.FEB: Feb
+month.abbr.MAR: Mar
+month.abbr.APR: Apr
+month.abbr.MAY: Mai
+month.abbr.JUN: Jun
+month.abbr.JUL: Jul
+month.abbr.AUG: Aug
+month.abbr.SEP: Sep
+month.abbr.OCT: Oct
+month.abbr.NOV: Nov
+month.abbr.DEC: Dec
 no: No
 number.columns: Number of columns
 number.lines: Number of lines
@@ -50,4 +75,6 @@ update.not.allowed: Update not allowed
 user.account: User account
 validate: Validate
 validate.not.allowed: Validate not allowed
+week.next: Next week
+week.previous: Previous week
 yes: Yes

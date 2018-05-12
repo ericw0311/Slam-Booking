@@ -10,6 +10,22 @@ activity.plural: Activités
 activity.singular: Activité
 activity.updated.ok: L'activité a bien été modifiée
 
+booking.all: Toutes les réservations
+booking.ask.delete: Voulez-vous vraiment supprimer cette réservation ?
+booking.back.to.list: Retour à la liste des réservations
+booking.create: Réserver
+booking.created.ok: La réservation a bien été créée
+booking.deleted.ok: La réservation a bien été supprimée
+booking.in.progress: Les réservations en cours
+booking.period.beginning.update: Modifier la période de début
+booking.period.end.update: Modifier la période de fin
+booking.plural: Réservations
+booking.singular: Réservation
+booking.updated.ok: La réservation a bien été modifiée
+booking.user.list.update: Modifier la liste des utilisateurs
+booking.your: Vos réservations
+booking.your.in.progress: Vos réservations en cours
+
 dashboard.plural: Tableaux de bord
 dashboard.singular: Tableau de bord
 
@@ -69,6 +85,8 @@ planification.validate.not.allowed: Vous devez sélectionner au moins une ressou
 
 planning: Planning
 planning.calendar: Calendrier
+planning.global: Planning global
+planning.stretched.out: Planning étendu
 planning.timetable: Grille horaire
 
 queryBooking.ask.delete: Voulez-vous vraiment supprimer la requête %name% ?
@@ -207,14 +225,17 @@ timetableLine.deleted.ok: Le créneau horaire a bien été supprimé
 timetableLine.updated.ok: Le créneau horaire a bien été modifié
 timetableLine.validate.and.create: Valider et ajouter un créneau horaire
 
+user: Utilisateur
 user.account.type: Type de compte
 user.account.type.INDIVIDUAL: Individuel
 user.account.type.ORGANISATION: Organisation
 user.firstName: Prénom
 user.lastName: Nom de famille
 user.organisation.name: Nom de l'organisation
-user.plural: Utilisateurs
-user.singular: Utilisateur
+
+users: Utilisateurs
+users.available: Utilisateurs disponibles
+users.selected: Utilisateurs sélectionnés
 
 userFile.administrator.rights: L'utilisateur a les droits d'administrateur sur le dossier
 userFile.ask.delete: Voulez-vous vraiment retirer l'utilisateur %name% du dossier ?

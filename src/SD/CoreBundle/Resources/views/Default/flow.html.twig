@@ -1,3 +1,38 @@
 {# src/SD/CoreBundle/Resources/views/Default/flow.html.twig #}
 
-Il n'y a aucune réservation
+{% if fileContext.allBookingsCount > 0 %}
+
+<div class="col-sm-6">
+
+<a href="{{ path('sd_core_planning_all_booking_list', { 'pageNumber': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('bundles/sdcore/images/user-group-32.png') }}"> {{ 'booking.all'|trans }} <span class="badge">{{ fileContext.allBookingsCount }}</span></a>
+
+{% if fileContext.currentUserBookingsCount > 0 %}
+<a href="{{ path('sd_core_planning_current_user_booking_list', { 'pageNumber': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('bundles/sdcore/images/user-32.png') }}"> {{ 'booking.your'|trans }} <span class="badge">{{ fileContext.currentUserBookingsCount }}</span></a>
+{% else %}
+<ul class="list-group"><li class="list-group-item"><img src="{{ asset('bundles/sdcore/images/user-32.png') }}"> {{ 'booking.your'|trans }} <span class="badge">{{ fileContext.currentUserBookingsCount }}</span></li></ul> 
+{% endif %}
+
+</div>
+
+<div class="col-sm-6">
+
+{% if fileContext.inProgressBookingsCount > 0 %}
+<a href="{{ path('sd_core_planning_in_progress_booking_list', { 'pageNumber': 1 }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('bundles/sdcore/images/user-group-32.png') }}"> {{ 'booking.in.progress'|trans }} <span class="badge">{{ fileContext.inProgressBookingsCount }}</span></a>
+
+{% if fileContext.currentUserInProgressBookingsCount > 0 %}
+<a href="{{ path('sd_core_planning_current_user_in_progress_booking_list', { 'pageNumber': 1 }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('bundles/sdcore/images/user-32.png') }}"> {{ 'booking.your.in.progress'|trans }} <span class="badge">{{ fileContext.currentUserInProgressBookingsCount }}</span></a>
+{% else %}
+<ul class="list-group"><li class="list-group-item"><img src="{{ asset('bundles/sdcore/images/user-32.png') }}"> {{ 'booking.your.in.progress'|trans }} <span class="badge">{{ fileContext.currentUserInProgressBookingsCount }}</span></li></ul> 
+{% endif %}
+
+{% else %}
+<ul class="list-group"><li class="list-group-item"><img src="{{ asset('bundles/sdcore/images/user-group-32.png') }}"> {{ 'booking.in.progress'|trans }} <span class="badge">{{ fileContext.inProgressBookingsCount }}</span></li></ul> 
+{% endif %}
+
+</div>
+
+{% else %}
+
+<ul class="list-group"><li class="list-group-item"><img src="{{ asset('bundles/sdcore/images/booking-32.png') }}"> {{ 'booking.all'|trans }} <span class="badge">{{ fileContext.allBookingsCount }}</span></li></ul> 
+
+{% endif %}

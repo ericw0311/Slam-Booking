@@ -10,6 +10,22 @@ activity.plural: Activities
 activity.singular: Activity
 activity.updated.ok: The activity has been updated
 
+booking.all: All bookings
+booking.ask.delete: Do you really want to delete this booking ?
+booking.back.to.list: Back to bookings list
+booking.create: Book
+booking.created.ok: The booking has been created
+booking.deleted.ok: The booking has been deleted
+booking.in.progress: Bookings in progress
+booking.period.beginning.update: Modify beginning period
+booking.period.end.update: Modify end period
+booking.plural: Bookings
+booking.singular: Booking
+booking.updated.ok: The booking has been updated
+booking.user.list.update: Modify users list
+booking.your: Your bookings
+booking.your.in.progress: Your bookings in progress
+
 dashboard.plural: Dashboards
 dashboard.singular: Dashboard
 
@@ -69,8 +85,9 @@ planification.validate.not.allowed: You must select at least one resource
 
 planning: Planning
 planning.calendar: Calendar
+planning.global: Global planning
+planning.stretched.out: Stretched out planning
 planning.timetable: Timetable
-
 
 queryBooking.ask.delete: Do you really want to delete query %name% ?
 queryBooking.back.to.list: Back to queries list
@@ -208,14 +225,17 @@ timetableLine.deleted.ok: The timetable slot has been deleted
 timetableLine.updated.ok: The timetable slot has been updated
 timetableLine.validate.and.create: Validate and add a timetable slot
 
+user: User
 user.account.type: Account type
 user.account.type.INDIVIDUAL: Individual
 user.account.type.ORGANISATION: Organisation
 user.firstName: First name
 user.lastName: Last name
 user.organisation.name: Organisation name
-user.plural: Users
-user.singular: User
+
+users: Users
+users.available: Available users
+users.selected: Selected users
 
 userFile.administrator.rights: The user has administrator rights on file
 userFile.ask.delete: Do you really want to remove user %name% from file ?

@@ -1,0 +1,11 @@
+{# src/SD/CoreBundle/Resources/views/Planning/calendar.one.html.twig #}
+
+{% extends "SDCoreBundle:Planning:planning.one.html.twig" %}
+
+{% block planning_many %}
+	<a href="{{ path('sd_core_planning_many_calendar', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.global'|trans }}"><span class="glyphicon glyphicon-resize-small"></span></a>
+{% endblock %}
+
+{% block planning %}
+{% include 'ADesignsCalendarBundle::calendar.html.twig' %}
+{% endblock %}

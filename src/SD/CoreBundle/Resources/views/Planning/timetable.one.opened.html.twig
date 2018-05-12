@@ -1,0 +1,10 @@
+{# src/SD/CoreBundle/Resources/views/Planning/timetable.one.opened.html.twig #}
+
+{% extends "SDCoreBundle:Planning:timetable.one.html.twig" %}
+
+{% block planning_timetable %}
+
+{% set vars = {'booking_create': 'sd_core_booking_one_create', 'booking_update': 'sd_core_booking_one_init_update', 'booking_delete': 'sd_core_booking_one_delete'} %}
+{% include 'SDCoreBundle:Planning:timetable.opened.html.twig' with vars %}
+
+{% endblock %}

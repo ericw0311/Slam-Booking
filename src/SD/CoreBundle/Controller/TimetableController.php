@@ -39,7 +39,7 @@ class TimetableController extends Controller
 
     $numberRecords = $timetableRepository->getTimetablesCount($userContext->getCurrentFile());
 
-    $listContext = new ListContext($em, $connectedUser, 'core', 'timetable', $pageNumber, $numberRecords, 'sd_core_timetable_display', 'sd_core_timetable_add');
+    $listContext = new ListContext($em, $connectedUser, 'core', 'timetable', $pageNumber, $numberRecords);
 
     $listTimetables = $timetableRepository->getDisplayedTimetables($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
                 

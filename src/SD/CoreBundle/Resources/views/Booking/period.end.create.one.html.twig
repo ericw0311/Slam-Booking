@@ -1,0 +1,19 @@
+{# src/SD/CoreBundle/Resources/views/Booking/period.end.create.one.html.twig #}
+
+{% extends "SDCoreBundle:Booking:period.end.html.twig" %}
+
+{% block previousFirstDateNumberLink %}
+	<a href="{{ path('sd_core_booking_one_end_period_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'firstDateNumber': previousFirstDateNumber, 'userFileIDList': userFileIDList }) }}" class="glyphicon glyphicon-backward" title="{{ 'days.previous'|trans }}"></a>
+{% endblock %}
+
+{% block nextFirstDateNumberLink %}
+	<a href="{{ path('sd_core_booking_one_end_period_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'firstDateNumber': nextFirstDateNumber, 'userFileIDList': userFileIDList }) }}" class="glyphicon glyphicon-forward" title="{{ 'days.next'|trans }}"></a>
+{% endblock %}
+
+{% block createOrUpdateBookingLink %}
+	<a href="{{ path('sd_core_booking_one_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': period.timetableLinesList, 'userFileIDList': userFileIDList }) }}" class="list-group-item"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
+{% endblock %}
+
+{% block booking_buttons %}
+	<a href="{{ path('sd_core_booking_one_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+{% endblock %}

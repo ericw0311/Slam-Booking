@@ -33,14 +33,18 @@ $label = new Label($this->getReference('user-1'), $this->getReference('file-507'
 $label = new Label($this->getReference('user-1'), $this->getReference('file-612')); $label->setName('Cours stretching'); $manager->persist($label); $manager->flush(); $this->addReference('activity-143', $label);
 $label = new Label($this->getReference('user-1'), $this->getReference('file-707')); $label->setName('Cours Enfants'); $manager->persist($label); $manager->flush(); $this->addReference('activity-151', $label);
 $label = new Label($this->getReference('user-1'), $this->getReference('file-707')); $label->setName('Cours adultes'); $manager->persist($label); $manager->flush(); $this->addReference('activity-152', $label);
-$label = new Label($this->getReference('user-1'), $this->getReference('file-707')); $label->setName('Pas d\'accès possible'); $manager->persist($label); $manager->flush(); $this->addReference('activity-153', $label);
+$label = new Label($this->getReference('user-1'), $this->getReference('file-707')); $label->setName('Pas d accès possible'); $manager->persist($label); $manager->flush(); $this->addReference('activity-153', $label);
 $label = new Label($this->getReference('user-1'), $this->getReference('file-507')); $label->setName('réservation clients extérieurs'); $manager->persist($label); $manager->flush(); $this->addReference('activity-157', $label);
 $label = new Label($this->getReference('user-1'), $this->getReference('file-507')); $label->setName('TOURNOI OPEN TBB'); $manager->persist($label); $manager->flush(); $this->addReference('activity-158', $label);
 $label = new Label($this->getReference('user-1'), $this->getReference('file-757')); $label->setName('TP chimie'); $manager->persist($label); $manager->flush(); $this->addReference('activity-163', $label);
 $label = new Label($this->getReference('user-1'), $this->getReference('file-757')); $label->setName('TP physique'); $manager->persist($label); $manager->flush(); $this->addReference('activity-164', $label);
 $label = new Label($this->getReference('user-1'), $this->getReference('file-757')); $label->setName('Manip bureau physique'); $manager->persist($label); $manager->flush(); $this->addReference('activity-165', $label);
 $label = new Label($this->getReference('user-1'), $this->getReference('file-757')); $label->setName('Manip bureau chimie'); $manager->persist($label); $manager->flush(); $this->addReference('activity-166', $label);
+$label = new Label($this->getReference('user-1'), $this->getReference('file-535')); $label->setName('ECOLE DE TENNIS'); $manager->persist($label); $manager->flush(); $this->addReference('activity-167', $label);
+$label = new Label($this->getReference('user-1'), $this->getReference('file-535')); $label->setName('GROUPE ADULTES'); $manager->persist($label); $manager->flush(); $this->addReference('activity-168', $label);
+$label = new Label($this->getReference('user-1'), $this->getReference('file-535')); $label->setName('COMPETITION'); $manager->persist($label); $manager->flush(); $this->addReference('activity-169', $label);
     }
+
     public function getOrder()
     {
     return 4;

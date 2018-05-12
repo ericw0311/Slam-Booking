@@ -29,9 +29,10 @@ class DefaultController extends Controller
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
+
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $fileContext = new FileContext($em, $userContext->getCurrentFile()); // contexte dossier
+    $fileContext = new FileContext($em, $userContext->getCurrentFile(), $userContext->getCurrentUserFile()); // contexte dossier
 
     return $this->render('SDCoreBundle:Default:summary.html.twig', array('userContext' => $userContext, 'fileContext' => $fileContext));
     }

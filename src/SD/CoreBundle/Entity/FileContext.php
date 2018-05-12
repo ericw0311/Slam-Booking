@@ -10,6 +10,10 @@ class FileContext
     protected $activityCount = 0;
     protected $resourceCount = 0;
     protected $planificationCount = 0;
+	protected $allBookingsCount = 0;
+	protected $inProgressBookingsCount = 0;
+	protected $currentUserBookingsCount = 0;
+	protected $currentUserInProgressBookingsCount = 0;
 
     public function setUserFileCount($userFileCount)
     {
@@ -77,23 +81,85 @@ class FileContext
     return $this->planificationCount;
     }
 
-    function __construct($em, \SD\CoreBundle\Entity\File $file)
+    public function setAllBookingsCount($bookingsCount)
     {
-    $userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
-    $this->setUserFileCount($userFileRepository->getUserFilesCount($file));
+    $this->allBookingsCount = $bookingsCount;
+    return $this;
+    }
 
-    $labelRepository = $em->getRepository('SDCoreBundle:Label');
-    $this->setLabelCount($labelRepository->getLabelsCount($file));
+    public function getAllBookingsCount()
+    {
+    return $this->allBookingsCount;
+    }
 
-    $timetableRepository = $em->getRepository('SDCoreBundle:Timetable');
-    $this->setTimetableCount($timetableRepository->getTimetablesCount($file));
+	public function setInProgressBookingsCount($bookingsCount)
+	{
+	$this->inProgressBookingsCount = $bookingsCount;
+	return $this;
+	}
 
-    $resourceRepository = $em->getRepository('SDCoreBundle:Resource');
-    $this->setResourceCount($resourceRepository->getResourcesCount($file));
+	public function getInProgressBookingsCount()
+	{
+	return $this->inProgressBookingsCount;
+	}
 
-    $planificationRepository = $em->getRepository('SDCoreBundle:Planification');
-    $this->setPlanificationCount($planificationRepository->getPlanificationsCount($file));
+	public function setCurrentUserBookingsCount($bookingsCount)
+	{
+	$this->currentUserBookingsCount = $bookingsCount;
+	return $this;
+	}
 
+	public function getCurrentUserBookingsCount()
+	{
+	return $this->currentUserBookingsCount;
+	}
+
+	public function setCurrentUserInProgressBookingsCount($bookingsCount)
+	{
+	$this->currentUserInProgressBookingsCount = $bookingsCount;
+	return $this;
+	}
+
+	public function getCurrentUserInProgressBookingsCount()
+	{
+	return $this->currentUserInProgressBookingsCount;
+	}
+
+    function __construct($em, \SD\CoreBundle\Entity\File $file, \SD\CoreBundle\Entity\UserFile $userfile)
+    {
+    $ufRepository = $em->getRepository('SDCoreBundle:UserFile');
+    $this->setUserFileCount($ufRepository->getUserFilesCount($file));
+
+    $lRepository = $em->getRepository('SDCoreBundle:Label');
+    $this->setLabelCount($lRepository->getLabelsCount($file));
+
+    $tRepository = $em->getRepository('SDCoreBundle:Timetable');
+    $this->setTimetableCount($tRepository->getTimetablesCount($file));
+
+    $rRepository = $em->getRepository('SDCoreBundle:Resource');
+    $this->setResourceCount($rRepository->getResourcesCount($file));
+
+    $pRepository = $em->getRepository('SDCoreBundle:Planification');
+    $this->setPlanificationCount($pRepository->getPlanificationsCount($file));
+
+    $bRepository = $em->getRepository('SDCoreBundle:Booking');
+    $this->setAllBookingsCount($bRepository->getAllBookingsCount($file));
+
+	if ($this->getAllBookingsCount() <= 0) {
+		$this->setInProgressBookingsCount(0);
+		$this->setCurrentUserBookingsCount(0);
+		$this->setCurrentUserInProgressBookingsCount(0);
+
+	} else {
+		$this->setInProgressBookingsCount($bRepository->getFromDatetimeBookingsCount($file, new \DateTime()));
+		$this->setCurrentUserBookingsCount($bRepository->getUserFileBookingsCount($file, $userfile));
+
+		if ($this->getInProgressBookingsCount() <= 0 || $this->getCurrentUserBookingsCount() <= 0) {
+			$this->setCurrentUserInProgressBookingsCount(0);
+		} else {
+			$this->setCurrentUserInProgressBookingsCount($bRepository->getUserFileFromDatetimeBookingsCount($file, $userfile, new \DateTime()));
+		}
+	}
     return $this;
     }
 }

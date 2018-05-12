@@ -34,3 +34,9 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: validator.constraint_validator, alias: sd_core_timetableLineEndTime }
+
+    sd.twig.sd_extension:
+        class: SD\CoreBundle\Twig\SDExtension
+        tags:
+            - { name: twig.extension }
+        arguments: ["@translator"]

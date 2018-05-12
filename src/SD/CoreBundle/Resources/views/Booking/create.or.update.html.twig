@@ -1,0 +1,46 @@
+{# src/SD/CoreBundle/Resources/views/Booking/create.or.update.html.twig #}
+
+{% extends "SDCoreBundle:Booking:booking.html.twig" %}
+
+{% block booking_details %}
+
+<div class="col-sm-6">
+
+<a href="#" class="list-group-item" title="{{ 'booking.period.beginning.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/time-32.png') }}">&nbsp;{{ dateLongue(beginningDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(beginningTimetableLine) }}</a>
+
+{% if userFiles|length == 1 %}
+
+{% if userFiles[0].administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+{% block userFiles_list_link %}{% endblock %}
+
+{% else %}
+
+<table class="table table-striped">
+	<thead>
+	<tr>
+	<th>{{ 'users'|trans }}&nbsp;{% block userFiles_table_link %}{% endblock %}</th>
+	</tr>
+	</thead>
+	<tbody>
+{% for userFile in userFiles %}
+	<tr>
+{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</td>
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
+
+{% endif %}
+
+</div>
+
+<div class="col-sm-6">
+
+{% block period_end_link %}{% endblock %}
+
+</div>
+
+{% block ask_delete %}{% endblock %}
+
+{% endblock %}

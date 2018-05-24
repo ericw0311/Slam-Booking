@@ -3,19 +3,19 @@
 {% extends "SDCoreBundle:Booking:user.files.html.twig" %}
 
 {% block link_sortBefore %}
-	<a href="{{ path('sd_core_booking_one_user_files_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.userFileIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_one_user_files_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a>
 {% endblock %}
 
 {% block link_sortAfter %}
-	<a href="{{ path('sd_core_booking_one_user_files_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.userFileIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_one_user_files_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a>
 {% endblock %}
 
 {% block link_unselect %}
-	<a href="{{ path('sd_core_booking_one_user_files_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.userFileIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'booking.user.unselect'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_one_user_files_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'booking.user.unselect'|trans }}"></a>
 {% endblock %}
 
 {% block link_select %}
-	<a href="{{ path('sd_core_booking_one_user_files_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.userFileIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'booking.user.select'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_one_user_files_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'booking.user.select'|trans }}"></a>
 {% endblock %}
 
 {% block booking_buttons %}

@@ -31,9 +31,7 @@
 	<td></td>
 {% endif %}
 {% endif %}
-
-{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
-    <td><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</td>
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ userFile.imageName) }}">&nbsp;{{ userFile.name }}</td>
 	<td>{% block link_unselect %}{% endblock %}</td>
 	</tr>
 {% endfor %}
@@ -50,10 +48,7 @@
 {% for userFile in availableUserFiles %}
 	<tr>
 	<td>{% block link_select %}{% endblock %}</td>
-	
-{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
-<td><img src="{{ asset('bundles/sdcore/images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</td>
-
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ userFile.imageName) }}">&nbsp;{{ userFile.name }}</td>
 	</tr>
 {% endfor %}
 	</tbody>

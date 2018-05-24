@@ -7,9 +7,9 @@ use SD\CoreBundle\Entity\Resource;
 use SD\CoreBundle\Entity\TimetableLine;
 use SD\CoreBundle\Entity\BookingDateNDB;
 use SD\CoreBundle\Entity\BookingPeriodNDB;
-use SD\CoreBundle\Entity\UserFileNDBAdd;
 use SD\CoreBundle\Entity\BookingNDB;
-use SD\CoreBundle\Entity\UserFileNDBSelected;
+use SD\CoreBundle\Entity\SelectedEntity;
+use SD\CoreBundle\Entity\AddEntity;
 use SD\CoreBundle\Entity\Constants;
 
 use SD\CoreBundle\Api\ResourceApi;
@@ -88,26 +88,25 @@ class BookingApi
     foreach ($userFileIDArray as $userFileID) {
 		$userFileDB = $ufRepository->find($userFileID);
 		if ($userFileDB !== null) {
-			$userFile = new UserFileNDBSelected(); // classe UserFile incluant les infos spécifiques aux utilisateurs sélectionnés
+			$userFile = new SelectedEntity(); // classe générique des entités sélectionnées
 			$userFile->setId($userFileDB->getId());
-			$userFile->setLastName($userFileDB->getLastName());
-			$userFile->setFirstName($userFileDB->getFirstName());
-			$userFile->setAdministrator($userFileDB->getAdministrator());
+			$userFile->setName($userFileDB->getFirstAndLastName());
+			$userFile->setImageName($userFileDB->getAdministrator() ? "administrator-32.png" : "user-32.png");
 			$userFileIDArray_tprr = $userFileIDArray;
 			unset($userFileIDArray_tprr[$i]);
-			$userFile->setUserFileIDList_unselect(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur désélectionne l'utilisateur
+			$userFile->setEntityIDList_unselect(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur désélectionne l'utilisateur
 			if (count($userFileIDArray) > 1) {
 				if ($i > 0) {
 					$userFileIDArray_tprr = $userFileIDArray;
 					$userFileIDArray_tprr[$i] = $userFileIDArray_tprr[$i-1];
 					$userFileIDArray_tprr[$i-1] = $userFileID;
-					$userFile->setUserFileIDList_sortBefore(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur remonte l'utilisateur dans l'ordre de tri
+					$userFile->setEntityIDList_sortBefore(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur remonte l'utilisateur dans l'ordre de tri
 				}
 				if ($i < count($userFileIDArray)-1) {
 					$userFileIDArray_tprr = $userFileIDArray;
 					$userFileIDArray_tprr[$i] = $userFileIDArray_tprr[$i+1];
 					$userFileIDArray_tprr[$i+1] = $userFileID;
-					$userFile->setUserFileIDList_sortAfter(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur redescend l'utilisateur dans l'ordre de tri
+					$userFile->setEntityIDList_sortAfter(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur redescend l'utilisateur dans l'ordre de tri
 				}
 			}
 			$i++;
@@ -117,26 +116,38 @@ class BookingApi
 	return $selectedUserFiles;
     }
 
-
-	// Retourne un tableau des utilisateurs pouvant être ajouté à une réservation
+	// Retourne un tableau des utilisateurs pouvant être ajoutés à une réservation
 	static function getAvailableUserFiles($userFilesDB, $selectedUserFileIDList)
     {
 	$selectedUserFileIDArray = explode('-', $selectedUserFileIDList);
 	$availableUserFiles = array();
     foreach ($userFilesDB as $userFileDB) {
 		if (array_search($userFileDB->getId(), $selectedUserFileIDArray) === false) {
-			$userFile = new UserFileNDBAdd(); // classe UserFile incluant les infos spécifiques aux utilisateurs pouvant être ajoutés à la sélection
+			$userFile = new AddEntity(); // classe générique des entités pouvant être ajoutées à la sélection
 			$userFile->setId($userFileDB->getId());
-			$userFile->setLastName($userFileDB->getLastName());
-			$userFile->setFirstName($userFileDB->getFirstName());
-			$userFile->setAdministrator($userFileDB->getAdministrator());
-			$userFile->setUserFileIDList_select(($selectedUserFileIDList == '') ? $userFileDB->getId() : ($selectedUserFileIDList.'-'.$userFileDB->getId())); // Liste des utilisateurs sélectionnés si l'utilisateur sélectionne l'utilisateur
+			$userFile->setName($userFileDB->getFirstAndLastName());
+			$userFile->setImageName($userFileDB->getAdministrator() ? "administrator-32.png" : "user-32.png");
+			$userFile->setEntityIDList_select(($selectedUserFileIDList == '') ? $userFileDB->getId() : ($selectedUserFileIDList.'-'.$userFileDB->getId())); // Liste des utilisateurs sélectionnés si l'utilisateur sélectionne l'utilisateur
 			array_push($availableUserFiles, $userFile);
 		}
 	}
 	return $availableUserFiles;
     }
 
+	// Retourne un tableau d'utilisateurs à partir d'une liste d'ID
+	static function getUserFiles($em, $userFileIDList)
+	{
+	$userFileIDArray = explode("-", $userFileIDList);
+	$userFiles = array();
+	$ufRepository = $em->getRepository('SDCoreBundle:UserFile');
+	foreach ($userFileIDArray as $userFileID) {
+		$userFile = $ufRepository->find($userFileID);
+		if ($userFile !== null) {
+			$userFiles[] = $userFile;
+		}
+	}
+	return $userFiles;
+	}
 
 	// Retourne un tableau des ressources à planifier (initialisation de planification)
 	static function initAvailableUserFiles($em, \SD\CoreBundle\Entity\File $file, $selectedUserFileIDList)

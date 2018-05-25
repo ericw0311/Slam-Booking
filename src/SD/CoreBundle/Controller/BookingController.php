@@ -58,18 +58,7 @@ class BookingController extends Controller
 	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
 
 	// Utilisateurs
-	$userFileIDArray = explode("-", $userFileIDList);
-
-	$userFiles = array();
-	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
-
-	foreach ($userFileIDArray as $userFileID) {
-
-		$userFile = $userFileRepository->find($userFileID);
-		if ($userFile !== null) {
-			$userFiles[] = $userFile;
-		}
-	}
+	$userFiles = BookingApi::getUserFiles($em, $userFileIDList);
 
 	return $this->render('SDCoreBundle:Booking:create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
@@ -156,18 +145,7 @@ array('userContext' => $userContext, 'planification' => $planification, 'planifi
 	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
 
 	// Utilisateurs
-	$userFileIDArray = explode("-", $userFileIDList);
-
-	$userFiles = array();
-	$userFileRepository = $em->getRepository('SDCoreBundle:UserFile');
-
-	foreach ($userFileIDArray as $userFileID) {
-
-		$userFile = $userFileRepository->find($userFileID);
-		if ($userFile !== null) {
-			$userFiles[] = $userFile;
-		}
-	}
+	$userFiles = BookingApi::getUserFiles($em, $userFileIDList);
 
 	return $this->render('SDCoreBundle:Booking:update.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,

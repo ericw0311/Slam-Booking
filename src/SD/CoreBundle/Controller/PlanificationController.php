@@ -68,11 +68,11 @@ class PlanificationController extends Controller
 
 	$selectedResources = ResourceApi::getSelectedResources($em, $resourceIDList);
 
-	$resourcesToPlanify = ResourceApi::initResourcesToPlanify($em, $userContext->getCurrentFile(), $type, $resourceIDList);
+	$availableResources = ResourceApi::initAvailableResources($em, $userContext->getCurrentFile(), $type, $resourceIDList);
 
     return $this->render('SDCoreBundle:Planification:resource.insert.html.twig', 
 		array('userContext' => $userContext, 'type' => $type, 'selectedResources' => $selectedResources, 
-		'selectedResourcesIDList' => $resourceIDList, 'resourcesToPlanify' => $resourcesToPlanify));
+		'selectedResourcesIDList' => $resourceIDList, 'availableResources' => $availableResources));
     }
 
 
@@ -139,12 +139,12 @@ class PlanificationController extends Controller
 
 	$selectedResources = ResourceApi::getSelectedResources($em, $resourceIDList);
 
-	$resourcesToPlanify = ResourceApi::updateResourcesToPlanify($em, $userContext->getCurrentFile(), $planification->getType(), $planificationPeriod, $resourceIDList);
+	$availableResources = ResourceApi::updateAvailableResources($em, $userContext->getCurrentFile(), $planification->getType(), $planificationPeriod, $resourceIDList);
 
     return $this->render('SDCoreBundle:Planification:resource.update.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 			'selectedResources' => $selectedResources, 'selectedResourcesIDList' => $resourceIDList,
-			'resourcesToPlanify' => $resourcesToPlanify));
+			'availableResources' => $availableResources));
     }
 
 

@@ -6,9 +6,6 @@
 
 {% block body %}
 
-{% set rtIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
-{% set rcIcons = constant('SD\\CoreBundle\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
-
 {% block planification %}{% endblock %}
 
 <div class="col-sm-6">
@@ -38,11 +35,7 @@
 	<td></td>
 {% endif %}
 {% endif %}
-{% if resource.internal %}
-	<td><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
-{% else %}
-	<td><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
-{% endif %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ resource.imageName) }}">&nbsp;{{ resource.name }}</td>
 	<td>{% block link_unselect %}{% endblock %}</td>
 	</tr>
 {% endfor %}
@@ -56,14 +49,10 @@
 <table class="table table-striped">
 	<thead><tr><th colspan=2>{{ 'planification.resource.to.planify'|trans }}</th></tr></thead>
 	<tbody>
-{% for resource in resourcesToPlanify %}
+{% for resource in availableResources %}
 	<tr>
 	<td>{% block link_select %}{% endblock %}</td>
-{% if resource.internal %}
-	<td><img src="{{ asset('bundles/sdcore/images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
-{% else %}
-	<td><img src="{{ asset('bundles/sdcore/images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</td>
-{% endif %}
+	<td><img src="{{ asset('bundles/sdcore/images/' ~ resource.imageName) }}">&nbsp;{{ resource.name }}</td>
 	</tr>
 {% endfor %}
 	</tbody>

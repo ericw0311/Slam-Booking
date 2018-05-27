@@ -7,19 +7,19 @@
 {% endblock %}
 
 {% block link_sortBefore %}
-	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a>
+	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a>
 {% endblock %}
 
 {% block link_sortAfter %}
-	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a>
+	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a>
 {% endblock %}
 
 {% block link_unselect %}
-	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'planification.resource.unselect'|trans }}"></a>
+	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'planification.resource.unselect'|trans }}"></a>
 {% endblock %}
 
 {% block link_select %}
-	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.resourceIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a>
+	<a href="{{ path('sd_core_planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a>
 {% endblock %}
 
 {% block link_cancel %}

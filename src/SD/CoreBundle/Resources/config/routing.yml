@@ -473,7 +473,7 @@ sd_core_planning_one_timetable_pp:
 
 # Création des réservations
 sd_core_booking_many_create:
-    path:     /bookingmany/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}
+    path:     /bookingmany/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}
     defaults: { _controller: SDCoreBundle:Booking:many_create }
     requirements:
         planificationID: \d+
@@ -481,7 +481,7 @@ sd_core_booking_many_create:
         resourceID: \d+
 
 sd_core_booking_one_create:
-    path:     /bookingone/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}
+    path:     /bookingone/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}
     defaults: { _controller: SDCoreBundle:Booking:one_create }
     requirements:
         planificationID: \d+
@@ -517,6 +517,22 @@ sd_core_booking_many_user_files_create:
 sd_core_booking_one_user_files_create:
     path:     /bookingone/userfilescreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDInitialList}/{userFileIDList}
     defaults: { _controller: SDCoreBundle:Booking:one_user_files_create, userFileIDList: null }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_many_labels_create:
+    path:     /bookingmany/labelscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDInitialList}/{labelIDList}
+    defaults: { _controller: SDCoreBundle:Booking:many_labels_create, labelIDList: null }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_labels_create:
+    path:     /bookingone/labelscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDInitialList}/{labelIDList}
+    defaults: { _controller: SDCoreBundle:Booking:one_labels_create, labelIDList: null }
     requirements:
         planificationID: \d+
         planificationPeriodID: \d+

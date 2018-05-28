@@ -39,6 +39,33 @@
 
 {% block period_end_link %}{% endblock %}
 
+{% if labels|length < 1 %}
+
+{% block labels_empty_list_link %}{% endblock %}
+
+{% elseif labels|length == 1 %}
+
+{% block labels_list_link %}{% endblock %}
+
+{% else %}
+
+<table class="table table-striped">
+	<thead>
+	<tr>
+	<th>{{ 'labels'|trans }}&nbsp;{% block labels_table_link %}{% endblock %}</th>
+	</tr>
+	</thead>
+	<tbody>
+{% for label in labels %}
+	<tr>
+	<td><img src="{{ asset('bundles/sdcore/images/label-32.png') }}">&nbsp;{{ label.getName() }}</td>
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
+
+{% endif %}
+
 </div>
 
 {% block ask_delete %}{% endblock %}

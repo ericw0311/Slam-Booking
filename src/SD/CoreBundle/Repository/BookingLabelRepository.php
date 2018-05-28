@@ -10,4 +10,16 @@ namespace SD\CoreBundle\Repository;
  */
 class BookingLabelRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getBookingLabels($booking)
+	{
+	$qb = $this->createQueryBuilder('bl');
+	$qb->select('l.id labelID');
+	$qb->addSelect('bl.order oorder');
+	$qb->where('bl.booking = :booking')->setParameter('booking', $booking);
+	$qb->innerJoin('bl.label', 'l');
+	$qb->orderBy('bl.order', 'ASC');
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
+	}
 }

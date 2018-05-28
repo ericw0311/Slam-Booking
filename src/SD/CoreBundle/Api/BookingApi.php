@@ -77,6 +77,9 @@ class BookingApi
 	return $endPeriods;
     }
     
+
+	// Gestion des utilisateurs des réservations
+
 	// Retourne un tableau des utilisateurs sélectionnés
 	// resourceIDList: Liste des ID des utilisateurs sélectionnés
 	static function getSelectedUserFiles($em, $userFileIDList)
@@ -156,6 +159,204 @@ class BookingApi
 
 	$userFilesDB = $ufRepository->getUserFiles($file);
 	return BookingApi::getAvailableUserFiles($userFilesDB, $selectedUserFileIDList);
+	}
+
+	// Gestion des étiquettes des réservations
+
+	// Retourne un tableau des étiquettes sélectionnées
+	// labelIDList: Liste des ID des étiquettes sélectionnées
+	static function getSelectedLabels($em, $labelIDList)
+	{
+	$labelIDArray = explode('-', $labelIDList);
+    $lRepository = $em->getRepository('SDCoreBundle:Label');
+	$selectedLabels = array();
+	$i = 0;
+    foreach ($labelIDArray as $labelID) {
+		$labelDB = $lRepository->find($labelID);
+		if ($labelDB !== null) {
+			$label = new SelectedEntity(); // classe générique des entités sélectionnées
+			$label->setId($labelDB->getId());
+			$label->setName($labelDB->getName());
+			$label->setImageName("label-32.png");
+			$labelIDArray_tprr = $labelIDArray;
+			unset($labelIDArray_tprr[$i]);
+			$label->setEntityIDList_unselect(implode('-', $labelIDArray_tprr)); // Liste des étiquettes sélectionnées si l'utilisateur désélectionne l'étiquette
+			if (count($labelIDArray) > 1) {
+				if ($i > 0) {
+					$labelIDArray_tprr = $labelIDArray;
+					$labelIDArray_tprr[$i] = $labelIDArray_tprr[$i-1];
+					$labelIDArray_tprr[$i-1] = $labelID;
+					$label->setEntityIDList_sortBefore(implode('-', $labelIDArray_tprr)); // Liste des étiquettes sélectionnées si l'utilisateur remonte l'étiquette dans l'ordre de tri
+				}
+				if ($i < count($labelIDArray)-1) {
+					$labelIDArray_tprr = $labelIDArray;
+					$labelIDArray_tprr[$i] = $labelIDArray_tprr[$i+1];
+					$labelIDArray_tprr[$i+1] = $labelID;
+					$label->setEntityIDList_sortAfter(implode('-', $labelIDArray_tprr)); // Liste des étiquettes sélectionnées si l'utilisateur redescend l'étiquette dans l'ordre de tri
+				}
+			}
+			$i++;
+			array_push($selectedLabels, $label);
+		}
+	}
+	return $selectedLabels;
+    }
+	
+	// Retourne un tableau des étiquettes pouvant être ajoutées à une réservation
+	static function getAvailableLabels($labelsDB, $selectedLabelIDList)
+    {
+	$selectedLabelIDArray = explode('-', $selectedLabelIDList);
+	$availableLabels = array();
+    foreach ($labelsDB as $labelDB) {
+		if (array_search($labelDB->getId(), $selectedLabelIDArray) === false) {
+			$label = new AddEntity(); // classe générique des entités pouvant être ajoutées à la sélection
+			$label->setId($labelDB->getId());
+			$label->setName($labelDB->getName());
+			$label->setImageName("label-32.png");
+			$label->setEntityIDList_select(($selectedLabelIDList == '') ? $labelDB->getId() : ($selectedLabelIDList.'-'.$labelDB->getId())); // Liste des étiquettes sélectionnées si l'utilisateur sélectionne l'étiquette
+			array_push($availableLabels, $label);
+		}
+	}
+	return $availableLabels;
+    }
+
+	// Retourne un tableau des étiquettes pouvant être ajoutées à une réservation
+	static function initAvailableLabels($em, \SD\CoreBundle\Entity\File $file, $selectedLabelIDList)
+	{
+	$lRepository = $em->getRepository('SDCoreBundle:Label');
+	$labelsDB = $lRepository->getLabels	($file);
+	return BookingApi::getAvailableLabels($labelsDB, $selectedLabelIDList);
+	}
+
+	// Retourne une chaine correspondant à la liste des étiquettes d'une réservation
+	static function getBookingLabelsUrl($em, \SD\CoreBundle\Entity\Booking $booking)
+	{
+	$blRepository = $em->getRepository('SDCoreBundle:BookingLabel');
+	$bookingLabelsDB = $blRepository->getBookingLabels($booking);
+	if (count($bookingLabelsDB) <= 0) {
+		return '';
+	}
+	$premier = true;
+	foreach ($bookingLabelsDB as $bookingLabel) {
+		if ($premier) {
+			$url = $bookingLabel['labelID'];
+		} else {
+			$url .= '-'.$bookingLabel['labelID'];
+		}
+		$premier = false;
+	}
+	return $url;
+	}
+
+	// ATTENTION À CETTE PROCEDURE. C'EST FAUX
+	// Retourne un tableau des utilisateurs d'une réservation
+	static function getBookingLabelsArray($em, \SD\CoreBundle\Entity\Booking $booking, \SD\CoreBundle\Entity\UserFile $currentUserFile)
+	{
+	$blRepository = $em->getRepository('SDCoreBundle:BookingLabel');
+	$bookingLabels = $blRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+	$userFiles = array();
+	if (count($bookingLabels) <= 0) { // Ce cas ne doit pas arriver. Toute réservation a au moins un utilisateur. Mais si cela arrive, on initialise la liste des utilisateurs avec l'utilisateur courant
+		$userFiles[] = $currentUserFile;
+		return $userFiles;
+	}
+	foreach ($bookingLabels as $bookingLabel) {
+		$userFiles[] = $bookingLabel->getUserFile();
+	}
+	return $userFiles;
+	}
+
+
+	// Retourne un tableau d'étiquettes à partir d'une liste d'ID
+	static function getLabels($em, $labelIDList)
+	{
+	$labelIDArray = explode("-", $labelIDList);
+	$labels = array();
+	$lRepository = $em->getRepository('SDCoreBundle:Label');
+	foreach ($labelIDArray as $labelID) {
+		if ($labelID > 0) { // Le labelID peut être égal à 0: cas d'une liste vide
+			$label = $lRepository->find($labelID);
+			if ($label !== null) {
+				$labels[] = $label;
+			}
+		}
+	}
+	return $labels;
+	}
+
+	// Retourne un tableau d'identifiants d'étiquettes à partir d'une liste d'ID
+	static function getLabelsID($labelIDList)
+	{
+	$labelsID = array();
+	if (strcmp($labelIDList, "0") != 0) {
+		$labelsID = explode("-", $labelIDList);
+	}
+	return $labelsID;
+	}
+
+	// Retourne les informations de début et de fin de réservation à partir d'une liste de périodes contenue dans une Url
+    static function getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, &$beginningDate, &$beginningTimetableLine, &$endDate, &$endTimetableLine)
+	{
+	$cellArray  = explode("-", $timetableLinesList);
+
+    $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
+
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $cellArray[0]);
+	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
+
+	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
+	$beginningTimetableLineID = $beginningTimetableLines[0];
+
+	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
+
+	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $cellArray[count($cellArray)-1]);
+	$endDate = date_create_from_format("Ymd", $endDateString);
+
+	$endTimetableLines = explode("*", $endTimetableLinesList);
+	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
+
+	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
+	}
+
+	// Retourne une chaine correspondant à la liste des utilisateurs d'une réservation
+	static function getBookingUsersUrl($em, \SD\CoreBundle\Entity\Booking $booking)
+	{
+	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
+	$bookingUsersDB = $buRepository->getBookingUsers($booking);
+	if (count($bookingUsersDB) <= 0) {
+		return '';
+	}
+
+	$premier = true;
+
+	foreach ($bookingUsersDB as $bookingUser) {
+		if ($premier) {
+			$url = $bookingUser['userFileID'];
+		} else {
+			$url .= '-'.$bookingUser['userFileID'];
+		}
+		$premier = false;
+	}
+	return $url;
+	}
+
+	// Retourne un tableau des utilisateurs d'une réservation
+	static function getBookingUsersArray($em, \SD\CoreBundle\Entity\Booking $booking, \SD\CoreBundle\Entity\UserFile $currentUserFile)
+	{
+	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
+
+	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+
+	$userFiles = array();
+
+	if (count($bookingUsers) <= 0) { // Ce cas ne doit pas arriver. Toute réservation a au moins un utilisateur. Mais si cela arrive, on initialise la liste des utilisateurs avec l'utilisateur courant
+		$userFiles[] = $currentUserFile;
+		return $userFiles;
+	}
+
+	foreach ($bookingUsers as $bookingUser) {
+		$userFiles[] = $bookingUser->getUserFile();
+	}
+	return $userFiles;
 	}
 
 
@@ -266,78 +467,5 @@ class BookingApi
 		$memo_date = $bookingLine['date']->format('Ymd');
 	}
 	return $url;
-	}
-
-	// Retourne les informations de début et de fin de réservation à partir d'une liste de périodes contenue dans une Url
-    static function getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, &$beginningDate, &$beginningTimetableLine, &$endDate, &$endTimetableLine)
-	{
-	$cellArray  = explode("-", $timetableLinesList);
-
-    $ttlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
-
-	list($beginningDateString, $beginningTimetableID, $beginningTimetableLinesList) = explode("+", $cellArray[0]);
-	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
-
-	$beginningTimetableLines = explode("*", $beginningTimetableLinesList);
-	$beginningTimetableLineID = $beginningTimetableLines[0];
-
-	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
-
-	list($endDateString, $endTimetableID, $endTimetableLinesList) = explode("+", $cellArray[count($cellArray)-1]);
-	$endDate = date_create_from_format("Ymd", $endDateString);
-
-	$endTimetableLines = explode("*", $endTimetableLinesList);
-	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
-
-	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
-	}
-
-
-
-
-
-
-
-	// Retourne une chaine correspondant à la liste des utilisateurs d'une réservation
-	static function getBookingUsersUrl($em, \SD\CoreBundle\Entity\Booking $booking)
-	{
-	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
-	$bookingUsersDB = $buRepository->getBookingUsers($booking);
-	if (count($bookingUsersDB) <= 0) {
-		return '';
-	}
-
-	$premier = true;
-
-	foreach ($bookingUsersDB as $bookingUser) {
-		if ($premier) {
-			$url = $bookingUser['userFileID'];
-		} else {
-			$url .= '-'.$bookingUser['userFileID'];
-		}
-		$premier = false;
-	}
-	return $url;
-	}
-
-
-	// Retourne un tableau des utilisateurs d'une réservation
-	static function getBookingUsersArray($em, \SD\CoreBundle\Entity\Booking $booking, \SD\CoreBundle\Entity\UserFile $currentUserFile)
-	{
-	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
-
-	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
-
-	$userFiles = array();
-
-	if (count($bookingUsers) <= 0) { // Ce cas ne doit pas arriver. Toute réservation a au moins un utilisateur. Mais si cela arrive, on initialise la liste des utilisateurs avec l'utilisateur courant
-		$userFiles[] = $currentUserFile;
-		return $userFiles;
-	}
-
-	foreach ($bookingUsers as $bookingUser) {
-		$userFiles[] = $bookingUser->getUserFile();
-	}
-	return $userFiles;
 	}
 }

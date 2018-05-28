@@ -22,7 +22,6 @@ booking.period.end.update: Modify end period
 booking.plural: Bookings
 booking.singular: Booking
 booking.updated.ok: The booking has been updated
-booking.user.list.update: Modify users list
 booking.your: Your bookings
 booking.your.in.progress: Your bookings in progress
 
@@ -52,9 +51,13 @@ label.create: Create an label
 label.created.ok: The label has been created
 label.deleted.ok: The label has been deleted
 label.name: Label name
+label.list.update: Modify labels list
 label.plural: Activities
 label.singular: Label
 label.updated.ok: The label has been updated
+
+labels.available: Etiquettes disponibles
+labels.selected: Etiquettes sélectionnées
 
 period.type: Period
 period.type.AFTER: After a day
@@ -231,6 +234,7 @@ user.account.type.INDIVIDUAL: Individual
 user.account.type.ORGANISATION: Organisation
 user.firstName: First name
 user.lastName: Last name
+user.list.update: Modify users list
 user.organisation.name: Organisation name
 
 users: Users

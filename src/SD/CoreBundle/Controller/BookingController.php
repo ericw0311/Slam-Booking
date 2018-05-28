@@ -31,9 +31,9 @@ class BookingController extends Controller
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function many_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList)
+    public function many_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList)
     {
-	return BookingController::create_Action($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, 1);
+	return BookingController::create_Action($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, 1);
     }
 
     // Création de réservation
@@ -43,13 +43,13 @@ class BookingController extends Controller
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function one_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList)
+    public function one_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList)
     {
-	return BookingController::create_Action($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, 0);
+	return BookingController::create_Action($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, 0);
     }
 
     // Création de réservation
-    public function create_Action(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $many)
+    public function create_Action(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -60,12 +60,16 @@ class BookingController extends Controller
 	// Utilisateurs
 	$userFiles = BookingApi::getUserFiles($em, $userFileIDList);
 
+	// Etiquettes
+	$labels = BookingApi::getLabels($em, $labelIDList);
+
 	return $this->render('SDCoreBundle:Booking:create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
 	'date' => $date, 'timetableLinesList' => $timetableLinesList,
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine,
-	'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList));
+	'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
+	'labels' => $labels, 'labelIDList' => $labelIDList));
     }
 
     // Initialisation de la mise à jour de réservation

@@ -167,7 +167,9 @@ class BookingApi
 	// labelIDList: Liste des ID des étiquettes sélectionnées
 	static function getSelectedLabels($em, $labelIDList)
 	{
-	$labelIDArray = explode('-', $labelIDList);
+	$l_labelIDList = ($labelIDList == '0') ? '' : $labelIDList; // On ramène la chaine '0' à une chaine vide
+
+	$labelIDArray = explode('-', $l_labelIDList);
     $lRepository = $em->getRepository('SDCoreBundle:Label');
 	$selectedLabels = array();
 	$i = 0;
@@ -180,19 +182,19 @@ class BookingApi
 			$label->setImageName("label-32.png");
 			$labelIDArray_tprr = $labelIDArray;
 			unset($labelIDArray_tprr[$i]);
-			$label->setEntityIDList_unselect(implode('-', $labelIDArray_tprr)); // Liste des étiquettes sélectionnées si l'utilisateur désélectionne l'étiquette
+			$label->setEntityIDList_unselect((count($labelIDArray_tprr) > 0) ? implode('-', $labelIDArray_tprr) : '0'); // Liste des étiquettes sélectionnées si l'utilisateur désélectionne l'étiquette
 			if (count($labelIDArray) > 1) {
 				if ($i > 0) {
 					$labelIDArray_tprr = $labelIDArray;
 					$labelIDArray_tprr[$i] = $labelIDArray_tprr[$i-1];
 					$labelIDArray_tprr[$i-1] = $labelID;
-					$label->setEntityIDList_sortBefore(implode('-', $labelIDArray_tprr)); // Liste des étiquettes sélectionnées si l'utilisateur remonte l'étiquette dans l'ordre de tri
+					$label->setEntityIDList_sortBefore((count($labelIDArray_tprr) > 0) ? implode('-', $labelIDArray_tprr) : '0'); // Liste des étiquettes sélectionnées si l'utilisateur remonte l'étiquette dans l'ordre de tri
 				}
 				if ($i < count($labelIDArray)-1) {
 					$labelIDArray_tprr = $labelIDArray;
 					$labelIDArray_tprr[$i] = $labelIDArray_tprr[$i+1];
 					$labelIDArray_tprr[$i+1] = $labelID;
-					$label->setEntityIDList_sortAfter(implode('-', $labelIDArray_tprr)); // Liste des étiquettes sélectionnées si l'utilisateur redescend l'étiquette dans l'ordre de tri
+					$label->setEntityIDList_sortAfter((count($labelIDArray_tprr) > 0) ? implode('-', $labelIDArray_tprr) : '0'); // Liste des étiquettes sélectionnées si l'utilisateur redescend l'étiquette dans l'ordre de tri
 				}
 			}
 			$i++;
@@ -205,7 +207,9 @@ class BookingApi
 	// Retourne un tableau des étiquettes pouvant être ajoutées à une réservation
 	static function getAvailableLabels($labelsDB, $selectedLabelIDList)
     {
-	$selectedLabelIDArray = explode('-', $selectedLabelIDList);
+	$l_selectedLabelIDList = ($selectedLabelIDList == '0') ? '' : $selectedLabelIDList; // On ramène la chaine '0' à une chaine vide
+
+	$selectedLabelIDArray = explode('-', $l_selectedLabelIDList);
 	$availableLabels = array();
     foreach ($labelsDB as $labelDB) {
 		if (array_search($labelDB->getId(), $selectedLabelIDArray) === false) {
@@ -213,7 +217,7 @@ class BookingApi
 			$label->setId($labelDB->getId());
 			$label->setName($labelDB->getName());
 			$label->setImageName("label-32.png");
-			$label->setEntityIDList_select(($selectedLabelIDList == '') ? $labelDB->getId() : ($selectedLabelIDList.'-'.$labelDB->getId())); // Liste des étiquettes sélectionnées si l'utilisateur sélectionne l'étiquette
+			$label->setEntityIDList_select(($l_selectedLabelIDList == '') ? $labelDB->getId() : ($l_selectedLabelIDList.'-'.$labelDB->getId())); // Liste des étiquettes sélectionnées si l'utilisateur sélectionne l'étiquette
 			array_push($availableLabels, $label);
 		}
 	}
@@ -234,7 +238,7 @@ class BookingApi
 	$blRepository = $em->getRepository('SDCoreBundle:BookingLabel');
 	$bookingLabelsDB = $blRepository->getBookingLabels($booking);
 	if (count($bookingLabelsDB) <= 0) {
-		return '';
+		return '0';
 	}
 	$premier = true;
 	foreach ($bookingLabelsDB as $bookingLabel) {

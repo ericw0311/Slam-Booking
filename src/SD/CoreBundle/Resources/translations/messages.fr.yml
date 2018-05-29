@@ -51,6 +51,7 @@ label.create: Créer une étiquette
 label.created.ok: L'étiquette a bien été créée
 label.deleted.ok: L'étiquette a bien été supprimée
 label.name: Nom de l'étiquette
+label.no: Pas d'étiquette
 label.list.update: Modifier la liste des étiquettes
 label.plural: Etiquettes
 label.singular: Etiquette

@@ -51,6 +51,7 @@ label.create: Create an label
 label.created.ok: The label has been created
 label.deleted.ok: The label has been deleted
 label.name: Label name
+label.no: No label
 label.list.update: Modify labels list
 label.plural: Activities
 label.singular: Label

@@ -252,21 +252,16 @@ class BookingApi
 	return $url;
 	}
 
-	// ATTENTION À CETTE PROCEDURE. C'EST FAUX
-	// Retourne un tableau des utilisateurs d'une réservation
-	static function getBookingLabelsArray($em, \SD\CoreBundle\Entity\Booking $booking, \SD\CoreBundle\Entity\UserFile $currentUserFile)
+	// Retourne un tableau des étiquettes d'une réservation
+	static function getBookingLabelsArray($em, \SD\CoreBundle\Entity\Booking $booking)
 	{
 	$blRepository = $em->getRepository('SDCoreBundle:BookingLabel');
-	$bookingLabels = $blRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
-	$userFiles = array();
-	if (count($bookingLabels) <= 0) { // Ce cas ne doit pas arriver. Toute réservation a au moins un utilisateur. Mais si cela arrive, on initialise la liste des utilisateurs avec l'utilisateur courant
-		$userFiles[] = $currentUserFile;
-		return $userFiles;
-	}
+	$bookingLabels = $blRepository->findBy(array('booking' => $booking), array('order' => 'asc'));
+	$labels = array();
 	foreach ($bookingLabels as $bookingLabel) {
-		$userFiles[] = $bookingLabel->getUserFile();
+		$labels[] = $bookingLabel->getLabel();
 	}
-	return $userFiles;
+	return $labels;
 	}
 
 
@@ -363,7 +358,6 @@ class BookingApi
 	return $userFiles;
 	}
 
-
 	// Convertit une URL comprenant une liste de grilles horaires (pour réservation) en un tableau de grilles horaires
 	static function getTimetableLines($timetableLinesUrl)
 	{
@@ -387,6 +381,7 @@ class BookingApi
 	{
 	$bRepository = $em->getRepository('SDCoreBundle:Booking');
 	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
+	$blRepository = $em->getRepository('SDCoreBundle:BookingLabel');
 
 	$bookingsDB = $bRepository->getTimetableBookings($file, $date, $planification, $planificationPeriod);
 	$bookings = array();
@@ -410,6 +405,7 @@ class BookingApi
 		if ($memo_bookingID > 0 && $booking['bookingID'] <> $memo_bookingID) { // On a parcouru une reservation.
 			$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount);
 			$bookings[$currentBookingHeaderKey]->setUserFiles(BookingApi::getBookingUsersArray($em, $bRepository->find($memo_bookingID), $currentUserFile));
+			$bookings[$currentBookingHeaderKey]->setLabels(BookingApi::getBookingLabelsArray($em, $bRepository->find($memo_bookingID)));
 			$bookingTimetableLinesCount = 0;
 			$resourceBookingCount++;
 		}
@@ -438,6 +434,7 @@ class BookingApi
 
 	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount); // Derniere reservation
 	$bookings[$currentBookingHeaderKey]->setUserFiles(BookingApi::getBookingUsersArray($em, $bRepository->find($memo_bookingID), $currentUserFile));
+	$bookings[$currentBookingHeaderKey]->setLabels(BookingApi::getBookingLabelsArray($em, $bRepository->find($memo_bookingID)));
 	return $bookings;
 	}
 

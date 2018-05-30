@@ -643,6 +643,22 @@ sd_core_booking_one_user_files_update:
         planificationPeriodID: \d+
         resourceID: \d+
 
+sd_core_booking_many_labels_update:
+    path:     /bookingmany/labelsupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDInitialList}/{labelIDList}
+    defaults: { _controller: SDCoreBundle:Booking:many_labels_update }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_labels_update:
+    path:     /bookingone/labelsupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDInitialList}/{labelIDList}
+    defaults: { _controller: SDCoreBundle:Booking:one_labels_update }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
 sd_core_booking_many_delete:
     path:     /bookingmany/delete/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}
     defaults: { _controller: SDCoreBundle:Booking:many_delete }

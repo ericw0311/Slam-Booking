@@ -217,12 +217,9 @@ class PlanningController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$logger = $this->get('logger');
-	$logger->info('DBG 1');
+	// $logger = $this->get('logger'); $logger->info('DBG 1');
 
 	$lDate = $date;
-
-	$logger->info('DBG 2 _'.$lDate->format('Y-m-d H:i:s').'_');
 
     $ddate = new Ddate();
     $form = $this->createForm(DdateType::class, $ddate);
@@ -233,11 +230,9 @@ class PlanningController extends Controller
 
     $pRepository = $em->getRepository('SDCoreBundle:Planification');
 
-	$logger->info('DBG 3 _'.$lDate->format('Y-m-d H:i:s').'_');
+	// $logger->info('DBG 3 _'.$lDate->format('Y-m-d H:i:s').'_');
 
     $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), $lDate);
-
-	$logger->info('DBG 4 _'.count($planifications).'_');
 
 	if (count($planifications) <= 0) {
 		return $this->redirectToRoute('sd_core_planning_noplanification');

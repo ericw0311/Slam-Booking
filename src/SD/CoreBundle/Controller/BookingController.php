@@ -17,6 +17,7 @@ use SD\CoreBundle\Entity\Resource;
 use SD\CoreBundle\Entity\Booking;
 use SD\CoreBundle\Entity\BookingLine;
 use SD\CoreBundle\Entity\BookingUser;
+use SD\CoreBundle\Entity\BookingLabel;
 
 use SD\CoreBundle\Api\BookingApi;
 
@@ -399,6 +400,49 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	'labelIDList' => $labelIDList, 'labelIDInitialList' => $labelIDInitialList));
     }
 
+    // Mise a jour de la liste des étiquettes (en mise a jour de réservation)
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function many_labels_updateAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDInitialList, $labelIDList)
+    {
+	return BookingController::labels_updateAction($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDInitialList, $labelIDList, 1);
+    }
+
+    // Mise a jour de la liste des étiquettes (en mise a jour de réservation)
+    /**
+	* @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+    public function one_labels_updateAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDInitialList, $labelIDList)
+    {
+	return BookingController::labels_updateAction($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDInitialList, $labelIDList, 0);
+    }
+
+    // Mise a jour de la liste des étiquettes (en mise à jour de réservation)
+    public function labels_updateAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDInitialList, $labelIDList, $many)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	
+	$selectedLabels = BookingApi::getSelectedLabels($em, $labelIDList);
+
+	$availableLabels = BookingApi::initAvailableLabels($em, $userContext->getCurrentFile(), $labelIDList);
+
+	return $this->render('SDCoreBundle:Booking:labels.update.'.($many ? 'many' : 'one').'.html.twig',
+array('userContext' => $userContext, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+	'date' => $date, 'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList,
+	'selectedLabels' => $selectedLabels, 'availableLabels' => $availableLabels, 'labelIDList' => $labelIDList, 'labelIDInitialList' => $labelIDInitialList));
+    }
+
 	// Validation de la création d'une réservation
     /**
 	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
@@ -432,6 +476,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
     $tRepository = $em->getRepository('SDCoreBundle:Timetable');
     $tlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
     $ufRepository = $em->getRepository('SDCoreBundle:UserFile');
+    $lRepository = $em->getRepository('SDCoreBundle:Label');
 
 	$booking = new Booking($connectedUser, $userContext->getCurrentFile(), $planification, $resource);
 
@@ -457,6 +502,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 
 	$em->persist($booking);
 
+	// Lignes de réservation
 	$timetableLines = BookingApi::getTimetableLines($timetableLinesList);
 
 	foreach ($timetableLines as $timetableLineString) {
@@ -474,6 +520,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 		$em->persist($bookingLine);
 	}
 
+	// Utilisateurs de réservation
 	$order = 0;
 	$userFileIDArray = explode("-", $userFileIDList);
 
@@ -481,6 +528,17 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 		$bookingUser = new BookingUser($connectedUser, $booking, $ufRepository->find($userFileID));
 		$bookingUser->setOrder(++$order);
 		$em->persist($bookingUser);
+	}
+
+	// Etiquettes de réservation
+	$l_labelIDList = ($labelIDList == '0') ? '' : $labelIDList; // On ramène la chaine '0' à une chaine vide
+	$order = 0;
+	$labelIDArray = explode("-", $l_labelIDList);
+
+	foreach ($labelIDArray as $labelID) {
+		$bookingLabel = new BookingLabel($connectedUser, $booking, $lRepository->find($labelID));
+		$bookingLabel->setOrder(++$order);
+		$em->persist($bookingLabel);
 	}
 
 	$em->flush();

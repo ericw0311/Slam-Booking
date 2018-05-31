@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block labels_table_link %}
-	<a href="{{ path('sd_core_booking_one_labels_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'booking.label.list.update'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_one_labels_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'label.list.update'|trans }}"></a>
 {% endblock %}
 
 {% block booking_buttons %}

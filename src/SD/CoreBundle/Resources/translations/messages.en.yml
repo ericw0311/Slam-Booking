@@ -45,20 +45,21 @@ file.singular: File
 file.update.not.allowed: Only the creator of the file ia allowed to update it
 file.updated.ok: The file has been updated
 
+label: Label
 label.ask.delete: Do you really want to delete label %name% ?
 label.back.to.list: Back to labels list
 label.create: Create an label
 label.created.ok: The label has been created
 label.deleted.ok: The label has been deleted
+label.list.update: Modify labels list
 label.name: Label name
 label.no: No label
 label.list.update: Modify labels list
-label.plural: Activities
-label.singular: Label
 label.updated.ok: The label has been updated
 
-labels.available: Etiquettes disponibles
-labels.selected: Etiquettes sélectionnées
+labels: Labels
+labels.available: Available labels
+labels.selected: Selected labels
 
 period.type: Period
 period.type.AFTER: After a day

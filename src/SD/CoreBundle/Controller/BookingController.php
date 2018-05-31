@@ -582,8 +582,10 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
     $tRepository = $em->getRepository('SDCoreBundle:Timetable');
     $tlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
     $ufRepository = $em->getRepository('SDCoreBundle:UserFile');
-    $blRepository = $em->getRepository('SDCoreBundle:BookingLine');
+    $bliRepository = $em->getRepository('SDCoreBundle:BookingLine');
     $buRepository = $em->getRepository('SDCoreBundle:BookingUser');
+    $blaRepository = $em->getRepository('SDCoreBundle:BookingLabel');
+    $lRepository = $em->getRepository('SDCoreBundle:Label');
 	
 	$urlArray  = explode("-", $timetableLinesList);
 	
@@ -603,7 +605,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	$url_timetableLinesString = BookingApi::getTimetableLines($timetableLinesList);
 	
 	// Parcours des lignes de réservation dans l'ordre chronologique.
-	$bookingLines = $blRepository->findBy(array('booking' => $booking), array('date' => 'asc', 'timetable' => 'asc', 'timetableLine' => 'asc')); // TPRR. Voir le champ date (date ou ddate)
+	$bookingLines = $bliRepository->findBy(array('booking' => $booking), array('date' => 'asc', 'timetable' => 'asc', 'timetableLine' => 'asc')); // TPRR. Voir le champ date (date ou ddate)
 	
 	foreach ($bookingLines as $bookingLine) {
 		$booking_timetableLineString = $bookingLine->getDate()->format('Ymd').'-'.$bookingLine->getTimetable()->getID().'-'.$bookingLine->getTimetableLine()->getID();
@@ -619,7 +621,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 		list($dateString, $timetableID, $timetableLineID) = explode("-", $url_timetableLineString);
 		$date = date_create_from_format('Ymd', $dateString);
 		// Recherche de la ligne de réservation en base.
-		$bookingLineDB = $blRepository->findOneBy(array('resource' => $resource, 'date' => $date, 'timetable' => $tRepository->find($timetableID), 'timetableLine' => $tlRepository->find($timetableLineID)));
+		$bookingLineDB = $bliRepository->findOneBy(array('resource' => $resource, 'date' => $date, 'timetable' => $tRepository->find($timetableID), 'timetableLine' => $tlRepository->find($timetableLineID)));
 
 		if ($bookingLineDB === null) { // La ligne de réservation n'existe pas en base, on la crée.
 			$bookingLine = new BookingLine($connectedUser, $booking, $resource);
@@ -639,7 +641,6 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	// Parcours des utilisateurs de la réservation.
 	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
 	
-	// Parcours des utilisateurs de la reservation.
 	foreach ($bookingUsers as $bookingUser) {
 		if (!in_array($bookingUser->getUserFile()->getID(), $url_userFileID)) { // L'utilisateur n'appartient pas a la liste de l'Url. Il est supprimé.
 			$em->remove($bookingUser);
@@ -656,6 +657,31 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 		}
 		$bookingUser->setOrder(++$order); // Pour tous les utilisateurs de l'Url, on met à jour le numéro d'ordre
 		$em->persist($bookingUser);
+	}
+
+	// Tableau des étiquettes de l'Url
+	$l_labelIDList = ($labelIDList == '0') ? '' : $labelIDList; // On ramène la chaine '0' à une chaine vide
+	$url_labelID = explode("-", $l_labelIDList);
+
+	// Parcours des étiquettes de la réservation.
+	$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+	
+	foreach ($bookingLabels as $bookingLabel) {
+		if (!in_array($bookingLabel->getLabel()->getID(), $url_labelID)) { // L'étiquette n'appartient pas a la liste de l'Url. Elle est supprimée.
+			$em->remove($bookingLabel);
+		}
+	}
+
+	$order = 0;
+	// Parcours des étiquettes de l'Url.
+	foreach ($url_labelID as $labelID) {
+		$bookingLabel = $blaRepository->findOneBy(array('booking' => $booking, 'label' => $lRepository->find($labelID)));
+
+		if ($bookingLabel === null) { // L'étiquette n'est pas rattachée en base à la réservation --> on crée le lien.
+			$bookingLabel = new BookingLabel($connectedUser, $booking, $lRepository->find($labelID));
+		}
+		$bookingLabel->setOrder(++$order); // Pour toutes les étiquettes de l'Url, on met à jour le numéro d'ordre
+		$em->persist($bookingLabel);
 	}
 
 	$em->flush();

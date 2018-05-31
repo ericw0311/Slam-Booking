@@ -15,15 +15,15 @@
 {% endblock %}
 
 {% block labels_empty_list_link %}
-	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'booking.label.list.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/label-32.png') }}">&nbsp;{{ 'label.no'|trans }}</a>
+	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/label-32.png') }}">&nbsp;{{ 'label.no'|trans }}</a>
 {% endblock %}
 
 {% block labels_list_link %}
-	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'booking.label.list.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/label-32.png') }}">&nbsp;{{ labels[0].getName() }}</a>
+	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('bundles/sdcore/images/label-32.png') }}">&nbsp;{{ labels[0].getName() }}</a>
 {% endblock %}
 
 {% block labels_table_link %}
-	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'booking.label.list.update'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'label.list.update'|trans }}"></a>
 {% endblock %}
 
 {% block booking_buttons %}

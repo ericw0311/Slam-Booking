@@ -54,7 +54,8 @@ label.deleted.ok: L'étiquette a bien été supprimée
 label.list.update: Modifier la liste des étiquettes
 label.name: Nom de l'étiquette
 label.no: Pas d'étiquette
-label.list.update: Modifier la liste des étiquettes
+label.select: Sélectionner l'étiquette
+label.unselect: Déselectionner l'étiquette
 label.updated.ok: L'étiquette a bien été modifiée
 
 labels: Etiquettes
@@ -238,6 +239,8 @@ user.firstName: Prénom
 user.lastName: Nom de famille
 user.list.update: Modifier la liste des utilisateurs
 user.organisation.name: Nom de l'organisation
+user.select: Sélectionner l'utilisateur
+user.unselect: Désélectionner l'utilisateur
 
 users: Utilisateurs
 users.available: Utilisateurs disponibles

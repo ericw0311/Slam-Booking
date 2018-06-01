@@ -54,7 +54,8 @@ label.deleted.ok: The label has been deleted
 label.list.update: Modify labels list
 label.name: Label name
 label.no: No label
-label.list.update: Modify labels list
+label.select: Select label
+label.unselect: Unselect label
 label.updated.ok: The label has been updated
 
 labels: Labels
@@ -238,6 +239,8 @@ user.firstName: First name
 user.lastName: Last name
 user.list.update: Modify users list
 user.organisation.name: Organisation name
+user.select: Select user
+user.unselect: Unselect user
 
 users: Users
 users.available: Available users

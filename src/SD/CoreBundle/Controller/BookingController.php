@@ -468,6 +468,8 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	// Validation de la création d'une réservation
     public function validate_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, Request $request, $many)
     {
+	$logger = $this->get('logger'); $logger->info('DBG 1');
+
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
@@ -531,11 +533,14 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	}
 
 	// Etiquettes de réservation
-	$l_labelIDList = ($labelIDList == '0') ? '' : $labelIDList; // On ramène la chaine '0' à une chaine vide
+	$labelIDArray = array();
+	if ($labelIDList != '0') {
+		$labelIDArray = explode("-", $labelIDList);
+	}
 	$order = 0;
-	$labelIDArray = explode("-", $l_labelIDList);
 
 	foreach ($labelIDArray as $labelID) {
+		$logger->info('DBG 4 _'.$labelID.'_');
 		$bookingLabel = new BookingLabel($connectedUser, $booking, $lRepository->find($labelID));
 		$bookingLabel->setOrder(++$order);
 		$em->persist($bookingLabel);
@@ -660,8 +665,10 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	}
 
 	// Tableau des étiquettes de l'Url
-	$l_labelIDList = ($labelIDList == '0') ? '' : $labelIDList; // On ramène la chaine '0' à une chaine vide
-	$url_labelID = explode("-", $l_labelIDList);
+	$url_labelID = array();
+	if ($labelIDList != '0') { // La chaine '0' équivaut à une chaine vide
+		$url_labelID = explode("-", $labelIDList);
+	}
 
 	// Parcours des étiquettes de la réservation.
 	$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));

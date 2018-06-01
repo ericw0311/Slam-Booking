@@ -11,11 +11,11 @@
 {% endblock %}
 
 {% block link_unselect %}
-	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDInitialList, 'labelIDList': label.entityIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'booking.label.unselect'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDInitialList, 'labelIDList': label.entityIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'label.unselect'|trans }}"></a>
 {% endblock %}
 
 {% block link_select %}
-	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDInitialList, 'labelIDList': label.entityIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'booking.label.select'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_many_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDInitialList': labelIDInitialList, 'labelIDList': label.entityIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'label.select'|trans }}"></a>
 {% endblock %}
 
 {% block booking_buttons %}

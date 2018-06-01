@@ -167,9 +167,11 @@ class BookingApi
 	// labelIDList: Liste des ID des étiquettes sélectionnées
 	static function getSelectedLabels($em, $labelIDList)
 	{
-	$l_labelIDList = ($labelIDList == '0') ? '' : $labelIDList; // On ramène la chaine '0' à une chaine vide
+	$labelIDArray = array();
+	if (strcmp($labelIDList, "0") != 0) { // La chaine '0' équivaut à une chaine vide
+		$labelIDArray = explode("-", $labelIDList);
+	}
 
-	$labelIDArray = explode('-', $l_labelIDList);
     $lRepository = $em->getRepository('SDCoreBundle:Label');
 	$selectedLabels = array();
 	$i = 0;
@@ -207,9 +209,10 @@ class BookingApi
 	// Retourne un tableau des étiquettes pouvant être ajoutées à une réservation
 	static function getAvailableLabels($labelsDB, $selectedLabelIDList)
     {
-	$l_selectedLabelIDList = ($selectedLabelIDList == '0') ? '' : $selectedLabelIDList; // On ramène la chaine '0' à une chaine vide
-
-	$selectedLabelIDArray = explode('-', $l_selectedLabelIDList);
+	$selectedLabelIDArray = array();
+	if (strcmp($selectedLabelIDList, "0") != 0) { // La chaine '0' équivaut à une chaine vide
+		$selectedLabelIDArray = explode("-", $selectedLabelIDList);
+	}
 	$availableLabels = array();
     foreach ($labelsDB as $labelDB) {
 		if (array_search($labelDB->getId(), $selectedLabelIDArray) === false) {
@@ -217,7 +220,7 @@ class BookingApi
 			$label->setId($labelDB->getId());
 			$label->setName($labelDB->getName());
 			$label->setImageName("label-32.png");
-			$label->setEntityIDList_select(($l_selectedLabelIDList == '') ? $labelDB->getId() : ($l_selectedLabelIDList.'-'.$labelDB->getId())); // Liste des étiquettes sélectionnées si l'utilisateur sélectionne l'étiquette
+			$label->setEntityIDList_select((count($selectedLabelIDArray) < 1) ? $labelDB->getId() : ($selectedLabelIDList.'-'.$labelDB->getId())); // Liste des étiquettes sélectionnées si l'utilisateur sélectionne l'étiquette
 			array_push($availableLabels, $label);
 		}
 	}
@@ -268,15 +271,16 @@ class BookingApi
 	// Retourne un tableau d'étiquettes à partir d'une liste d'ID
 	static function getLabels($em, $labelIDList)
 	{
-	$labelIDArray = explode("-", $labelIDList);
+	$labelIDArray = array();
+	if (strcmp($labelIDList, "0") != 0) { // La chaine '0' équivaut à une chaine vide
+		$labelIDArray = explode("-", $labelIDList);
+	}
 	$labels = array();
 	$lRepository = $em->getRepository('SDCoreBundle:Label');
 	foreach ($labelIDArray as $labelID) {
-		if ($labelID > 0) { // Le labelID peut être égal à 0: cas d'une liste vide
-			$label = $lRepository->find($labelID);
-			if ($label !== null) {
-				$labels[] = $label;
-			}
+		$label = $lRepository->find($labelID);
+		if ($label !== null) {
+			$labels[] = $label;
 		}
 	}
 	return $labels;

@@ -11,11 +11,11 @@
 {% endblock %}
 
 {% block link_unselect %}
-	<a href="{{ path('sd_core_booking_one_user_files_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'booking.user.unselect'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_one_user_files_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'user.unselect'|trans }}"></a>
 {% endblock %}
 
 {% block link_select %}
-	<a href="{{ path('sd_core_booking_one_user_files_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'booking.user.select'|trans }}"></a>
+	<a href="{{ path('sd_core_booking_one_user_files_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'user.select'|trans }}"></a>
 {% endblock %}
 
 {% block booking_buttons %}

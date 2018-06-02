@@ -22,7 +22,6 @@ booking.period.end.update: Modify end period
 booking.plural: Bookings
 booking.singular: Booking
 booking.updated.ok: The booking has been updated
-booking.user.list.update: Modify users list
 booking.your: Your bookings
 booking.your.in.progress: Your bookings in progress
 
@@ -46,15 +45,22 @@ file.singular: File
 file.update.not.allowed: Only the creator of the file ia allowed to update it
 file.updated.ok: The file has been updated
 
+label: Label
 label.ask.delete: Do you really want to delete label %name% ?
 label.back.to.list: Back to labels list
 label.create: Create an label
 label.created.ok: The label has been created
 label.deleted.ok: The label has been deleted
+label.list.update: Modify labels list
 label.name: Label name
-label.plural: Activities
-label.singular: Label
+label.no: No label
+label.select: Select label
+label.unselect: Unselect label
 label.updated.ok: The label has been updated
+
+labels: Labels
+labels.available: Available labels
+labels.selected: Selected labels
 
 period.type: Period
 period.type.AFTER: After a day
@@ -231,7 +237,10 @@ user.account.type.INDIVIDUAL: Individual
 user.account.type.ORGANISATION: Organisation
 user.firstName: First name
 user.lastName: Last name
+user.list.update: Modify users list
 user.organisation.name: Organisation name
+user.select: Select user
+user.unselect: Unselect user
 
 users: Users
 users.available: Available users

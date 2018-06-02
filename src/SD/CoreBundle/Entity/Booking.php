@@ -69,6 +69,11 @@ class Booking
     private $bookingUserFiles;
 
     /**
+     * @ORM\OneToMany(targetEntity="BookingLabel", mappedBy="booking", cascade={"persist", "remove"})
+     */
+    private $bookingLabels;
+
+    /**
     * @ORM\Column(name="beginning_date", type="datetime", nullable=false)
     */
     private $beginningDate;

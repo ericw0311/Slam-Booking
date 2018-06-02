@@ -2,8 +2,6 @@
 // src/SD/CoreBundle/Api/ResourceApi.php
 namespace SD\CoreBundle\Api;
 
-use SD\CoreBundle\Entity\ResourceNDBPlanificationAdd;
-use SD\CoreBundle\Entity\ResourceNDBPlanificationSelected;
 use SD\CoreBundle\Entity\SelectedEntity;
 use SD\CoreBundle\Entity\AddEntity;
 use SD\CoreBundle\Entity\Constants;

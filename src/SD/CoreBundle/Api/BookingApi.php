@@ -161,6 +161,48 @@ class BookingApi
 	return BookingApi::getAvailableUserFiles($userFilesDB, $selectedUserFileIDList);
 	}
 
+	// Retourne une chaine correspondant à la liste des utilisateurs d'une réservation
+	static function getBookingUsersUrl($em, \SD\CoreBundle\Entity\Booking $booking)
+	{
+	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
+	$bookingUsersDB = $buRepository->getBookingUsers($booking);
+	if (count($bookingUsersDB) <= 0) {
+		return '';
+	}
+
+	$premier = true;
+
+	foreach ($bookingUsersDB as $bookingUser) {
+		if ($premier) {
+			$url = $bookingUser['userFileID'];
+		} else {
+			$url .= '-'.$bookingUser['userFileID'];
+		}
+		$premier = false;
+	}
+	return $url;
+	}
+
+	// Retourne un tableau des utilisateurs d'une réservation
+	static function getBookingUsersArray($em, \SD\CoreBundle\Entity\Booking $booking, \SD\CoreBundle\Entity\UserFile $currentUserFile)
+	{
+	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
+
+	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('order' => 'asc'));
+
+	$userFiles = array();
+
+	if (count($bookingUsers) <= 0) { // Ce cas ne doit pas arriver. Toute réservation a au moins un utilisateur. Mais si cela arrive, on initialise la liste des utilisateurs avec l'utilisateur courant
+		$userFiles[] = $currentUserFile;
+		return $userFiles;
+	}
+
+	foreach ($bookingUsers as $bookingUser) {
+		$userFiles[] = $bookingUser->getUserFile();
+	}
+	return $userFiles;
+	}
+
 	// Gestion des étiquettes des réservations
 
 	// Retourne un tableau des étiquettes sélectionnées
@@ -190,13 +232,13 @@ class BookingApi
 					$labelIDArray_tprr = $labelIDArray;
 					$labelIDArray_tprr[$i] = $labelIDArray_tprr[$i-1];
 					$labelIDArray_tprr[$i-1] = $labelID;
-					$label->setEntityIDList_sortBefore((count($labelIDArray_tprr) > 0) ? implode('-', $labelIDArray_tprr) : '0'); // Liste des étiquettes sélectionnées si l'utilisateur remonte l'étiquette dans l'ordre de tri
+					$label->setEntityIDList_sortBefore(implode('-', $labelIDArray_tprr)); // Liste des étiquettes sélectionnées si l'utilisateur remonte l'étiquette dans l'ordre de tri
 				}
 				if ($i < count($labelIDArray)-1) {
 					$labelIDArray_tprr = $labelIDArray;
 					$labelIDArray_tprr[$i] = $labelIDArray_tprr[$i+1];
 					$labelIDArray_tprr[$i+1] = $labelID;
-					$label->setEntityIDList_sortAfter((count($labelIDArray_tprr) > 0) ? implode('-', $labelIDArray_tprr) : '0'); // Liste des étiquettes sélectionnées si l'utilisateur redescend l'étiquette dans l'ordre de tri
+					$label->setEntityIDList_sortAfter(implode('-', $labelIDArray_tprr)); // Liste des étiquettes sélectionnées si l'utilisateur redescend l'étiquette dans l'ordre de tri
 				}
 			}
 			$i++;
@@ -318,48 +360,6 @@ class BookingApi
 	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
 
 	$endTimetableLine = $ttlRepository->find($endTimetableLineID);
-	}
-
-	// Retourne une chaine correspondant à la liste des utilisateurs d'une réservation
-	static function getBookingUsersUrl($em, \SD\CoreBundle\Entity\Booking $booking)
-	{
-	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
-	$bookingUsersDB = $buRepository->getBookingUsers($booking);
-	if (count($bookingUsersDB) <= 0) {
-		return '';
-	}
-
-	$premier = true;
-
-	foreach ($bookingUsersDB as $bookingUser) {
-		if ($premier) {
-			$url = $bookingUser['userFileID'];
-		} else {
-			$url .= '-'.$bookingUser['userFileID'];
-		}
-		$premier = false;
-	}
-	return $url;
-	}
-
-	// Retourne un tableau des utilisateurs d'une réservation
-	static function getBookingUsersArray($em, \SD\CoreBundle\Entity\Booking $booking, \SD\CoreBundle\Entity\UserFile $currentUserFile)
-	{
-	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
-
-	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
-
-	$userFiles = array();
-
-	if (count($bookingUsers) <= 0) { // Ce cas ne doit pas arriver. Toute réservation a au moins un utilisateur. Mais si cela arrive, on initialise la liste des utilisateurs avec l'utilisateur courant
-		$userFiles[] = $currentUserFile;
-		return $userFiles;
-	}
-
-	foreach ($bookingUsers as $bookingUser) {
-		$userFiles[] = $bookingUser->getUserFile();
-	}
-	return $userFiles;
 	}
 
 	// Convertit une URL comprenant une liste de grilles horaires (pour réservation) en un tableau de grilles horaires

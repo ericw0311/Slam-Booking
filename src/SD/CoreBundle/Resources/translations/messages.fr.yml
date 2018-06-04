@@ -62,6 +62,11 @@ labels: Etiquettes
 labels.available: Etiquettes disponibles
 labels.selected: Etiquettes sélectionnées
 
+note: Note
+note.enter: Saisir une note
+note.no: Pas de note
+note.update: Modifier la note
+
 period.type: Période
 period.type.AFTER: Au dela d'une date
 period.type.AFTER.SYSDATE: Au dela de la date du jour

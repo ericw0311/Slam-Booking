@@ -1,0 +1,11 @@
+{# src/SD/CoreBundle/Resources/views/Booking/note.html.twig #}
+
+{% extends "SDCoreBundle:Booking:booking.html.twig" %}
+
+{% block booking_details %}
+
+{{ form_errors(form) }}
+{{ form_row(form.note) }}
+{{ form_rest(form) }}
+
+{% endblock %}

@@ -62,6 +62,11 @@ labels: Labels
 labels.available: Available labels
 labels.selected: Selected labels
 
+note: Note
+note.enter: Saisir une note
+note.no: Pas de note
+note.update: Modifier la note
+
 period.type: Period
 period.type.AFTER: After a day
 period.type.AFTER.SYSDATE: After current day

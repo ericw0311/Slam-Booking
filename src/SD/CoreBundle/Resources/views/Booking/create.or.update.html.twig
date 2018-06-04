@@ -68,6 +68,20 @@
 
 </div>
 
+<div class="col-sm-12">
+
+{% if noteID <= 0 %}
+
+{% block note_empty_link %}{% endblock %}
+
+{% else %}
+
+{% block note_link %}{% endblock %}
+
+{% endif %}
+
+</div>
+
 {% block ask_delete %}{% endblock %}
 
 {% endblock %}

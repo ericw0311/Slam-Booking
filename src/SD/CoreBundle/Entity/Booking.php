@@ -47,11 +47,17 @@ class Booking
      */
     private $user;
 
-    /**
-    * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\File")
-    * @ORM\JoinColumn(nullable=false)
-    */
+	/**
+	 * @ORM\ManyToOne(targetEntity="SD\CoreBundle\Entity\File")
+	 * @ORM\JoinColumn(nullable=false)
+	 */
     private $file;
+    
+    /**
+	 * @ORM\OneToOne(targetEntity="SD\CoreBundle\Entity\Note")
+	 * @ORM\JoinColumn(name="form_note_id", referencedColumnName="id")
+     */
+    private $formNote;
 
     /**
     * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -259,6 +265,29 @@ class Booking
     public function getEndDate()
     {
 		return $this->endDate;
+    }
+
+    /**
+     * Set formNote
+     *
+     * @param \SD\CoreBundle\Entity\Note $formNote
+     *
+     * @return Booking
+     */
+    public function setFormNote(\SD\CoreBundle\Entity\Note $formNote)
+    {
+		$this->file = $formNote;
+		return $this;
+    }
+
+    /**
+     * Get formNote
+     *
+     * @return \SD\CoreBundle\Entity\Note
+     */
+    public function getFormNote()
+    {
+		return $this->formNote;
     }
 
     public function __construct(\SD\UserBundle\Entity\User $user, \SD\CoreBundle\Entity\File $file, \SD\CoreBundle\Entity\Planification $planification, \SD\CoreBundle\Entity\Resource $resource)

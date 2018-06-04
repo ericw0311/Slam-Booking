@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use SD\CoreBundle\Entity\Constants;
 use SD\CoreBundle\Entity\UserContext;
+use SD\CoreBundle\Entity\Note;
 use SD\CoreBundle\Entity\Planification;
 use SD\CoreBundle\Entity\PlanificationPeriod;
 use SD\CoreBundle\Entity\Resource;
@@ -18,6 +19,8 @@ use SD\CoreBundle\Entity\Booking;
 use SD\CoreBundle\Entity\BookingLine;
 use SD\CoreBundle\Entity\BookingUser;
 use SD\CoreBundle\Entity\BookingLabel;
+
+use SD\CoreBundle\Form\NoteType;
 
 use SD\CoreBundle\Api\BookingApi;
 
@@ -356,7 +359,6 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	'selectedUserFiles' => $selectedUserFiles, 'availableUserFiles' => $availableUserFiles, 'userFileIDList' => $userFileIDList, 'userFileIDInitialList' => $userFileIDInitialList));
     }
 
-
 	// Mise a jour de la liste des étiquettes (en création de réservation)
     /**
 	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
@@ -441,6 +443,56 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	'date' => $date, 'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'noteID' => $noteID,
 	'selectedLabels' => $selectedLabels, 'availableLabels' => $availableLabels, 'labelIDList' => $labelIDList, 'labelIDInitialList' => $labelIDInitialList));
     }
+
+	// Mise a jour de la note (en création de réservation)
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+	public function many_note_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, Request $request)
+    {
+	return BookingController::note_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $request, 1);
+    }
+
+	// Mise a jour de la note (en création de réservation)
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+	*/
+	public function one_note_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, Request $request)
+    {
+	return BookingController::note_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $request, 0);
+    }
+
+	// Mise a jour de la note (en création de réservation)
+    public function note_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, Request $request, $many)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$note = new Note($connectedUser);
+	$form = $this->createForm(NoteType::class, $note);
+
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+		$em->persist($note);
+		$em->flush();
+
+		return $this->redirectToRoute('sd_core_booking_'.($many ? 'many' : 'one').'_create',
+	array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
+		'resourceID' => $resource->getID(), 'date' => $date->format('Ymd'), 'timetableLinesList' => $timetableLinesList,
+		'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $note->getID()));
+	}
+
+	return $this->render('SDCoreBundle:Booking:note.create.'.($many ? 'many' : 'one').'.html.twig',
+		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
+			'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList,
+			'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'form' => $form->createView()));
+	}
 
 	// Validation de la création d'une réservation
     /**

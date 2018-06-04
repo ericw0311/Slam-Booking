@@ -538,6 +538,22 @@ sd_core_booking_one_labels_create:
         planificationPeriodID: \d+
         resourceID: \d+
 
+sd_core_booking_many_note_create:
+    path:     /bookingmany/notecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:many_note_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_note_create:
+    path:     /bookingone/notecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:one_note_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
 sd_core_booking_many_validate_create:
     path:     /bookingmany/validatecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:many_validate_create }

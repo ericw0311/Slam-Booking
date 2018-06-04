@@ -276,7 +276,7 @@ class Booking
      */
     public function setFormNote(\SD\CoreBundle\Entity\Note $formNote)
     {
-		$this->file = $formNote;
+		$this->formNote = $formNote;
 		return $this;
     }
 

@@ -58,6 +58,7 @@ class BookingController extends Controller
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	$nRepository = $em->getRepository('SDCoreBundle:Note');
 
 	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
 
@@ -67,13 +68,19 @@ class BookingController extends Controller
 	// Etiquettes
 	$labels = BookingApi::getLabels($em, $labelIDList);
 
+	// Note
+	$note = new Note($connectedUser);
+	if ($noteID > 0) {
+		$note = $nRepository->find($noteID);
+	}
+
 	return $this->render('SDCoreBundle:Booking:create.'.($many ? 'many' : 'one').'.html.twig',
 array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
 	'date' => $date, 'timetableLinesList' => $timetableLinesList,
 	'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 	'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine,
 	'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
-	'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID));
+	'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
     }
 
     // Initialisation de la mise à jour de réservation
@@ -475,11 +482,17 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
+	$nRepository = $em->getRepository('SDCoreBundle:Note');
 	$note = new Note($connectedUser);
+	if ($noteID > 0) {
+		$note = $nRepository->find($noteID);
+	}
 	$form = $this->createForm(NoteType::class, $note);
 
     if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-		$em->persist($note);
+		if ($noteID <= 0) { // On ne persiste pas en mise à jour.
+			$em->persist($note);
+		}
 		$em->flush();
 
 		return $this->redirectToRoute('sd_core_booking_'.($many ? 'many' : 'one').'_create',
@@ -492,6 +505,49 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 			'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList,
 			'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'form' => $form->createView()));
+	}
+
+	// Suppression de la note (en création de réservation)
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+    * @ParamConverter("note", options={"mapping": {"noteID": "id"}})
+	*/
+	public function many_note_delete_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
+    {
+	return BookingController::note_delete_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 1);
+    }
+
+	// Suppression de la note (en création de réservation)
+    /**
+	* @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	* @ParamConverter("date", options={"format": "Ymd"})
+    * @ParamConverter("note", options={"mapping": {"noteID": "id"}})
+	*/
+	public function one_note_delete_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
+    {
+	return BookingController::note_delete_createAction($planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 0);
+    }
+
+	// Suppression de la note (en création de réservation)
+    public function note_delete_createAction(Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note, $many)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	// Inutile de persister ici, Doctrine connait déjà la note
+	$em->remove($note);
+	$em->flush();
+
+	return $this->redirectToRoute('sd_core_booking_'.($many ? 'many' : 'one').'_create',
+		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
+		'resourceID' => $resource->getID(), 'date' => $date->format('Ymd'), 'timetableLinesList' => $timetableLinesList,
+		'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => 0));
 	}
 
 	// Validation de la création d'une réservation
@@ -530,6 +586,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
     $tlRepository = $em->getRepository('SDCoreBundle:TimetableLine');
     $ufRepository = $em->getRepository('SDCoreBundle:UserFile');
     $lRepository = $em->getRepository('SDCoreBundle:Label');
+	$nRepository = $em->getRepository('SDCoreBundle:Note');
 
 	$booking = new Booking($connectedUser, $userContext->getCurrentFile(), $planification, $resource);
 
@@ -552,6 +609,14 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	$endTimetableLine = $tlRepository->find($endTimetableLineID);
 
 	$booking->setEndDate(date_create_from_format('YmdHi', $endDateString.$endTimetableLine->getEndTime()->format('Hi')));
+
+	$note = new Note($connectedUser);
+	if ($noteID > 0) {
+		$note = $nRepository->find($noteID);
+
+		$booking->setNote($note->getNote());
+		$booking->setFormNote($note);
+	}
 
 	$em->persist($booking);
 

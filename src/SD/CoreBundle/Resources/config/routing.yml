@@ -554,6 +554,24 @@ sd_core_booking_one_note_create:
         planificationPeriodID: \d+
         resourceID: \d+
 
+sd_core_booking_many_note_delete_create:
+    path:     /bookingmany/notedeletecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:many_note_delete_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+        noteID: \d+
+
+sd_core_booking_one_note_delete_create:
+    path:     /bookingone/notedeletecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:one_note_delete_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+        noteID: \d+
+
 sd_core_booking_many_validate_create:
     path:     /bookingmany/validatecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:many_validate_create }

@@ -76,7 +76,13 @@
 
 {% else %}
 
-{% block note_link %}{% endblock %}
+<ul class="list-group">
+<li class="list-group-item">
+{{ note.note }}
+&nbsp;{% block note_update_link %}{% endblock %}
+&nbsp;{% block note_delete_link %}{% endblock %}
+</li>
+</ul>
 
 {% endif %}
 

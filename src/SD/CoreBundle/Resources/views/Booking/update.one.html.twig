@@ -26,6 +26,18 @@
 	<a href="{{ path('sd_core_booking_one_labels_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'label.list.update'|trans }}"></a>
 {% endblock %}
 
+{% block note_empty_link %}
+	<a href="{{ path('sd_core_booking_one_note_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="list-group-item" title="{{ 'note.enter'|trans }}"><img src="{{ asset('bundles/sdcore/images/note-32.png') }}">&nbsp;{{ 'note.no'|trans }}</a>
+{% endblock %}
+
+{% block note_update_link %}
+	<a href="{{ path('sd_core_booking_one_note_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+{% endblock %}
+
+{% block note_delete_link %}
+	<a href="{{ path('sd_core_booking_one_note_delete_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': note.ID }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
+{% endblock %}
+
 {% block booking_buttons %}
 	<a href="{{ path('sd_core_planning_one_timetable', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
 	<a href="{{ path('sd_core_booking_one_validate_update', { 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>

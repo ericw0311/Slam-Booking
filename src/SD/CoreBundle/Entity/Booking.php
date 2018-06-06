@@ -280,6 +280,12 @@ class Booking
 		return $this;
     }
 
+    public function setNullFormNote()
+    {
+		$this->formNote = null;
+		return $this;
+    }
+
     /**
      * Get formNote
      *

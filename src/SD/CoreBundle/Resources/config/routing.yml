@@ -111,6 +111,7 @@ sd_core_userFile_resource_validate_external:
         resourceClassificationID: \d+
         yes: \d
 
+
 sd_core_label_list:
     path:     /label/list/{pageNumber}
     defaults: { _controller: SDCoreBundle:Label:index }
@@ -674,6 +675,44 @@ sd_core_booking_one_labels_update:
         planificationID: \d+
         planificationPeriodID: \d+
         resourceID: \d+
+
+sd_core_booking_many_note_update:
+    path:     /bookingmany/noteupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:many_note_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_note_update:
+    path:     /bookingone/noteupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:one_note_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_many_note_delete_update:
+    path:     /bookingmany/notedeleteupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:many_note_delete_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+        noteID: \d+
+
+sd_core_booking_one_note_delete_update:
+    path:     /bookingone/notedeleteupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:one_note_delete_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+        noteID: \d+
 
 sd_core_booking_many_validate_update:
     path:     /bookingmany/validateupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}

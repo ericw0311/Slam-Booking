@@ -68,6 +68,26 @@
 
 </div>
 
+<div class="col-sm-12">
+
+{% if noteID <= 0 %}
+
+{% block note_empty_link %}{% endblock %}
+
+{% else %}
+
+<ul class="list-group">
+<li class="list-group-item">
+{{ note.note }}
+&nbsp;{% block note_update_link %}{% endblock %}
+&nbsp;{% block note_delete_link %}{% endblock %}
+</li>
+</ul>
+
+{% endif %}
+
+</div>
+
 {% block ask_delete %}{% endblock %}
 
 {% endblock %}

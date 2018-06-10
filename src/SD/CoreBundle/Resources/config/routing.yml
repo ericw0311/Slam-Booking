@@ -111,6 +111,7 @@ sd_core_userFile_resource_validate_external:
         resourceClassificationID: \d+
         yes: \d
 
+
 sd_core_label_list:
     path:     /label/list/{pageNumber}
     defaults: { _controller: SDCoreBundle:Label:index }
@@ -473,7 +474,7 @@ sd_core_planning_one_timetable_pp:
 
 # Création des réservations
 sd_core_booking_many_create:
-    path:     /bookingmany/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}
+    path:     /bookingmany/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:many_create }
     requirements:
         planificationID: \d+
@@ -481,7 +482,7 @@ sd_core_booking_many_create:
         resourceID: \d+
 
 sd_core_booking_one_create:
-    path:     /bookingone/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}
+    path:     /bookingone/create/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:one_create }
     requirements:
         planificationID: \d+
@@ -489,7 +490,7 @@ sd_core_booking_one_create:
         resourceID: \d+
 
 sd_core_booking_many_end_period_create:
-    path:     /bookingmany/endperiodcreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}
+    path:     /bookingmany/endperiodcreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:many_end_period_create }
     requirements:
         planificationID: \d+
@@ -498,7 +499,7 @@ sd_core_booking_many_end_period_create:
         firstDateNumber: \d+
 
 sd_core_booking_one_end_period_create:
-    path:     /bookingone/endperiodcreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}
+    path:     /bookingone/endperiodcreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:one_end_period_create }
     requirements:
         planificationID: \d+
@@ -507,7 +508,7 @@ sd_core_booking_one_end_period_create:
         firstDateNumber: \d+
 
 sd_core_booking_many_user_files_create:
-    path:     /bookingmany/userfilescreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{userFileIDInitialList}/{userFileIDList}
+    path:     /bookingmany/userfilescreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}
     defaults: { _controller: SDCoreBundle:Booking:many_user_files_create, userFileIDList: null }
     requirements:
         planificationID: \d+
@@ -515,7 +516,7 @@ sd_core_booking_many_user_files_create:
         resourceID: \d+
 
 sd_core_booking_one_user_files_create:
-    path:     /bookingone/userfilescreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{userFileIDInitialList}/{userFileIDList}
+    path:     /bookingone/userfilescreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}
     defaults: { _controller: SDCoreBundle:Booking:one_user_files_create, userFileIDList: null }
     requirements:
         planificationID: \d+
@@ -523,7 +524,7 @@ sd_core_booking_one_user_files_create:
         resourceID: \d+
 
 sd_core_booking_many_labels_create:
-    path:     /bookingmany/labelscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDInitialList}/{labelIDList}
+    path:     /bookingmany/labelscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}
     defaults: { _controller: SDCoreBundle:Booking:many_labels_create }
     requirements:
         planificationID: \d+
@@ -531,15 +532,49 @@ sd_core_booking_many_labels_create:
         resourceID: \d+
 
 sd_core_booking_one_labels_create:
-    path:     /bookingone/labelscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDInitialList}/{labelIDList}
+    path:     /bookingone/labelscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}
     defaults: { _controller: SDCoreBundle:Booking:one_labels_create }
     requirements:
         planificationID: \d+
         planificationPeriodID: \d+
         resourceID: \d+
 
+sd_core_booking_many_note_create:
+    path:     /bookingmany/notecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:many_note_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_note_create:
+    path:     /bookingone/notecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:one_note_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_many_note_delete_create:
+    path:     /bookingmany/notedeletecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:many_note_delete_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+        noteID: \d+
+
+sd_core_booking_one_note_delete_create:
+    path:     /bookingone/notedeletecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:one_note_delete_create }
+    requirements:
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+        noteID: \d+
+
 sd_core_booking_many_validate_create:
-    path:     /bookingmany/validatecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}
+    path:     /bookingmany/validatecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:many_validate_create }
     requirements:
         planificationID: \d+
@@ -547,7 +582,7 @@ sd_core_booking_many_validate_create:
         resourceID: \d+
 
 sd_core_booking_one_validate_create:
-    path:     /bookingone/validatecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}
+    path:     /bookingone/validatecreate/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:one_validate_create }
     requirements:
         planificationID: \d+
@@ -574,7 +609,7 @@ sd_core_booking_one_init_update:
         resourceID: \d+
 
 sd_core_booking_many_update:
-    path:     /bookingmany/update/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}
+    path:     /bookingmany/update/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:many_update }
     requirements:
         bookingID: \d+
@@ -583,7 +618,7 @@ sd_core_booking_many_update:
         resourceID: \d+
 
 sd_core_booking_one_update:
-    path:     /bookingone/update/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}
+    path:     /bookingone/update/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:one_update }
     requirements:
         bookingID: \d+
@@ -592,7 +627,7 @@ sd_core_booking_one_update:
         resourceID: \d+
 
 sd_core_booking_many_end_period_update:
-    path:     /bookingmany/endperiodupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}
+    path:     /bookingmany/endperiodupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:many_end_period_update }
     requirements:
         planificationID: \d+
@@ -601,7 +636,7 @@ sd_core_booking_many_end_period_update:
         firstDateNumber: \d+
 
 sd_core_booking_one_end_period_update:
-    path:     /bookingone/endperiodupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}
+    path:     /bookingone/endperiodupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:one_end_period_update }
     requirements:
         planificationID: \d+
@@ -610,7 +645,7 @@ sd_core_booking_one_end_period_update:
         firstDateNumber: \d+
 
 sd_core_booking_many_user_files_update:
-    path:     /bookingmany/userfilesupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{userFileIDInitialList}/{userFileIDList}
+    path:     /bookingmany/userfilesupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}
     defaults: { _controller: SDCoreBundle:Booking:many_user_files_update, userFileIDList: null }
     requirements:
         planificationID: \d+
@@ -618,7 +653,7 @@ sd_core_booking_many_user_files_update:
         resourceID: \d+
 
 sd_core_booking_one_user_files_update:
-    path:     /bookingone/userfilesupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{userFileIDInitialList}/{userFileIDList}
+    path:     /bookingone/userfilesupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}
     defaults: { _controller: SDCoreBundle:Booking:one_user_files_update, userFileIDList: null }
     requirements:
         planificationID: \d+
@@ -626,7 +661,7 @@ sd_core_booking_one_user_files_update:
         resourceID: \d+
 
 sd_core_booking_many_labels_update:
-    path:     /bookingmany/labelsupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDInitialList}/{labelIDList}
+    path:     /bookingmany/labelsupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}
     defaults: { _controller: SDCoreBundle:Booking:many_labels_update }
     requirements:
         planificationID: \d+
@@ -634,15 +669,53 @@ sd_core_booking_many_labels_update:
         resourceID: \d+
 
 sd_core_booking_one_labels_update:
-    path:     /bookingone/labelsupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDInitialList}/{labelIDList}
+    path:     /bookingone/labelsupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}
     defaults: { _controller: SDCoreBundle:Booking:one_labels_update }
     requirements:
         planificationID: \d+
         planificationPeriodID: \d+
         resourceID: \d+
 
+sd_core_booking_many_note_update:
+    path:     /bookingmany/noteupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:many_note_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_one_note_update:
+    path:     /bookingone/noteupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:one_note_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+
+sd_core_booking_many_note_delete_update:
+    path:     /bookingmany/notedeleteupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:many_note_delete_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+        noteID: \d+
+
+sd_core_booking_one_note_delete_update:
+    path:     /bookingone/notedeleteupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
+    defaults: { _controller: SDCoreBundle:Booking:one_note_delete_update }
+    requirements:
+        bookingID: \d+
+        planificationID: \d+
+        planificationPeriodID: \d+
+        resourceID: \d+
+        noteID: \d+
+
 sd_core_booking_many_validate_update:
-    path:     /bookingmany/validateupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}
+    path:     /bookingmany/validateupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:many_validate_update }
     requirements:
         bookingID: \d+
@@ -651,7 +724,7 @@ sd_core_booking_many_validate_update:
         resourceID: \d+
 
 sd_core_booking_one_validate_update:
-    path:     /bookingone/validateupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}
+    path:     /bookingone/validateupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}
     defaults: { _controller: SDCoreBundle:Booking:one_validate_update }
     requirements:
         bookingID: \d+

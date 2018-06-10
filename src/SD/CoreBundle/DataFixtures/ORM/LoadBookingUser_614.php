@@ -458,10 +458,16 @@ $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReferenc
 $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23138'), $this->getReference('userFile-1786')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
 $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23139'), $this->getReference('userFile-1786')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
 $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23140'), $this->getReference('userFile-1786')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
-$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23141'), $this->getReference('userFile-1786')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
 $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23142'), $this->getReference('userFile-1786')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
 $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23143'), $this->getReference('userFile-1786')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
 $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23144'), $this->getReference('userFile-1786')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
+$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23630'), $this->getReference('userFile-1882')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
+$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23988'), $this->getReference('userFile-1882')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
+$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23989'), $this->getReference('userFile-1882')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
+$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23990'), $this->getReference('userFile-1882')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
+$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23991'), $this->getReference('userFile-1882')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
+$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-24049'), $this->getReference('userFile-1882')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
+$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-24050'), $this->getReference('userFile-1882')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
     }
 
     public function getOrder()

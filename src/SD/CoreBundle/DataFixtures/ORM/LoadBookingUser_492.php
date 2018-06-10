@@ -176,6 +176,8 @@ $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReferenc
 $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-20094'), $this->getReference('userFile-811')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
 $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-20317'), $this->getReference('userFile-1891')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
 $bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-20321'), $this->getReference('userFile-1891')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
+$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-23984'), $this->getReference('userFile-811')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
+$bookingUser = new BookingUser($this->getReference('user-1'), $this->getReference('booking-24001'), $this->getReference('userFile-1170')); $bookingUser->setOrder(1); $manager->persist($bookingUser); $manager->flush();
     }
 
     public function getOrder()

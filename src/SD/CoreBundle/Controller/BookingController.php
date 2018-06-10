@@ -781,6 +781,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
 	// Inutile de persister ici, Doctrine connait déjà la note
+	$booking->setNullFormNote();
 	$em->remove($note);
 	$em->flush();
 

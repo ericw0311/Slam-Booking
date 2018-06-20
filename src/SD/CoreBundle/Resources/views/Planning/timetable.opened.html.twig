@@ -31,12 +31,8 @@
 		<td class="{{ bookings[key].cellClass }}">
 {% endif %}
 <table><tr>
-<td><img src="{{ asset('bundles/sdcore/images/user-16.png') }}"></td><td>&nbsp;&#124;&nbsp;</td>
-{% for userFile in bookings[key].userFiles %}
-<td>
-{{ userFile.getFirstAndLastName() }}
-</td><td>&nbsp;&#124;&nbsp;</td>
-{% endfor %}
+<td><img src="{{ asset('bundles/sdcore/images/user-16.png') }}"></td>
+<td>{{ bookings[key].userNamesString }}</td>
 <td><a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a></td><td>&nbsp;&#124;&nbsp;</td>
 <td><a href="{{ path(booking_delete, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a></td>
 </tr></table>

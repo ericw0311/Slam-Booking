@@ -11,6 +11,7 @@ class BookingNDB
 	private $numberTimetableLines;
 	private $cellClass;
 	private $userFiles;
+	private $userNamesString;
 	private $labels;
 
 	public function setId($id)
@@ -79,6 +80,17 @@ class BookingNDB
 	return $this->labels;
 	}
 
+	public function setUserNamesString($userNamesString)
+	{
+	$this->userNamesString = $userNamesString;
+	return $this;
+	}
+
+	public function getUserNamesString()
+	{
+	return $this->userNamesString;
+	}
+	
 	public function __construct($id, $type, $cellClass)
 	{
 	$this->setId($id);
@@ -87,5 +99,6 @@ class BookingNDB
 	$this->setCellClass($cellClass);
 	$this->setUserFiles(null);
 	$this->setLabels(null);
+	$this->setUserNamesString(null);
 	}
 }

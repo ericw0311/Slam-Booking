@@ -30,15 +30,26 @@
 {% else %}
 		<td class="{{ bookings[key].cellClass }}">
 {% endif %}
-<ul class="list-group">
-{% for userFile in bookings[key].userFiles %}
-<li class="list-group-item">
-{{ userFile.getFirstAndLastName() }}
-</li>
-{% endfor %}
-</ul>
+
+<table><tr><td>
+<img src="{{ asset('bundles/sdcore/images/user-16.png') }}">&nbsp;
+{{ bookings[key].userNamesString }}
+{% if bookings[key].getMultiLigne() %}
+</td></tr><tr><td>
+{% else %}
+&nbsp;
+{% endif %}
+{% if bookings[key].getLabel() %}
+<img src="{{ asset('bundles/sdcore/images/label-16.png') }}">&nbsp;
+{{ bookings[key].labelNamesString }}&nbsp;
+{% endif %}
+{% if bookings[key].getNoteExists() %}
+<img src="{{ asset('bundles/sdcore/images/note-16.png') }}" title="{{ bookings[key].note }}">&nbsp;
+{% endif %}
 <a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
 <a href="{{ path(booking_delete, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
+</td></tr></table>
+
 		</td>
 {% endif %}
 {% else %}

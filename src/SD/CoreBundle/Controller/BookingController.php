@@ -767,6 +767,7 @@ array('userContext' => $userContext, 'booking' => $booking, 'planification' => $
     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	* @ParamConverter("date", options={"format": "Ymd"})
+    * @ParamConverter("note", options={"mapping": {"noteID": "id"}})
 	*/
     public function one_note_delete_updateAction(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
     {

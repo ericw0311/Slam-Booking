@@ -102,4 +102,6 @@ class Constants
 
 	// La couleur par défaut d'affichage des réservations dans le calendrier: noir sur rose POUR L'INSTANT
 	const CALENDAR_RESOURCE_DEFAULT_COLOR = array('BGC' => '#ff69b4', 'FGC' => '#000000');
+
+	const CALENDAR_COLOR = array('success' => '#dff0d8', 'warning' => '#fcf8e3', 'info' => '#d9edf7', 'danger' => '#f2dede');
 }

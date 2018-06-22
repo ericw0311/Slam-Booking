@@ -47,9 +47,9 @@ class CalendarEventListener
     public function loadEvents(CalendarEvent $calendarEvent)
     {
 	$this->getLogger()->info('CalendarEventListener.loadEvents 1');
-    $entityManager = $this->getDoctrine()->getManager();
+    $em = $this->getDoctrine()->getManager();
     $connectedUser = $this->getUser();
-    $userContext = new UserContext($entityManager, $connectedUser); // contexte utilisateur
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 	$startDate = $calendarEvent->getStartDatetime();
 	$endDate = $calendarEvent->getEndDatetime();
 	// The original request so you can get filters from the calendar
@@ -60,38 +60,50 @@ class CalendarEventListener
 	// for instance, retrieving events from a repository
 
 	$this->getLogger()->info('CalendarEventListener.loadEvents 2');
-	$pRepository = $entityManager->getRepository('SDCoreBundle:Planification');
-	$bRepository = $entityManager->getRepository('SDCoreBundle:Booking');
-	$buRepository = $entityManager->getRepository('SDCoreBundle:BookingUser');
+	$pRepository = $em->getRepository('SDCoreBundle:Planification');
+	$ppRepository = $em->getRepository('SDCoreBundle:PlanificationPeriod');
+	$bRepository = $em->getRepository('SDCoreBundle:Booking');
+	$buRepository = $em->getRepository('SDCoreBundle:BookingUser');
 
-	$currentCalendarPlanificationID = PlanningApi::getCurrentCalendarPlanificationID($entityManager, $connectedUser);
-	$currentCalendarMany = PlanningApi::getCurrentCalendarManyValue($entityManager, $connectedUser);
+	$planificationID = PlanningApi::getCurrentCalendarPlanificationID($em, $connectedUser);
+	// $currentCalendarMany = PlanningApi::getCurrentCalendarManyValue($em, $connectedUser);
 
 
-	$resourcesColors = ResourceApi::getCalendarResourcesColor($entityManager, $pRepository->find($currentCalendarPlanificationID));
+	$resourcesColors = ResourceApi::getCalendarResourcesColor($em, $pRepository->find($planificationID));
 
-	$this->getLogger()->info('CalendarEventListener.loadEvents 2-bis _'.$currentCalendarPlanificationID.'_'.count($resourcesColors).'_');
+	// On recherche la periode de planification a partir de la planification et de la date de début.
+	$planificationPeriod = $ppRepository->getPlanificationPeriod($pRepository->find($planificationID), $startDate);
+	$evenResourcesID = ResourceApi::getEvenPlanifiedResourcesID($em, $planificationPeriod);
 
-	$SBEvents = $bRepository->getCalendarBookings($userContext->getCurrentFile(), $pRepository->find($currentCalendarPlanificationID));
+	$this->getLogger()->info('CalendarEventListener.loadEvents 2-bis _'.$planificationID.'_ planificationPeriod _'.$planificationPeriod->getID().'_');
+
+	$SBEvents = $bRepository->getCalendarBookings($userContext->getCurrentFile(), $pRepository->find($planificationID));
 
 	$this->getLogger()->info('CalendarEventListener.loadEvents 3');
-	foreach($SBEvents as $SBEvent) {
-//		$this->getLogger()->info('CalendarEventListener.loadEvents 4 _'.$SBEvent['bookingID'].'_'.$SBEvent['beginningDate']->format('YmdHi').'_'.$SBEvent['endDate']->format('YmdHi').'_');
-//		$this->getLogger()->info('CalendarEventListener.loadEvents 5 _'.$SBEvent['dateTest'].'_');
 
+	$memo_date = '';
+	$memo_resource_id = 0;
+	$resourceBookingCount = 0;
+
+	foreach($SBEvents as $SBEvent) {
 		$bookingUser = $buRepository->findOneBy(array('booking' => $SBEvent, 'order' => 1));
+
+		// On compte les réservations par ressource et par jour
+		if ($SBEvent->getBeginningDate()->format('Y-m-d') != $memo_date || $SBEvent->getResource()->getID() != $memo_resource_id) { $resourceBookingCount = 0; }
+		$resourceBookingCount++;
+
+		// Attention, dans l'affichage par grille horaire, le compteur des réservations par ressource et par jour n'est pas correct.
+		// Il est à 0 pour la première réservation, à 1 pour la deuxième, etc...
+		// Ici il est correct, c'est pour cela qu'il y a une inversion des classes entre pair et impair.
+		$cellClass = (in_array($SBEvent->getResource()->getID(), $evenResourcesID) ? ((($resourceBookingCount % 2) < 1) ? 'warning' : 'success') : ((($resourceBookingCount % 2) < 1) ? 'danger' : 'info'));
+		$fgColor = '#000000';
+		$bgColor = Constants::CALENDAR_COLOR[$cellClass];
+
+		$this->getLogger()->info('CalendarEventListener.loadEvents 4 _'.$SBEvent->getBeginningDate()->format('Y-m-d').'_'.$SBEvent->getResource()->getID().'_'.$SBEvent->getResource()->getName().'_');
 
 		$eventEntity = new EventEntity($bookingUser->getUserFile()->getFirstAndLastName(), $SBEvent->getBeginningDate(), $SBEvent->getEndDate());
 		//optional calendar event settings
 		$eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
-
-		if (isset($resourcesColors[$SBEvent->getResource()->getID()])) {
-			$bgColor = Constants::CALENDAR_RESOURCE_COLOR[$resourcesColors[$SBEvent->getResource()->getID()]]['BGC'];
-			$fgColor = Constants::CALENDAR_RESOURCE_COLOR[$resourcesColors[$SBEvent->getResource()->getID()]]['FGC'];
-		} else {
-			$bgColor = Constants::CALENDAR_RESOURCE_DEFAULT_COLOR['BGC'];
-			$fgColor = Constants::CALENDAR_RESOURCE_DEFAULT_COLOR['FGC'];
-		}
 
 		$eventEntity->setBgColor($bgColor); //set the background color of the event's label
 		$eventEntity->setFgColor($fgColor); //set the foreground color of the event's label
@@ -101,6 +113,8 @@ class CalendarEventListener
 		// $eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
 		//finally, add the event to the CalendarEvent for displaying on the calendar
 		$calendarEvent->addEvent($eventEntity);
+		$memo_date = $SBEvent->getBeginningDate()->format('Y-m-d');
+		$memo_resource_id = $SBEvent->getResource()->getID();
 	}
     }
 }

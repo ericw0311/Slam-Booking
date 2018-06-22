@@ -60,6 +60,9 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
     $qb = $this->createQueryBuilder('b');
     $qb->where('b.file = :file')->setParameter('file', $file);
 	$qb->andWhere('b.planification = :planification')->setParameter('planification', $planification);
+	$qb->orderBy('b.resource', 'ASC');
+	$qb->addOrderBy('b.beginningDate', 'ASC');
+
     $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;

@@ -93,15 +93,6 @@ class Constants
 	const MAXIMUM_NUMBER_BOOKING_LINES = 50; // Nombre maximum de lignes dans une réservation
 	const MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED = 5; // Nombre maximum de dates affichées (utilisé pour la mise a jour des périodes de début et de fin des réservations)
 
-	// Les couleurs d'affichage des réservations dans le calendrier: blanc sur bleu, noir sur rouge, noir sur vert
-	const CALENDAR_RESOURCE_COLOR = array(
-		1 => array('BGC' => '#0033FF', 'FGC' => '#ffffff'),
-		2 => array('BGC' => '#CC0000', 'FGC' => '#000000'),
-		0 => array('BGC' => '#669900', 'FGC' => '#000000')
-	);
-
-	// La couleur par défaut d'affichage des réservations dans le calendrier: noir sur rose POUR L'INSTANT
-	const CALENDAR_RESOURCE_DEFAULT_COLOR = array('BGC' => '#ff69b4', 'FGC' => '#000000');
-
+	// Couleurs d'affichage des réservations dans le calendrier
 	const CALENDAR_COLOR = array('success' => '#dff0d8', 'warning' => '#fcf8e3', 'info' => '#d9edf7', 'danger' => '#f2dede');
 }

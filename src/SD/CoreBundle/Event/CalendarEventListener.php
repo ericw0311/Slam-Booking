@@ -68,9 +68,6 @@ class CalendarEventListener
 	$planificationID = PlanningApi::getCurrentCalendarPlanificationID($em, $connectedUser);
 	// $currentCalendarMany = PlanningApi::getCurrentCalendarManyValue($em, $connectedUser);
 
-
-	$resourcesColors = ResourceApi::getCalendarResourcesColor($em, $pRepository->find($planificationID));
-
 	// On recherche la periode de planification a partir de la planification et de la date de début.
 	$planificationPeriod = $ppRepository->getPlanificationPeriod($pRepository->find($planificationID), $startDate);
 	$evenResourcesID = ResourceApi::getEvenPlanifiedResourcesID($em, $planificationPeriod);

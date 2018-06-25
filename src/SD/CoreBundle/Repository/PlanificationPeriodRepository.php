@@ -16,12 +16,12 @@ class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
     // Retourne les periodes de planification d'une ressource
     public function getResourcePlanificationPeriods($resource)
     {
-	$queryBuilder = $this->createQueryBuilder('pp');
-	$queryBuilder->innerJoin('pp.planificationResources', 'pr', Expr\Join::WITH, $queryBuilder->expr()->eq('pr.resource', '?1'));
-	$queryBuilder->orderBy('pp.id', 'ASC');
-	$queryBuilder->setParameter(1, $resource); 
+	$qb = $this->createQueryBuilder('pp');
+	$qb->innerJoin('pp.planificationResources', 'pr', Expr\Join::WITH, $qb->expr()->eq('pr.resource', '?1'));
+	$qb->orderBy('pp.id', 'ASC');
+	$qb->setParameter(1, $resource); 
 
-	$query = $queryBuilder->getQuery();
+	$query = $qb->getQuery();
 	$results = $query->getResult();
 	return $results;
     }
@@ -29,13 +29,13 @@ class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
     // Retourne les periodes de planification d'une grille horaire
     public function getTimetablePlanificationPeriods($timetable)
     {
-	$queryBuilder = $this->createQueryBuilder('pp');
-	$queryBuilder->innerJoin('pp.planificationLines', 'pl', Expr\Join::WITH, $queryBuilder->expr()->eq('pl.timetable', '?1'));
-	$queryBuilder->groupBy('pp.id');
-	$queryBuilder->orderBy('pp.id', 'ASC');
-	$queryBuilder->setParameter(1, $timetable); 
+	$qb = $this->createQueryBuilder('pp');
+	$qb->innerJoin('pp.planificationLines', 'pl', Expr\Join::WITH, $qb->expr()->eq('pl.timetable', '?1'));
+	$qb->groupBy('pp.id');
+	$qb->orderBy('pp.id', 'ASC');
+	$qb->setParameter(1, $timetable); 
 
-	$query = $queryBuilder->getQuery();
+	$query = $qb->getQuery();
 	$results = $query->getResult();
 	return $results;
     }
@@ -43,13 +43,13 @@ class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
 	// Retourne la periode de planification precedente
 	public function getPreviousPlanificationPeriod($planification, $planificationPeriodID)
     {
-	$queryBuilder = $this->createQueryBuilder('pp');
-	$queryBuilder->where('pp.planification = :planification')->setParameter('planification', $planification);
-	$queryBuilder->andWhere('pp.id < :planificationPeriodID')->setParameter('planificationPeriodID', $planificationPeriodID);
-	$queryBuilder->orderBy('pp.id', 'DESC');
-	$queryBuilder->setMaxResults(1);
+	$qb = $this->createQueryBuilder('pp');
+	$qb->where('pp.planification = :planification')->setParameter('planification', $planification);
+	$qb->andWhere('pp.id < :planificationPeriodID')->setParameter('planificationPeriodID', $planificationPeriodID);
+	$qb->orderBy('pp.id', 'DESC');
+	$qb->setMaxResults(1);
 
-	$query = $queryBuilder->getQuery();
+	$query = $qb->getQuery();
 	$results = $query->getOneOrNullResult();
 	return $results;
 	}
@@ -57,13 +57,13 @@ class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
 	// Retourne la periode de planification suivante
 	public function getNextPlanificationPeriod($planification, $planificationPeriodID)
     {
-	$queryBuilder = $this->createQueryBuilder('pp');
-	$queryBuilder->where('pp.planification = :planification')->setParameter('planification', $planification);
-	$queryBuilder->andWhere('pp.id > :planificationPeriodID')->setParameter('planificationPeriodID', $planificationPeriodID);
-	$queryBuilder->orderBy('pp.id', 'ASC');
-	$queryBuilder->setMaxResults(1);
+	$qb = $this->createQueryBuilder('pp');
+	$qb->where('pp.planification = :planification')->setParameter('planification', $planification);
+	$qb->andWhere('pp.id > :planificationPeriodID')->setParameter('planificationPeriodID', $planificationPeriodID);
+	$qb->orderBy('pp.id', 'ASC');
+	$qb->setMaxResults(1);
 
-	$query = $queryBuilder->getQuery();
+	$query = $qb->getQuery();
 	$results = $query->getOneOrNullResult();
 	return $results;
 	}
@@ -71,12 +71,31 @@ class PlanificationPeriodRepository extends \Doctrine\ORM\EntityRepository
 	// Retourne la derniere periode d'une planification
 	public function getLastPlanificationPeriod($planification)
     {
-	$queryBuilder = $this->createQueryBuilder('pp');
-	$queryBuilder->where('pp.planification = :planification')->setParameter('planification', $planification);
-	$queryBuilder->orderBy('pp.id', 'DESC');
-	$queryBuilder->setMaxResults(1);
+	$qb = $this->createQueryBuilder('pp');
+	$qb->where('pp.planification = :planification')->setParameter('planification', $planification);
+	$qb->orderBy('pp.id', 'DESC');
+	$qb->setMaxResults(1);
 
-	$query = $queryBuilder->getQuery();
+	$query = $qb->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
+	
+	// Retourne la periode de planification en fonction d'une planification et une date
+	public function getPlanificationPeriod($planification, \Datetime $date)
+    {
+	$qb = $this->createQueryBuilder('pp');
+	$qb->where('pp.planification = :planification');
+	$qb->andWhere($qb->expr()->andX(
+			$qb->expr()->orX($qb->expr()->isNull('pp.beginningDate'), $qb->expr()->lte('pp.beginningDate', ':beginningDate')),
+			$qb->expr()->orX($qb->expr()->isNull('pp.endDate'), $qb->expr()->gte('pp.endDate', ':endDate'))));
+	$qb->setParameter('planification', $planification);
+	$qb->setParameter('beginningDate', $date);
+	$qb->setParameter('endDate', $date);
+	$qb->orderBy('pp.id', 'ASC');
+	$qb->setMaxResults(1);
+
+	$query = $qb->getQuery();
 	$results = $query->getOneOrNullResult();
 	return $results;
 	}
